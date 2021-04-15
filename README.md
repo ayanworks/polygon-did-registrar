@@ -48,7 +48,8 @@ Here, ‘controller’ is the address of the person who creates and manages the 
 
 Creation of DID is done by logging the transaction on the polygon-register contract, by invoking
 
-```npm run start:register
+```
+npm run start:register
 ```
 
 The assign the address type id variable, to the reference the respective struct, which will store the DID doc. 
@@ -58,14 +59,16 @@ The assign the address type id variable, to the reference the respective struct,
 
 The DID controller requests for the update functionality, if the controller wishes to edit the did doc store on the ledger using :
 
-```npm run start:update
+```
+npm run start:update
 ```
 
 ## Delete
 
 To remove the instance of DID from the ledger the above function is used as follows :
 
-```npm run start:delete
+```
+npm run start:delete
 ```
 
 
