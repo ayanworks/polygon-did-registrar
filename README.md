@@ -26,7 +26,8 @@ The DID method is a specific implementation of a DID scheme that will be identif
 
 ## The DID for Polygon looks like:
 
-```did:polygon:0xdce5306fb5f9ba6797546dcd2e11eb5c5201bfeb
+```
+did:polygon:0xdce5306fb5f9ba6797546dcd2e11eb5c5201bfeb
 ```
 ## DID On-Chain
 
