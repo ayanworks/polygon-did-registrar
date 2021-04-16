@@ -52,27 +52,31 @@ export class PolyGonDIDRegistry {
      */
     async createKeyPair(): Promise<any> {
 
-        const kp = secp256k1.genKeyPair()
-        const publicKey = kp.getPublic('hex');
-        const privateKey = kp.getPrivate('hex');
-        const address = toEthereumAddress(publicKey);
+        try {
+            const kp = secp256k1.genKeyPair()
+            const publicKey = kp.getPublic('hex');
+            const privateKey = kp.getPrivate('hex');
+            const address = toEthereumAddress(publicKey);
 
-        logger.debug(`*********** [createKeyPair] ******* publicKey Hex - ${JSON.stringify(publicKey)} \n\n\n`);
-        logger.debug(`*********** [createKeyPair] ******* privateKey Hex - ${JSON.stringify(privateKey)}`);
+            logger.debug(`*********** [createKeyPair] ******* publicKey Hex - ${JSON.stringify(publicKey)} \n\n\n`);
+            logger.debug(`*********** [createKeyPair] ******* privateKey Hex - ${JSON.stringify(privateKey)}`);
 
-        const bufferPublicKey = Buffer.from(publicKey, 'hex');
-        logger.debug(`*********** [createKeyPair] ******** bufferPublicKey Buffer - ${JSON.stringify(bufferPublicKey)} \n\n\n`);
+            const bufferPublicKey = Buffer.from(publicKey, 'hex');
+            logger.debug(`*********** [createKeyPair] ******** bufferPublicKey Buffer - ${JSON.stringify(bufferPublicKey)} \n\n\n`);
 
-        const publicKeyBase58 = bs58.encode(bufferPublicKey);
-        logger.debug(`*********** [createKeyPair] ******** publicKeyBase58 - ${JSON.stringify(publicKeyBase58)} \n\n\n`)
+            const publicKeyBase58 = bs58.encode(bufferPublicKey);
+            logger.debug(`*********** [createKeyPair] ******** publicKeyBase58 - ${JSON.stringify(publicKeyBase58)} \n\n\n`)
 
-        const bufferPrivateKey = Buffer.from(privateKey, 'hex');
-        logger.debug(`*********** [createKeyPair] ******** bufferPrivateKey Buffer - ${JSON.stringify(bufferPrivateKey)} \n\n\n`);
+            const bufferPrivateKey = Buffer.from(privateKey, 'hex');
+            logger.debug(`*********** [createKeyPair] ******** bufferPrivateKey Buffer - ${JSON.stringify(bufferPrivateKey)} \n\n\n`);
 
-        const privateKeyBase58 = bs58.encode(bufferPrivateKey);
-        logger.debug(`*********** [createKeyPair] ********* privateKeyBase58 - ${JSON.stringify(privateKeyBase58)} \n\n\n`);
+            const privateKeyBase58 = bs58.encode(bufferPrivateKey);
+            logger.debug(`*********** [createKeyPair] ********* privateKeyBase58 - ${JSON.stringify(privateKeyBase58)} \n\n\n`);
 
-        return { address, publicKeyBase58, privateKeyBase58 };
+            return { address, publicKeyBase58, privateKeyBase58 };
+        } catch (error) {
+            throw error;
+        }
     }
 
     /**
@@ -82,18 +86,22 @@ export class PolyGonDIDRegistry {
      */
     async sign(privateKeyBase58: string, message: any): Promise<any> {
 
-        const privateKey = bs58.decode(privateKeyBase58);
-        logger.debug(`*********** [sign] ******** privateKey - ${JSON.stringify(privateKey)} \n\n\n`);
+        try {
+            const privateKey = bs58.decode(privateKeyBase58);
+            logger.debug(`*********** [sign] ******** privateKey - ${JSON.stringify(privateKey)} \n\n\n`);
 
-        const hexPrivateKey = privateKey.toString('hex');
-        logger.debug(`*********** [sign] ******** hexPrivateKey - ${JSON.stringify(hexPrivateKey)} \n\n\n`)
+            const hexPrivateKey = privateKey.toString('hex');
+            logger.debug(`*********** [sign] ******** hexPrivateKey - ${JSON.stringify(hexPrivateKey)} \n\n\n`)
 
-        const kp = secp256k1.keyFromPrivate(hexPrivateKey);
+            const kp = secp256k1.keyFromPrivate(hexPrivateKey);
 
-        const signature = kp.sign(message);
-        logger.debug(`*********** [sign] ******** signature - ${JSON.stringify(signature)} \n\n\n`);
+            const signature = kp.sign(message);
+            logger.debug(`*********** [sign] ******** signature - ${JSON.stringify(signature)} \n\n\n`);
 
-        return signature;
+            return signature;
+        } catch (error) {
+            throw error;
+        }
     }
 
     /**
@@ -102,21 +110,25 @@ export class PolyGonDIDRegistry {
      * @param message 
      * @param signature 
      */
-    async verify(publicKeyBase58: string, message: any, signature: any) {
+    async verify(publicKeyBase58: string, message: any, signature: any): Promise<any> {
 
-        logger.info("************ verify ********************");
+        try {
+            logger.info("************ verify ********************");
 
-        const publicKey = bs58.decode(publicKeyBase58);
-        logger.debug(`*********** [verify] ********** publicKey - ${JSON.stringify(publicKey)} \n\n\n`);
+            const publicKey = bs58.decode(publicKeyBase58);
+            logger.debug(`*********** [verify] ********** publicKey - ${JSON.stringify(publicKey)} \n\n\n`);
 
-        const hexPublicKey = publicKey.toString('hex');
-        logger.debug(`*********** [verify] ********** hexPublicKey - ${JSON.stringify(hexPublicKey)} \n\n\n`);
+            const hexPublicKey = publicKey.toString('hex');
+            logger.debug(`*********** [verify] ********** hexPublicKey - ${JSON.stringify(hexPublicKey)} \n\n\n`);
 
-        const kp = secp256k1.keyFromPublic(hexPublicKey, 'hex');
-        const verify = kp.verify(message, signature);
-        logger.debug(`*********** [verify] ********** verify - ${JSON.stringify(verify)} \n\n\n`);
+            const kp = secp256k1.keyFromPublic(hexPublicKey, 'hex');
+            const verify = kp.verify(message, signature);
+            logger.debug(`*********** [verify] ********** verify - ${JSON.stringify(verify)} \n\n\n`);
 
-        return verify;
+            return verify;
+        } catch (error) {
+            throw error;
+        }
     }
 
     /**
