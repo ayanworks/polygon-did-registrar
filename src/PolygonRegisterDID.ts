@@ -4,6 +4,7 @@ import { toEthereumAddress } from 'did-jwt';
 import * as log4js from "log4js";
 const bs58 = require('bs58')
 const ethers = require('ethers');
+const multibase = require('multibase');
 const EC = require('elliptic').ec;
 
 dot.config();
@@ -34,12 +35,6 @@ export class PolyGonDIDRegistry {
         return {
             '@context': 'https://w3id.org/did/v1',
             id: did,
-            // publicKey: [{
-            //     id: `${did}#keys-1`,
-            //     type: 'Secp256k1VerificationKey2018',
-            //     owner: did,
-            //     ethereumAddress: address
-            // }]
             "verificationMethod": [
                 {
                     "id": did,
@@ -61,13 +56,67 @@ export class PolyGonDIDRegistry {
         const publicKey = kp.getPublic('hex');
         const privateKey = kp.getPrivate('hex');
         const address = toEthereumAddress(publicKey);
-        
+
+        logger.debug(`*********** [createKeyPair] ******* publicKey Hex - ${JSON.stringify(publicKey)} \n\n\n`);
+        logger.debug(`*********** [createKeyPair] ******* privateKey Hex - ${JSON.stringify(privateKey)}`);
+
         const bufferPublicKey = Buffer.from(publicKey, 'hex');
+        logger.debug(`*********** [createKeyPair] ******** bufferPublicKey Buffer - ${JSON.stringify(bufferPublicKey)} \n\n\n`);
+
         const publicKeyBase58 = bs58.encode(bufferPublicKey);
+        logger.debug(`*********** [createKeyPair] ******** publicKeyBase58 - ${JSON.stringify(publicKeyBase58)} \n\n\n`)
 
         const bufferPrivateKey = Buffer.from(privateKey, 'hex');
+        logger.debug(`*********** [createKeyPair] ******** bufferPrivateKey Buffer - ${JSON.stringify(bufferPrivateKey)} \n\n\n`);
+
         const privateKeyBase58 = bs58.encode(bufferPrivateKey);
+        logger.debug(`*********** [createKeyPair] ********* privateKeyBase58 - ${JSON.stringify(privateKeyBase58)} \n\n\n`);
+
         return { address, publicKeyBase58, privateKeyBase58 };
+    }
+
+    /**
+     * Message Sign 
+     * @param privateKeyBase58 
+     * @param message 
+     */
+    async sign(privateKeyBase58: string, message: any): Promise<any> {
+
+        const privateKey = bs58.decode(privateKeyBase58);
+        logger.debug(`*********** [sign] ******** privateKey - ${JSON.stringify(privateKey)} \n\n\n`);
+
+        const hexPrivateKey = privateKey.toString('hex');
+        logger.debug(`*********** [sign] ******** hexPrivateKey - ${JSON.stringify(hexPrivateKey)} \n\n\n`)
+
+        const kp = secp256k1.keyFromPrivate(hexPrivateKey);
+
+        const signature = kp.sign(message);
+        logger.debug(`*********** [sign] ******** signature - ${JSON.stringify(signature)} \n\n\n`);
+
+        return signature;
+    }
+
+    /**
+     * Signature verification
+     * @param publicKeyBase58 
+     * @param message 
+     * @param signature 
+     */
+    async verify(publicKeyBase58: string, message: any, signature: any) {
+
+        logger.info("************ verify ********************");
+
+        const publicKey = bs58.decode(publicKeyBase58);
+        logger.debug(`*********** [verify] ********** publicKey - ${JSON.stringify(publicKey)} \n\n\n`);
+
+        const hexPublicKey = publicKey.toString('hex');
+        logger.debug(`*********** [verify] ********** hexPublicKey - ${JSON.stringify(hexPublicKey)} \n\n\n`);
+
+        const kp = secp256k1.keyFromPublic(hexPublicKey, 'hex');
+        const verify = kp.verify(message, signature);
+        logger.debug(`*********** [verify] ********** verify - ${JSON.stringify(verify)} \n\n\n`);
+
+        return verify;
     }
 
     /**
@@ -86,6 +135,18 @@ export class PolyGonDIDRegistry {
 
             // Get DID document
             const didDoc = await this.wrapDidDocument(did, publicKeyBase58, address);
+
+            // message format
+            const message = "Shashank Kulkarni";
+
+            // Sign
+            const messageHex = Buffer.from(message, 'hex');
+            logger.debug(`***** [registerDID] ****** messageHex - ${JSON.stringify(messageHex)}`);
+            const signature = await this.sign(privateKeyBase58, messageHex);
+
+            // Verified signature
+            const verifiedSignature = await this.verify(publicKeyBase58, messageHex, signature);
+            logger.debug(`******* [registerDID] ****** verifiedSignature - ${verifiedSignature}`);
 
             const stringDIDDoc = JSON.stringify(didDoc);
             logger.debug(`****** [registerDID] ****** address - ${JSON.stringify(address)} \n\n\n`);
@@ -114,7 +175,6 @@ export class PolyGonDIDRegistry {
             // Calling smart contract with register DID document on matic chain
             let returnHashValues = await registry.functions.createDID(address, DidDoc)
                 .then((resHashValue) => {
-                    logger.debug(`****** [createDid] ****** resHashValue - ${JSON.stringify(resHashValue)} \n\n\n`);
                     return resHashValue;
                 })
             return returnHashValues;
