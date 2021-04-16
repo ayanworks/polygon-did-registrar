@@ -58,78 +58,21 @@ export class PolyGonDIDRegistry {
             const privateKey = kp.getPrivate('hex');
             const address = toEthereumAddress(publicKey);
 
-            logger.debug(`*********** [createKeyPair] ******* publicKey Hex - ${JSON.stringify(publicKey)} \n\n\n`);
-            logger.debug(`*********** [createKeyPair] ******* privateKey Hex - ${JSON.stringify(privateKey)}`);
-
             const bufferPublicKey = Buffer.from(publicKey, 'hex');
-            logger.debug(`*********** [createKeyPair] ******** bufferPublicKey Buffer - ${JSON.stringify(bufferPublicKey)} \n\n\n`);
-
             const publicKeyBase58 = bs58.encode(bufferPublicKey);
-            logger.debug(`*********** [createKeyPair] ******** publicKeyBase58 - ${JSON.stringify(publicKeyBase58)} \n\n\n`)
 
             const bufferPrivateKey = Buffer.from(privateKey, 'hex');
-            logger.debug(`*********** [createKeyPair] ******** bufferPrivateKey Buffer - ${JSON.stringify(bufferPrivateKey)} \n\n\n`);
-
             const privateKeyBase58 = bs58.encode(bufferPrivateKey);
-            logger.debug(`*********** [createKeyPair] ********* privateKeyBase58 - ${JSON.stringify(privateKeyBase58)} \n\n\n`);
 
             return { address, publicKeyBase58, privateKeyBase58 };
+
         } catch (error) {
+
+            logger.error(`Error occurred in createKeyPair function ${error}`)
             throw error;
         }
     }
 
-    /**
-     * Message Sign 
-     * @param privateKeyBase58 
-     * @param message 
-     */
-    async sign(privateKeyBase58: string, message: any): Promise<any> {
-
-        try {
-            const privateKey = bs58.decode(privateKeyBase58);
-            logger.debug(`*********** [sign] ******** privateKey - ${JSON.stringify(privateKey)} \n\n\n`);
-
-            const hexPrivateKey = privateKey.toString('hex');
-            logger.debug(`*********** [sign] ******** hexPrivateKey - ${JSON.stringify(hexPrivateKey)} \n\n\n`)
-
-            const kp = secp256k1.keyFromPrivate(hexPrivateKey);
-
-            const signature = kp.sign(message);
-            logger.debug(`*********** [sign] ******** signature - ${JSON.stringify(signature)} \n\n\n`);
-
-            return signature;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    /**
-     * Signature verification
-     * @param publicKeyBase58 
-     * @param message 
-     * @param signature 
-     */
-    async verify(publicKeyBase58: string, message: any, signature: any): Promise<any> {
-
-        try {
-            logger.info("************ verify ********************");
-
-            const publicKey = bs58.decode(publicKeyBase58);
-            logger.debug(`*********** [verify] ********** publicKey - ${JSON.stringify(publicKey)} \n\n\n`);
-
-            const hexPublicKey = publicKey.toString('hex');
-            logger.debug(`*********** [verify] ********** hexPublicKey - ${JSON.stringify(hexPublicKey)} \n\n\n`);
-
-            const kp = secp256k1.keyFromPublic(hexPublicKey, 'hex');
-            const verify = kp.verify(message, signature);
-            logger.debug(`*********** [verify] ********** verify - ${JSON.stringify(verify)} \n\n\n`);
-
-            return verify;
-        } catch (error) {
-            throw error;
-        }
-    }
 
     /**
      * Register DID document on matic chain
@@ -138,8 +81,6 @@ export class PolyGonDIDRegistry {
     async registerDID(): Promise<object> {
 
         try {
-            logger.info("*************** registerDid *******************");
-
             const { address, publicKeyBase58, privateKeyBase58 } = await this.createKeyPair();
 
             // DID format
@@ -148,29 +89,16 @@ export class PolyGonDIDRegistry {
             // Get DID document
             const didDoc = await this.wrapDidDocument(did, publicKeyBase58, address);
 
-            // message format
-            const message = "Shashank Kulkarni";
-
-            // Sign
-            const messageHex = Buffer.from(message, 'hex');
-            logger.debug(`***** [registerDID] ****** messageHex - ${JSON.stringify(messageHex)}`);
-            const signature = await this.sign(privateKeyBase58, messageHex);
-
-            // Verified signature
-            const verifiedSignature = await this.verify(publicKeyBase58, messageHex, signature);
-            logger.debug(`******* [registerDID] ****** verifiedSignature - ${verifiedSignature}`);
-
             const stringDIDDoc = JSON.stringify(didDoc);
-            logger.debug(`****** [registerDID] ****** address - ${JSON.stringify(address)} \n\n\n`);
-            logger.debug(`****** [registerDID] ****** stringDIDDoc - ${JSON.stringify(stringDIDDoc)} \n\n\n`);
 
             // Calling createDID with Create DID and register on match chain 
             const returnAddress = await this.createDid(address, stringDIDDoc);
 
             logger.debug(`****** [registerDID] ****** returnAddress - ${JSON.stringify(returnAddress)} \n\n\n`);
             return { did, returnAddress };
-        }
-        catch (error) {
+        } catch (error) {
+
+            logger.error(`Error occurred in registerDID function  ${error}`)
             throw error;
         }
     }
@@ -192,6 +120,8 @@ export class PolyGonDIDRegistry {
             return returnHashValues;
         }
         catch (error) {
+
+            logger.error(`Error occurred in createDid function  ${error}`)
             throw error;
         }
     }

@@ -30,8 +30,6 @@ export class PolyGonDIDDelete {
     async deleteDidDoc(did: string): Promise<string> {
         try {
 
-            logger.debug(`****** [deleteDidDoc] ****** did - ${JSON.stringify(did)} \n\n\n`);
-            
             if (did && (did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/))) {
 
                 if (did.match(/^did:polygon:\w{0,42}$/)) {
@@ -67,7 +65,6 @@ export class PolyGonDIDDelete {
             // Calling smart contract with delete DID document on matic chain
             let returnValues = await registry.functions.deleteDID(address)
                 .then((resValue) => {
-                    logger.debug(`****** [deleteDID] ****** resValue - ${JSON.stringify(resValue)} \n\n\n`);
                     return resValue;
                 })
             return returnValues;

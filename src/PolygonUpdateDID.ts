@@ -20,22 +20,18 @@ const did = process.argv[2];
 const stringDIDDoc = process.argv[3];
 
 export class PolyGonDIDUpdate {
-    
-    constructor(
-        ) { }
-        
-        
-        /**
-         * Update DID document on matic chain
-         * @returns 
-         */
-        async updateDidDoc(did: string, stringDIDDoc: string): Promise<object> {
-            
-            try {
-                
-            logger.debug(`****** [updateDidDoc] ****** did - ${JSON.stringify(did)} \n\n\n`);
-            logger.debug(`****** [updateDidDoc] ****** stringDIDDoc - ${JSON.stringify(stringDIDDoc)} \n\n\n`);
 
+    constructor(
+    ) { }
+
+
+    /**
+     * Update DID document on matic chain
+     * @returns 
+     */
+    async updateDidDoc(did: string, stringDIDDoc: string): Promise<object> {
+
+        try {
             if (did && (did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/))) {
 
                 if (did.match(/^did:polygon:\w{0,42}$/)) {
@@ -73,7 +69,6 @@ export class PolyGonDIDUpdate {
             // Calling smart contract with update DID document on matic chain
             let returnValues = await registry.functions.updateDID(address, DidDoc)
                 .then((resValue) => {
-                    logger.debug(`****** [updateDID] ****** resValue - ${JSON.stringify(resValue)} \n\n\n`);
                     return resValue;
                 })
             return returnValues;
