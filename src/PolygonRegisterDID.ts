@@ -2,6 +2,7 @@ import * as dot from 'dotenv';
 import { polygonDIDRegistryABI } from './PolygonDIDRegistryABI';
 import { toEthereumAddress } from 'did-jwt';
 import * as log4js from "log4js";
+const bs58 = require('bs58')
 const ethers = require('ethers');
 const EC = require('elliptic').ec;
 
@@ -29,16 +30,24 @@ export class PolyGonDIDRegistry {
      * @param address 
      * @returns 
      */
-    async wrapDidDocument(did, address): Promise<object> {
+    async wrapDidDocument(did: string, publicKeyBase58: string, address: string): Promise<object> {
         return {
             '@context': 'https://w3id.org/did/v1',
             id: did,
-            publicKey: [{
-                id: `${did}#keys-1`,
-                type: 'Secp256k1VerificationKey2018',
-                owner: did,
-                ethereumAddress: address
-            }]
+            // publicKey: [{
+            //     id: `${did}#keys-1`,
+            //     type: 'Secp256k1VerificationKey2018',
+            //     owner: did,
+            //     ethereumAddress: address
+            // }]
+            "verificationMethod": [
+                {
+                    "id": did,
+                    "type": "EcdsaSecp256k1VerificationKey2019", // external (property value)
+                    "controller": did,
+                    "publicKeyBase58": publicKeyBase58,
+                }
+            ]
         }
     }
 
@@ -52,7 +61,13 @@ export class PolyGonDIDRegistry {
         const publicKey = kp.getPublic('hex');
         const privateKey = kp.getPrivate('hex');
         const address = toEthereumAddress(publicKey);
-        return { address, privateKey }
+        
+        const bufferPublicKey = Buffer.from(publicKey, 'hex');
+        const publicKeyBase58 = bs58.encode(bufferPublicKey);
+
+        const bufferPrivateKey = Buffer.from(privateKey, 'hex');
+        const privateKeyBase58 = bs58.encode(bufferPrivateKey);
+        return { address, publicKeyBase58, privateKeyBase58 };
     }
 
     /**
@@ -64,13 +79,13 @@ export class PolyGonDIDRegistry {
         try {
             logger.info("*************** registerDid *******************");
 
-            const { address, privateKey } = await this.createKeyPair();
+            const { address, publicKeyBase58, privateKeyBase58 } = await this.createKeyPair();
 
             // DID format
             const did = `did:polygon:${address}`;
 
             // Get DID document
-            const didDoc = await this.wrapDidDocument(did, address);
+            const didDoc = await this.wrapDidDocument(did, publicKeyBase58, address);
 
             const stringDIDDoc = JSON.stringify(didDoc);
             logger.debug(`****** [registerDID] ****** address - ${JSON.stringify(address)} \n\n\n`);
