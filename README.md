@@ -53,7 +53,9 @@ import { registerDID } from "polygon-did-registrar";
 const txHash = await registerDID();
 ```
 
-This assigns the address type id variable, to the reference the respective struct, which will store the DID doc. 
+The above function will facilitate the generation of a uniques key pair, and a corresponding ethereumAddress. 
+It will then generate a relevant DID and it's associated DID Doc, and send it to the registry smart contract. 
+ 
 
 
 ## Update
