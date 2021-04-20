@@ -49,10 +49,11 @@ Here, ‘controller’ is the address of the person who creates and manages the 
 Creation of DID is done by logging the transaction on the polygon-register contract, by invoking
 
 ```
-npm run start:register
+import { registerDID } from "polygon-did-registrar";
+const txHash = await registerDID();
 ```
 
-The assign the address type id variable, to the reference the respective struct, which will store the DID doc. 
+This assigns the address type id variable, to the reference the respective struct, which will store the DID doc. 
 
 
 ## Update
@@ -60,7 +61,8 @@ The assign the address type id variable, to the reference the respective struct,
 The DID controller requests for the update functionality, if the controller wishes to edit the did doc store on the ledger using :
 
 ```
-npm run start:update
+import { updateDidDoc } from "polygon-did-registrar";
+const txHash = await updateDidDoc(did, didDoc);
 ```
 
 ## Delete
@@ -68,7 +70,8 @@ npm run start:update
 To remove the instance of DID from the ledger the above function is used as follows :
 
 ```
-npm run start:delete
+import { deleteDidDoc } from "polygon-did-registrar";
+const txHash = await deleteDidDoc(did);
 ```
 
 
