@@ -16,9 +16,6 @@ const provider = new ethers.providers.JsonRpcProvider(url);
 let wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
 let registry = new ethers.Contract(DID_ADDRESS, polygonDIDRegistryABI, wallet);
 
-const did = process.argv[2];
-const stringDIDDoc = process.argv[3];
-
 
 /**
  * Update DID document on matic chain
