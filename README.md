@@ -46,11 +46,31 @@ Here, ‘controller’ is the address of the person who creates and manages the 
 
 ## Create
 
-Creation of DID is done by logging the transaction on the polygon-register contract, by invoking
+Creating a DID refers to generation of a DID uri, based on either a newly generated wallet or users wallet.
+
+Can be invoked using 2 methods
+
+Method 1:
+
+```
+import { createDID } from "polygon-did-registrar";
+const txHash = await createDID(privateKey);
+```
+
+Method 2:
+
+```
+import { createDID } from "polygon-did-registrar";
+const txHash = await createDID();
+```
+
+## Register
+
+Register of DID is done by logging the transaction on the polygon-register contract, by invoking
 
 ```
 import { registerDID } from "polygon-did-registrar";
-const txHash = await registerDID();
+const txHash = await registerDID(did, privateKey, url, contractAddress);
 ```
 
 The above function will facilitate the generation of a uniques key pair, and a corresponding ethereumAddress. 
@@ -64,7 +84,7 @@ The DID controller requests for the update functionality, if the controller wish
 
 ```
 import { updateDidDoc } from "polygon-did-registrar";
-const txHash = await updateDidDoc(did, didDoc);
+const txHash = await updateDidDoc(did, didDoc, privateKey, url, contractAddress);
 ```
 
 ## Delete
@@ -73,7 +93,7 @@ To remove the instance of DID from the ledger the above function is used as foll
 
 ```
 import { deleteDidDoc } from "polygon-did-registrar";
-const txHash = await deleteDidDoc(did);
+const txHash = await deleteDidDoc(did, privateKey, url, contractAddress);
 ```
 
 

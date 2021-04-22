@@ -2,7 +2,6 @@ module.exports = {
     clearMocks: true,
     verbose: true,
     testEnvironment: "node",
-
     transform: {
         '^.+\\.ts?$': 'ts-jest',
     },
@@ -12,7 +11,5 @@ module.exports = {
     globals: {
         Uint8Array: Uint8Array,
         ArrayBuffer: ArrayBuffer
-    },
-
-    testTimeout: 30000
+    }
 };

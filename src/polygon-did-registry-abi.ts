@@ -1,14 +1,16 @@
-export const polygonDIDRegistryABI =[
+export const polygonDIDRegistryABI = [
   {
     "anonymous": false,
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
         "name": "id",
         "type": "address"
       },
       {
         "indexed": false,
+        "internalType": "string",
         "name": "doc",
         "type": "string"
       }
@@ -21,23 +23,7 @@ export const polygonDIDRegistryABI =[
     "inputs": [
       {
         "indexed": false,
-        "name": "id",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "doc",
-        "type": "string"
-      }
-    ],
-    "name": "UpdateDID",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
+        "internalType": "address",
         "name": "id",
         "type": "address"
       }
@@ -46,13 +32,34 @@ export const polygonDIDRegistryABI =[
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "id",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "doc",
+        "type": "string"
+      }
+    ],
+    "name": "UpdateDID",
+    "type": "event"
+  },
+  {
     "constant": false,
     "inputs": [
       {
+        "internalType": "address",
         "name": "_id",
         "type": "address"
       },
       {
+        "internalType": "string",
         "name": "_doc",
         "type": "string"
       }
@@ -60,8 +67,24 @@ export const polygonDIDRegistryABI =[
     "name": "createDID",
     "outputs": [
       {
-        "name": "",
+        "internalType": "address",
+        "name": "controller",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "created",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "updated",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "did_doc",
+        "type": "string"
       }
     ],
     "payable": false,
@@ -72,6 +95,7 @@ export const polygonDIDRegistryABI =[
     "constant": true,
     "inputs": [
       {
+        "internalType": "address",
         "name": "_id",
         "type": "address"
       }
@@ -79,6 +103,7 @@ export const polygonDIDRegistryABI =[
     "name": "getDID",
     "outputs": [
       {
+        "internalType": "string",
         "name": "",
         "type": "string"
       }
@@ -91,16 +116,39 @@ export const polygonDIDRegistryABI =[
     "constant": false,
     "inputs": [
       {
+        "internalType": "address",
         "name": "_id",
         "type": "address"
       },
       {
+        "internalType": "string",
         "name": "_doc",
         "type": "string"
       }
     ],
     "name": "updateDID",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "controller",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "created",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "updated",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "did_doc",
+        "type": "string"
+      }
+    ],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
@@ -109,6 +157,7 @@ export const polygonDIDRegistryABI =[
     "constant": false,
     "inputs": [
       {
+        "internalType": "address",
         "name": "_id",
         "type": "address"
       }
@@ -119,4 +168,4 @@ export const polygonDIDRegistryABI =[
     "stateMutability": "nonpayable",
     "type": "function"
   }
-]
+];

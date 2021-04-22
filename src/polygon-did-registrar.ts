@@ -1,123 +1,142 @@
-import * as dot from 'dotenv';
-import { polygonDIDRegistryABI } from './PolygonDIDRegistryABI';
-import { toEthereumAddress } from 'did-jwt';
+import * as dot from "dotenv";
+import { polygonDIDRegistryABI } from "./polygon-did-registry-abi";
+import { ethers } from "ethers";
 import * as log4js from "log4js";
-const bs58 = require('bs58')
-const ethers = require('ethers');
-const EC = require('elliptic').ec;
+import { computeAddress } from '@ethersproject/transactions'
+import { computePublicKey } from '@ethersproject/signing-key'
+import { Wallet } from '@ethersproject/wallet'
 
+const bs58 = require("bs58");
 dot.config();
-
-const secp256k1 = new EC('secp256k1');
-
-const url = process.env.URL;
-const DID_ADDRESS = `${process.env.DID_ADDRESS}`;
-const provider = new ethers.providers.JsonRpcProvider(url);
-
-let wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`, provider);
-let registry = new ethers.Contract(DID_ADDRESS, polygonDIDRegistryABI, wallet);
 
 const logger = log4js.getLogger();
 logger.level = process.env.LOGGER_LEVEL;
 
+let registry;
 
 /**
  * Create and return DID Document
- * @param did 
- * @param address 
- * @returns 
+ * @param did
+ * @param address
+ * @returns
  */
-async function wrapDidDocument(did: string, publicKeyBase58: string, address: string): Promise<object> {
+async function wrapDidDocument(did: string, publicKeyBase58: string): Promise<object> {
     return {
-        '@context': 'https://w3id.org/did/v1',
+        "@context": "https://w3id.org/did/v1",
         id: did,
-        "verificationMethod": [
+        verificationMethod: [
             {
-                "id": did,
-                "type": "EcdsaSecp256k1VerificationKey2019", // external (property value)
-                "controller": did,
-                "publicKeyBase58": publicKeyBase58,
-            }
-        ]
-    }
+                id: did,
+                type: "EcdsaSecp256k1VerificationKey2019", // external (property value)
+                controller: did,
+                publicKeyBase58: publicKeyBase58,
+            },
+        ],
+    };
 }
 
 /**
  * Create public and private key and generate address
- * @returns 
+ * @returns
  */
-async function createKeyPair(): Promise<any> {
-
+async function createKeyPair(privateKey: string): Promise<any> {
     try {
-        const kp = secp256k1.genKeyPair()
-        const publicKey = kp.getPublic('hex');
-        const privateKey = kp.getPrivate('hex');
-        const address = toEthereumAddress(publicKey);
 
-        const bufferPublicKey = Buffer.from(publicKey, 'hex');
+        const publicKey = computePublicKey(privateKey, true);
+
+        const bufferPublicKey = Buffer.from(publicKey);
         const publicKeyBase58 = bs58.encode(bufferPublicKey);
 
-        const bufferPrivateKey = Buffer.from(privateKey, 'hex');
-        const privateKeyBase58 = bs58.encode(bufferPrivateKey);
+        const address = computeAddress(privateKey);
 
-        return { address, publicKeyBase58, privateKeyBase58 };
+        return { address, publicKeyBase58 };
 
     } catch (error) {
-
-        logger.error(`Error occurred in createKeyPair function ${error}`)
+        logger.error(`Error occurred in createKeyPair function ${error}`);
         throw error;
     }
 }
 
+/**
+ * Create DID 
+ * @param privateKey 
+ * @returns 
+ */
+export async function createDID(privateKey?: string): Promise<any> {
+    try {
+
+        if (privateKey) {
+
+            const { address } = await createKeyPair(privateKey);
+            const did = `did:polygon:${address}`;
+            return did;
+
+        } else {
+
+            const wallet = Wallet.createRandom();
+            const privateKey = wallet.privateKey;
+            const { address, publicKeyBase58 } = await createKeyPair(privateKey);
+            const did = `did:polygon:${address}`;
+
+            return { address, publicKeyBase58, privateKey, did };
+        }
+
+    } catch (error) {
+        logger.error(`Error occurred in createDID function ${error}`);
+        throw error;
+    }
+}
 
 /**
  * Register DID document on matic chain
- * @returns 
+ * @returns
  */
-export async function registerDID(): Promise<object> {
-
+export async function registerDID(did: string, privateKey: string, url?: string, contractAddress?: string): Promise<object> {
     try {
-        const { address, publicKeyBase58, privateKeyBase58 } = await createKeyPair();
 
-        // DID format
-        const did = `did:polygon:${address}`;
+        const PRIVATE_KEY = privateKey;
 
+        const URL = url || process.env.URL;
+        const CONTRACT_ADDRESS = contractAddress || process.env.CONTRACT_ADDRESS;
+        const provider = new ethers.providers.JsonRpcProvider(URL);
+
+        let wallet = new ethers.Wallet(PRIVATE_KEY, provider);
+        registry = new ethers.Contract(CONTRACT_ADDRESS, polygonDIDRegistryABI, wallet);
+
+        const kp = await createKeyPair(PRIVATE_KEY);
         // Get DID document
-        const didDoc = await wrapDidDocument(did, publicKeyBase58, address);
+        const didDoc = await wrapDidDocument(did, kp.publicKeyBase58);
 
         const stringDIDDoc = JSON.stringify(didDoc);
 
-        // Calling createDID with Create DID and register on match chain 
-        const returnAddress = await createDid(address, stringDIDDoc);
+        // Calling createDID with Create DID and register on match chain
+        const txnHash = await registrarDid(did.split(":")[2], stringDIDDoc);
 
-        logger.debug(`returnAddress - ${JSON.stringify(returnAddress)} \n\n\n`);
-        return { did, returnAddress };
+        logger.debug(`[registerDID] txnHash - ${JSON.stringify(txnHash)} \n\n\n`);
+        return { did, txnHash };
     } catch (error) {
-
-        logger.error(`Error occurred in registerDID function  ${error}`)
+        logger.error(`Error occurred in registerDID function  ${error}`);
         throw error;
     }
 }
 
 /**
- * Register DID document on matic chain  
- * @param address 
- * @param DidDoc 
- * @returns 
+ * Register DID document on matic chain
+ * @param address
+ * @param DidDoc
+ * @returns
  */
-async function createDid(address: string, DidDoc: string) {
+async function registrarDid(address: string, DidDoc: string) {
     try {
 
         // Calling smart contract with register DID document on matic chain
         let returnHashValues = await registry.functions.createDID(address, DidDoc)
             .then((resHashValue) => {
                 return resHashValue;
-            })
+            });
         return returnHashValues;
-    }
-    catch (error) {
-
-        logger.error(`Error occurred in createDid function  ${error}`)
+    } catch (error) {
+        logger.error(`Error occurred in createDid function  ${error}`);
         throw error;
     }
 }
