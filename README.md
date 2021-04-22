@@ -46,7 +46,7 @@ Here, ‘controller’ is the address of the person who creates and manages the 
 
 ## Create
 
-Creating a DID refers to generation of a DID uri, based on either a newly generated wallet or users wallet.
+Creating a DID refers to generation of a DID uri, based on either a newly generated wallet or user's existing wallet. Note that the wallet should hold Matic tokens.
 
 Can be invoked using 2 methods
 
@@ -66,7 +66,7 @@ const txHash = await createDID();
 
 ## Register
 
-Register of DID is done by logging the transaction on the polygon-register contract, by invoking
+Register of DID is done by logging the transaction on the polygon-register smart contract, by invoking
 
 ```
 import { registerDID } from "polygon-did-registrar";
