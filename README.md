@@ -94,5 +94,10 @@ To remove the instance of DID from the ledger the above function is used as foll
 import { deleteDidDoc } from "polygon-did-registrar";
 const txHash = await deleteDidDoc(did, privateKey, url, contractAddress);
 ```
+## Testing
 
+For Testing use the command
 
+```
+npm run test
+```
