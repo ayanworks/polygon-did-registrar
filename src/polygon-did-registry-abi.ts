@@ -1,171 +1,133 @@
-export const polygonDIDRegistryABI = [
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "id",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "doc",
-        "type": "string"
-      }
-    ],
-    "name": "CreateDID",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "id",
-        "type": "address"
-      }
-    ],
-    "name": "DeleteDID",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "id",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "doc",
-        "type": "string"
-      }
-    ],
-    "name": "UpdateDID",
-    "type": "event"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_id",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "_doc",
-        "type": "string"
-      }
-    ],
-    "name": "createDID",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "controller",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "created",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "updated",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "did_doc",
-        "type": "string"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_id",
-        "type": "address"
-      }
-    ],
-    "name": "getDID",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_id",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "_doc",
-        "type": "string"
-      }
-    ],
-    "name": "updateDID",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "controller",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "created",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "updated",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "did_doc",
-        "type": "string"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_id",
-        "type": "address"
-      }
-    ],
-    "name": "deleteDID",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
-];
+export const polygonDidRegistryABI = [{
+  "type": "event",
+  "name": "DidCreated",
+  "inputs": [{
+    "type": "address",
+    "name": "id",
+    "internalType": "address",
+    "indexed": false
+  }, {
+    "type": "string",
+    "name": "doc",
+    "internalType": "string",
+    "indexed": false
+  }],
+  "anonymous": false
+}, {
+  "type": "event",
+  "name": "DidDeleted",
+  "inputs": [{
+    "type": "address",
+    "name": "id",
+    "internalType": "address",
+    "indexed": false
+  }],
+  "anonymous": false
+}, {
+  "type": "event",
+  "name": "DidUpdated",
+  "inputs": [{
+    "type": "address",
+    "name": "id",
+    "internalType": "address",
+    "indexed": false
+  }, {
+    "type": "string",
+    "name": "doc",
+    "internalType": "string",
+    "indexed": false
+  }],
+  "anonymous": false
+}, {
+  "type": "function",
+  "stateMutability": "nonpayable",
+  "payable": false,
+  "outputs": [{
+    "type": "address",
+    "name": "controller",
+    "internalType": "address"
+  }, {
+    "type": "uint256",
+    "name": "created",
+    "internalType": "uint256"
+  }, {
+    "type": "uint256",
+    "name": "updated",
+    "internalType": "uint256"
+  }, {
+    "type": "string",
+    "name": "did_doc",
+    "internalType": "string"
+  }],
+  "name": "createDID",
+  "inputs": [{
+    "type": "address",
+    "name": "_id",
+    "internalType": "address"
+  }, {
+    "type": "string",
+    "name": "_doc",
+    "internalType": "string"
+  }],
+  "constant": false
+}, {
+  "type": "function",
+  "stateMutability": "nonpayable",
+  "payable": false,
+  "outputs": [],
+  "name": "deleteDID",
+  "inputs": [{
+    "type": "address",
+    "name": "_id",
+    "internalType": "address"
+  }],
+  "constant": false
+}, {
+  "type": "function",
+  "stateMutability": "view",
+  "payable": false,
+  "outputs": [{
+    "type": "string",
+    "name": "",
+    "internalType": "string"
+  }],
+  "name": "getDID",
+  "inputs": [{
+    "type": "address",
+    "name": "_id",
+    "internalType": "address"
+  }],
+  "constant": true
+}, {
+  "type": "function",
+  "stateMutability": "nonpayable",
+  "payable": false,
+  "outputs": [{
+    "type": "address",
+    "name": "controller",
+    "internalType": "address"
+  }, {
+    "type": "uint256",
+    "name": "created",
+    "internalType": "uint256"
+  }, {
+    "type": "uint256",
+    "name": "updated",
+    "internalType": "uint256"
+  }, {
+    "type": "string",
+    "name": "did_doc",
+    "internalType": "string"
+  }],
+  "name": "updateDID",
+  "inputs": [{
+    "type": "address",
+    "name": "_id",
+    "internalType": "address"
+  }, {
+    "type": "string",
+    "name": "_doc",
+    "internalType": "string"
+  }],
+  "constant": false
+}];

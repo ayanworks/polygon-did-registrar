@@ -1,69 +1,67 @@
-import * as dot from "dotenv";
-import { polygonDIDRegistryABI } from "./polygon-did-registry-abi";
-import * as log4js from "log4js";
-import { ethers } from "ethers";
+import * as dot from "dotenv"; // Loads environment variables from .env file.
+import * as log4js from "log4js"; // Logging Services.
+import { polygonDidRegistryABI } from "./polygon-did-registry-abi"; // Polygon DID Registry ABI json data.
+import { ethers } from "ethers"; // Ethereum wallet implementation and utilities.
 
 dot.config();
 
 const logger = log4js.getLogger();
 logger.level = process.env.LOGGER_LEVEL;
 
-let registry;
-
 /**
- * Match DID and address and then delete DID to the internal function
+ * Delete DID Document
  * @param did
- * @returns
+ * @param privateKey
+ * @param url
+ * @param contractAddress
+ * @returns Return transaction hash after deleting DID Document on chain.
  */
-export async function deleteDidDoc(did: string, privateKey: string, url?: string, contractAddress?: string): Promise<string> {
+export async function deleteDidDoc(
+    did: string,
+    privateKey: string,
+    url?: string,
+    contractAddress?: string
+): Promise<object> {
     try {
+        const URL: string = url || process.env.URL;
+        const CONTRACT_ADDRESS: string = contractAddress || process.env.CONTRACT_ADDRESS;
+        
+        const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
+            URL
+        );
+        const wallet: ethers.Wallet = new ethers.Wallet(privateKey, provider);
+        const registry: ethers.Contract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            polygonDidRegistryABI,
+            wallet
+        );
 
-        const URL = url || process.env.URL;
-        const CONTRACT_ADDRESS = contractAddress || process.env.CONTRACT_ADDRESS;
-        const PRIVATE_KEY = privateKey;
-        const provider = new ethers.providers.JsonRpcProvider(URL);
-
-        let wallet = new ethers.Wallet(`${PRIVATE_KEY}`, provider);
-        registry = new ethers.Contract(CONTRACT_ADDRESS, polygonDIDRegistryABI, wallet);
+        let errorMessage: string;
 
         if (did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/)) {
-
             if (did.match(/^did:polygon:\w{0,42}$/)) {
+                let txnHash: any = await registry.functions
+                    .deleteDID(did.split(":")[2])
+                    .then((resValue: any) => {
+                        return resValue;
+                    });
 
-                // Delete the DID for deleteDID function
-                const txnHash = await deleteDID(did.split(":")[2]);
-                logger.debug(`[deleteDidDoc] - txnHash - ${JSON.stringify(txnHash)} \n\n\n`);
+                logger.debug(
+                    `[deleteDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`
+                );
                 return txnHash;
-
             } else {
-                throw new Error("Invalid address has been entered!");
+                errorMessage = `Invalid address has been entered!`;
+                logger.error(errorMessage);
+                throw new Error(errorMessage);
             }
         } else {
-            throw new Error("Invalid DID has been entered!");
+            errorMessage = `Invalid DID has been entered!`;
+            logger.error(errorMessage);
+            throw new Error(errorMessage);
         }
     } catch (error) {
         logger.error(`Error occurred in deleteDidDoc function ${error}`);
-        throw error;
-    }
-}
-
-/**
- * Delete DID document on matic chain
- * @param address
- * @param DidDoc
- * @returns
- */
-async function deleteDID(address: string) {
-    try {
-        // Calling smart contract with delete DID document on matic chain
-        let returnValues = await registry.functions
-            .deleteDID(address)
-            .then((resValue) => {
-                return resValue;
-            });
-        return returnValues;
-    } catch (error) {
-        logger.error(`Error occurred in deleteDID function ${error}`);
         throw error;
     }
 }

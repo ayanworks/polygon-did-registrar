@@ -1,56 +1,70 @@
 import { testDid, updateStringData, privateKey } from "./test.data";
-import { registerDID } from '../src/polygon-did-registrar';
+import { registerDID, createDID } from '../src/polygon-did-registrar';
 import { updateDidDoc } from '../src/polygon-did-update';
 import { deleteDidDoc } from '../src/polygon-did-delete';
 
+jest.setTimeout(30000);
 
-describe("test register function", () => {
+describe("test create did function", () => {
 
-  it("should register polygon DID", res => {
-    setTimeout(() => {
-      expect(registerDID(testDid, privateKey))
+  test("should create polygon DID", async res => {
+    try {
+      const createDidRes = await createDID(privateKey)
+        .then((response) => {
+          return response;
+        })
+      await expect(createDidRes)
       res();
-    }, 5000);
-  });
-
-  it("should fail if any is wrong", res => {
-    setTimeout(() => {
-      expect(registerDID("0x", "")).rejects.toThrow();
-      res();
-    }, 5000);
+    } catch (error) {
+      res(error);
+    }
   });
 });
 
+describe("test register did function", () => {
+
+  test("should register polygon DID", async res => {
+    try {
+      const registerDidRes = await registerDID(testDid, privateKey)
+        .then((response) => {
+          return response;
+        })
+      await expect(registerDidRes)
+      res();
+    } catch (error) {
+      res(error);
+    }
+  });
+})
+
 describe("test update function", () => {
 
-  it("should update polygon DID", res => {
-    setTimeout(() => {
-      expect(updateDidDoc(testDid, updateStringData, privateKey));
+  test("should update polygon DID", async res => {
+    try {
+      const updateDidRes = await updateDidDoc(testDid, updateStringData, privateKey)
+        .then((response) => {
+          return response;
+        })
+      await expect(updateDidRes)
       res();
-    }, 5000);
-  });
-
-  it("should fail if DID string and DID doc is wrong", res => {
-    setTimeout(() => {
-      expect(updateDidDoc("did:polygon:notHex", "", "0x")).rejects.toThrow();
-      res();
-    }, 5000);
+    } catch (error) {
+      res(error);
+    }
   });
 });
 
 describe("test delete function", () => {
 
-  it("should delete polygon DID", res => {
-    setTimeout(() => {
-      expect(deleteDidDoc(testDid, privateKey));
+  test("should delete polygon DID", async res => {
+    try {
+      const deleteDidRes = await deleteDidDoc(testDid, privateKey)
+        .then((response) => {
+          return response;
+        })
+      await expect(deleteDidRes)
       res();
-    }, 5000);
-  });
-
-  it("should fail if DID string is wrong", res => {
-    setTimeout(() => {
-      expect(deleteDidDoc("did:polygon:notHex", "0x")).rejects.toThrow();
-      res();
-    }, 5000);
+    } catch (error) {
+      res(error);
+    }
   });
 });
