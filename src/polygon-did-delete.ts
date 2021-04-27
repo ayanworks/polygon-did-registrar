@@ -1,7 +1,8 @@
-import * as dot from "dotenv"; // Loads environment variables from .env file.
-import * as log4js from "log4js"; // Logging Services.
-import { polygonDidRegistryABI } from "./polygon-did-registry-abi"; // Polygon DID Registry ABI json data.
-import { ethers } from "ethers"; // Ethereum wallet implementation and utilities.
+import * as dot from "dotenv"; 
+import * as log4js from "log4js"; 
+import { polygonDidRegistryABI } from "./polygon-did-registry-abi"; 
+import { ethers } from "ethers"; 
+import { BaseResponse } from "./common-response"; 
 
 dot.config();
 
@@ -21,11 +22,11 @@ export async function deleteDidDoc(
     privateKey: string,
     url?: string,
     contractAddress?: string
-): Promise<object> {
+): Promise<BaseResponse> {
     try {
         const URL: string = url || process.env.URL;
         const CONTRACT_ADDRESS: string = contractAddress || process.env.CONTRACT_ADDRESS;
-        
+
         const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
             URL
         );
@@ -49,9 +50,10 @@ export async function deleteDidDoc(
                 logger.debug(
                     `[deleteDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`
                 );
-                return txnHash;
+
+                return BaseResponse.from(txnHash, 'Delete DID document successfully');
             } else {
-                errorMessage = `Invalid address has been entered!`;
+                errorMessage = `Invalid method-specific identifier has been entered!`;
                 logger.error(errorMessage);
                 throw new Error(errorMessage);
             }

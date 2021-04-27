@@ -1,11 +1,12 @@
-import * as dot from "dotenv"; // Loads environment variables from .env file.
-import * as log4js from "log4js"; // Logging Services.
-import * as bs58 from "bs58"; // Compute base 58 encoding.
-import { polygonDidRegistryABI } from "./polygon-did-registry-abi"; // Polygon DID Registry ABI json data.
-import { ethers } from "ethers"; // Ethereum wallet implementation and utilities.
-import { Wallet } from '@ethersproject/wallet' // To generate wallet.
-import { computeAddress } from "@ethersproject/transactions"; // Utilities for decoding and encoding Ethereum transaction for ethers.
-import { computePublicKey } from "@ethersproject/signing-key"; // Responsible for secp256-k1 signing, verifying and recovery operations.
+import * as dot from "dotenv";
+import * as log4js from "log4js";
+import * as bs58 from "bs58";
+import { polygonDidRegistryABI } from "./polygon-did-registry-abi";
+import { ethers } from "ethers";
+import { Wallet } from '@ethersproject/wallet'
+import { computeAddress } from "@ethersproject/transactions";
+import { computePublicKey } from "@ethersproject/signing-key";
+import { BaseResponse } from "./common-response";
 
 dot.config();
 
@@ -41,7 +42,9 @@ async function wrapDidDocument(
  * @param privateKey
  * @returns Returns the address and public key of type base58.
  */
-async function createKeyPair(privateKey: string): Promise<any> {
+async function createKeyPair(
+    privateKey: string
+): Promise<any> {
     try {
         const publicKey: string = computePublicKey(privateKey, true);
 
@@ -62,8 +65,11 @@ async function createKeyPair(privateKey: string): Promise<any> {
  * @param privateKey
  * @returns Returns the address, public key of type base58, private key and DID Uri
  */
-export async function createDID(privateKey?: string): Promise<any> {
+export async function createDID(
+    privateKey?: string
+): Promise<BaseResponse> {
     try {
+
         let did: string;
         let _privateKey: string;
 
@@ -80,7 +86,7 @@ export async function createDID(privateKey?: string): Promise<any> {
         logger.debug(`[createDID] address - ${JSON.stringify(address)} \n\n\n`);
         logger.debug(`[createDID] did - ${JSON.stringify(did)} \n\n\n`);
 
-        return { address, publicKeyBase58, _privateKey, did };
+        return BaseResponse.from({ address, publicKeyBase58, _privateKey, did }, 'Created DID uri successfully');
     } catch (error) {
         logger.error(`Error occurred in createDID function ${error}`);
         throw error;
@@ -100,7 +106,7 @@ export async function registerDID(
     privateKey: string,
     url?: string,
     contractAddress?: string
-): Promise<object> {
+): Promise<BaseResponse> {
     try {
         const URL: string = url || process.env.URL;
         const CONTRACT_ADDRESS: string = contractAddress || process.env.CONTRACT_ADDRESS;
@@ -129,7 +135,8 @@ export async function registerDID(
             });
 
         logger.debug(`[registerDID] txnHash - ${JSON.stringify(txnHash)} \n\n\n`);
-        return { did, txnHash };
+
+        return BaseResponse.from({ did, txnHash }, 'Registered DID document successfully.');
     } catch (error) {
         logger.error(`Error occurred in registerDID function  ${error}`);
         throw error;

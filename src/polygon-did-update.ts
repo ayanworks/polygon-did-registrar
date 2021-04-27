@@ -1,7 +1,8 @@
-import * as dot from "dotenv"; // Loads environment variables from .env file.
-import * as log4js from "log4js"; // Logging Services.
-import { polygonDidRegistryABI } from "./polygon-did-registry-abi"; // Polygon DID Registry ABI json data.
-import { ethers } from "ethers"; // Ethereum wallet implementation and utilities.
+import * as dot from "dotenv";
+import * as log4js from "log4js";
+import { polygonDidRegistryABI } from "./polygon-did-registry-abi";
+import { ethers } from "ethers";
+import { BaseResponse } from "./common-response";
 
 dot.config();
 
@@ -11,7 +12,7 @@ logger.level = process.env.LOGGER_LEVEL;
 /**
  * Update DID document on matic chain
  * @param did
- * @param stringDIDDoc
+ * @param didDocJson
  * @param privateKey
  * @param url
  * @param contractAddress
@@ -19,15 +20,15 @@ logger.level = process.env.LOGGER_LEVEL;
  */
 export async function updateDidDoc(
     did: string,
-    stringDidDoc: string,
-    privateKey: string,
+    didDocJson: string,
+    privateKey: string, // Todo: look for better way to address private key passing mechanism
     url?: string,
     contractAddress?: string
-): Promise<object> {
+): Promise<BaseResponse> {
     try {
         const URL: string = url || process.env.URL;
         const CONTRACT_ADDRESS: string = contractAddress || process.env.CONTRACT_ADDRESS;
-        
+
         const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
             URL
         );
@@ -44,7 +45,7 @@ export async function updateDidDoc(
             if (did.match(/^did:polygon:\w{0,42}$/)) {
                 // Calling smart contract with update DID document on matic chain
                 let txnHash: any = await registry.functions
-                    .updateDID(did.split(":")[2], stringDidDoc)
+                    .updateDID(did.split(":")[2], didDocJson)
                     .then((resValue) => {
                         return resValue;
                     });
@@ -52,9 +53,10 @@ export async function updateDidDoc(
                 logger.debug(
                     `[updateDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`
                 );
-                return txnHash;
+
+                return BaseResponse.from(txnHash, 'Update DID document successfully');
             } else {
-                errorMessage = `Invalid address has been entered!`;
+                errorMessage = `Invalid method-specific identifier has been entered!`;
                 logger.error(errorMessage);
                 throw new Error(errorMessage);
             }
