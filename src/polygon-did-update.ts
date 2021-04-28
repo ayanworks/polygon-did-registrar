@@ -2,12 +2,13 @@ import * as dot from "dotenv";
 import * as log4js from "log4js";
 import { polygonDidRegistryABI } from "./polygon-did-registry-abi";
 import { ethers } from "ethers";
-import { BaseResponse } from "./common-response";
+import { BaseResponse } from "./base-response";
+import { default as CommonConstants } from "./configuration";
 
 dot.config();
 
 const logger = log4js.getLogger();
-logger.level = process.env.LOGGER_LEVEL;
+logger.level = `${CommonConstants.LOGGER_LEVEL}`;
 
 /**
  * Update DID document on matic chain
@@ -26,8 +27,8 @@ export async function updateDidDoc(
     contractAddress?: string
 ): Promise<BaseResponse> {
     try {
-        const URL: string = url || process.env.URL;
-        const CONTRACT_ADDRESS: string = contractAddress || process.env.CONTRACT_ADDRESS;
+        const URL: string = url || `${CommonConstants.URL}`;
+        const CONTRACT_ADDRESS: string = contractAddress || `${CommonConstants.CONTRACT_ADDRESS}`;
 
         const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
             URL
@@ -41,27 +42,45 @@ export async function updateDidDoc(
 
         let errorMessage: string;
 
-        if (did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/)) {
-            if (did.match(/^did:polygon:\w{0,42}$/)) {
-                // Calling smart contract with update DID document on matic chain
-                let txnHash: any = await registry.functions
-                    .updateDID(did.split(":")[2], didDocJson)
-                    .then((resValue) => {
-                        return resValue;
-                    });
+        if (didDocJson && JSON.parse(didDocJson)) {
 
-                logger.debug(
-                    `[updateDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`
-                );
+            if ('@context' in JSON.parse(didDocJson) &&
+                'id' in JSON.parse(didDocJson) &&
+                'verificationMethod' in JSON.parse(didDocJson)) {
 
-                return BaseResponse.from(txnHash, 'Update DID document successfully');
+                if (did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/)) {
+
+                    if (did.match(/^did:polygon:\w{0,42}$/)) {
+
+                        // Calling smart contract with update DID document on matic chain
+                        let txnHash: any = await registry.functions
+                            .updateDID(did.split(":")[2], didDocJson)
+                            .then((resValue) => {
+                                return resValue;
+                            });
+
+                        logger.debug(
+                            `[updateDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`
+                        );
+
+                        return BaseResponse.from(txnHash, 'Update DID document successfully');
+                    } else {
+                        errorMessage = `Invalid method-specific identifier has been entered!`;
+                        logger.error(errorMessage);
+                        throw new Error(errorMessage);
+                    }
+                } else {
+                    errorMessage = `Invalid DID has been entered!!`;
+                    logger.error(errorMessage);
+                    throw new Error(errorMessage);
+                }
             } else {
-                errorMessage = `Invalid method-specific identifier has been entered!`;
+                errorMessage = `Invalid DID document has been entered!!`;
                 logger.error(errorMessage);
                 throw new Error(errorMessage);
             }
         } else {
-            errorMessage = `Invalid DID has been entered!!`;
+            errorMessage = `Invalid data has been entered!!`;
             logger.error(errorMessage);
             throw new Error(errorMessage);
         }

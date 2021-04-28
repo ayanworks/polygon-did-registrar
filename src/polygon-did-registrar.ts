@@ -6,12 +6,13 @@ import { ethers } from "ethers";
 import { Wallet } from '@ethersproject/wallet'
 import { computeAddress } from "@ethersproject/transactions";
 import { computePublicKey } from "@ethersproject/signing-key";
-import { BaseResponse } from "./common-response";
+import { BaseResponse } from "./base-response";
+import { default as CommonConstants } from "./configuration";
 
 dot.config();
 
 const logger = log4js.getLogger();
-logger.level = process.env.LOGGER_LEVEL;
+logger.level = `${CommonConstants.LOGGER_LEVEL}`;
 
 /**
  * Create DID Document.
@@ -108,8 +109,8 @@ export async function registerDID(
     contractAddress?: string
 ): Promise<BaseResponse> {
     try {
-        const URL: string = url || process.env.URL;
-        const CONTRACT_ADDRESS: string = contractAddress || process.env.CONTRACT_ADDRESS;
+        const URL: string = url || `${CommonConstants.URL}`;
+        const CONTRACT_ADDRESS: string = contractAddress || `${CommonConstants.CONTRACT_ADDRESS}`;
 
         const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
             URL

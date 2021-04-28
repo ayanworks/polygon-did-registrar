@@ -16,12 +16,14 @@ describe("test create did function", () => {
         })
 
       // output address
+      await expect(createDidRes.data.address).toBeDefined();
       await expect(createDidRes.data.address).not.toBeNull();
       await expect(createDidRes.data.address).not.toBe('');
       await expect(createDidRes.data.address.slice(0, 2)).toMatch('0x');
       await expect(createDidRes.data.address.length).toBe(42);
 
       // output publicKeyBase58
+      await expect(createDidRes.data.publicKeyBase58).toBeDefined();
       await expect(createDidRes.data.publicKeyBase58).not.toBeNull();
       await expect(createDidRes.data.publicKeyBase58).not.toBe('');
 

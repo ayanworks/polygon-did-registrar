@@ -1,13 +1,14 @@
-import * as dot from "dotenv"; 
-import * as log4js from "log4js"; 
-import { polygonDidRegistryABI } from "./polygon-did-registry-abi"; 
-import { ethers } from "ethers"; 
-import { BaseResponse } from "./common-response"; 
+import * as dot from "dotenv";
+import * as log4js from "log4js";
+import { polygonDidRegistryABI } from "./polygon-did-registry-abi";
+import { ethers } from "ethers";
+import { BaseResponse } from "./base-response";
+import { default as CommonConstants } from "./configuration";
 
 dot.config();
 
 const logger = log4js.getLogger();
-logger.level = process.env.LOGGER_LEVEL;
+logger.level = `${CommonConstants.LOGGER_LEVEL}`;
 
 /**
  * Delete DID Document
@@ -24,8 +25,8 @@ export async function deleteDidDoc(
     contractAddress?: string
 ): Promise<BaseResponse> {
     try {
-        const URL: string = url || process.env.URL;
-        const CONTRACT_ADDRESS: string = contractAddress || process.env.CONTRACT_ADDRESS;
+        const URL: string = url || `${CommonConstants.URL}`;
+        const CONTRACT_ADDRESS: string = contractAddress || `${CommonConstants.CONTRACT_ADDRESS}`;
 
         const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
             URL
