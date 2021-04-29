@@ -1,9 +1,9 @@
 import * as dot from "dotenv";
 import * as log4js from "log4js";
-import { polygonDidRegistryABI } from "./polygon-did-registry-abi";
 import { ethers } from "ethers";
 import { BaseResponse } from "./base-response";
 import { default as CommonConstants } from "./configuration";
+const DidRegistryContract = require('polygon-did-registry-contract');
 
 dot.config();
 
@@ -36,7 +36,7 @@ export async function updateDidDoc(
         const wallet: ethers.Wallet = new ethers.Wallet(privateKey, provider);
         const registry: ethers.Contract = new ethers.Contract(
             CONTRACT_ADDRESS,
-            polygonDidRegistryABI,
+            DidRegistryContract.abi,
             wallet
         );
 
@@ -49,9 +49,7 @@ export async function updateDidDoc(
                 'verificationMethod' in JSON.parse(didDocJson)) {
 
                 if (did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/)) {
-
                     if (did.match(/^did:polygon:\w{0,42}$/)) {
-
                         // Calling smart contract with update DID document on matic chain
                         let txnHash: any = await registry.functions
                             .updateDID(did.split(":")[2], didDocJson)

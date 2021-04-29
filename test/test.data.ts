@@ -1,5 +1,5 @@
 
-export const testDid = 'did:polygon:0x0c63b671f7215a764665874f192cde0c0b6f6326';
+export const testDid = 'did:polygon:0x0f03e85c11e1c832c994777bdf610425c30eeba2';
 
 export const updateDidDocument = "{\"@context\":\"https://w3id.org/did/v1\",\"id\":\"did:polygon:0x0c63b671f7215a764665874f192cde0c0b6f6326\",\"verificationMethod\":[{\"id\":\"did:polygon:0x0c63b671f7215a764665874f192cde0c0b6f6326\",\"type\":\"EcdsaSecp256k1VerificationKey2019\",\"controller\":\"did:polygon:0x0c63b671f7215a764665874f192cde0c0b6f6326\",\"publicKeyBase58\":\"NxkSq85Fq2hdev5hE6tCFMsF7yjnEwBtGFJU1RtGXykUwgTY4MfSaCGC1HQFoDmQYLPTy38M1nThz9gWgAVgtWa6\"}]}";
 

@@ -1,9 +1,9 @@
 import * as dot from "dotenv";
 import * as log4js from "log4js";
-import { polygonDidRegistryABI } from "./polygon-did-registry-abi";
 import { ethers } from "ethers";
 import { BaseResponse } from "./base-response";
 import { default as CommonConstants } from "./configuration";
+const DidRegistryContract = require('polygon-did-registry-contract');
 
 dot.config();
 
@@ -34,7 +34,7 @@ export async function deleteDidDoc(
         const wallet: ethers.Wallet = new ethers.Wallet(privateKey, provider);
         const registry: ethers.Contract = new ethers.Contract(
             CONTRACT_ADDRESS,
-            polygonDidRegistryABI,
+            DidRegistryContract.abi,
             wallet
         );
 

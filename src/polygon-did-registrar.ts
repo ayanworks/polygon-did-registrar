@@ -1,13 +1,13 @@
 import * as dot from "dotenv";
 import * as log4js from "log4js";
 import * as bs58 from "bs58";
-import { polygonDidRegistryABI } from "./polygon-did-registry-abi";
 import { ethers } from "ethers";
 import { Wallet } from '@ethersproject/wallet'
 import { computeAddress } from "@ethersproject/transactions";
 import { computePublicKey } from "@ethersproject/signing-key";
 import { BaseResponse } from "./base-response";
 import { default as CommonConstants } from "./configuration";
+const DidRegistryContract = require('polygon-did-registry-contract');
 
 dot.config();
 
@@ -109,35 +109,70 @@ export async function registerDID(
     contractAddress?: string
 ): Promise<BaseResponse> {
     try {
-        const URL: string = url || `${CommonConstants.URL}`;
-        const CONTRACT_ADDRESS: string = contractAddress || `${CommonConstants.CONTRACT_ADDRESS}`;
 
-        const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
-            URL
-        );
-        const wallet: ethers.Wallet = new ethers.Wallet(privateKey, provider);
-        const registry: ethers.Contract = new ethers.Contract(
-            CONTRACT_ADDRESS,
-            polygonDidRegistryABI,
-            wallet
-        );
+        let errorMessage: string;
 
-        const kp: any = await createKeyPair(privateKey);
+        if (did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/)) {
+            if (did.match(/^did:polygon:\w{0,42}$/)) {
 
-        // Get DID document
-        const didDoc: object = await wrapDidDocument(did, kp.publicKeyBase58);
-        const stringDidDoc: string = JSON.stringify(didDoc);
+                const kp: any = await createKeyPair(privateKey);
 
-        // Calling smart contract with register DID document on matic chain
-        const txnHash: any = await registry.functions
-            .createDID(did.split(":")[2], stringDidDoc)
-            .then((resValue: any) => {
-                return resValue;
-            });
+                if (did.split(":")[2] === kp.address) {
+                    const URL: string = url || `${CommonConstants.URL}`;
+                    const CONTRACT_ADDRESS: string = contractAddress || `${CommonConstants.CONTRACT_ADDRESS}`;
 
-        logger.debug(`[registerDID] txnHash - ${JSON.stringify(txnHash)} \n\n\n`);
+                    const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
+                        URL
+                    );
+                    const wallet: ethers.Wallet = new ethers.Wallet(privateKey, provider);
+                    const registry: ethers.Contract = new ethers.Contract(
+                        CONTRACT_ADDRESS,
+                        DidRegistryContract.abi,
+                        wallet
+                    );
 
-        return BaseResponse.from({ did, txnHash }, 'Registered DID document successfully.');
+                    let resolveDidDoc: any = await registry.functions
+                        .getDID(did.split(":")[2])
+                        .then((resValue: any) => {
+                            return resValue;
+                        });
+
+                    if (resolveDidDoc.includes("")) {
+
+                        // Get DID document
+                        const didDoc: object = await wrapDidDocument(did, kp.publicKeyBase58);
+                        const stringDidDoc: string = JSON.stringify(didDoc);
+
+                        // Calling smart contract with register DID document on matic chain
+                        const txnHash: any = await registry.functions
+                            .createDID(did.split(":")[2], stringDidDoc)
+                            .then((resValue: any) => {
+                                return resValue;
+                            });
+
+                        logger.debug(`[registerDID] txnHash - ${JSON.stringify(txnHash)} \n\n\n`);
+
+                        return BaseResponse.from({ did, txnHash }, 'Registered DID document successfully.');
+                    } else {
+                        errorMessage = `The DID document already registered!`;
+                        logger.error(errorMessage);
+                        throw new Error(errorMessage);
+                    }
+                } else {
+                    errorMessage = `Private key and DID uri do not match!`;
+                    logger.error(errorMessage);
+                    throw new Error(errorMessage);
+                }
+            } else {
+                errorMessage = `Invalid method-specific identifier has been entered!`;
+                logger.error(errorMessage);
+                throw new Error(errorMessage);
+            }
+        } else {
+            errorMessage = `Invalid DID has been entered!`;
+            logger.error(errorMessage);
+            throw new Error(errorMessage);
+        }
     } catch (error) {
         logger.error(`Error occurred in registerDID function  ${error}`);
         throw error;
