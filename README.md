@@ -12,7 +12,7 @@ The DID identifier allows the controller to resolve DID document for usage in di
     "publicKey": [
         {
             "id": "did:polygon:0xdce5306fb5f9ba6797546dcd2e11eb5c5201bfeb#keys-1",
-            "type": "Secp256k1VerificationKey2018",
+            "type": "EcdsaSecp256k1VerificationKey2019",
             "owner": "did:polygon:0xdce5306fb5f9ba6797546dcd2e11eb5c5201bfeb",
             "ethereumAddress": "0xdce5306fb5f9ba6797546dcd2e11eb5c5201bfeb"
         }
@@ -22,7 +22,7 @@ The DID identifier allows the controller to resolve DID document for usage in di
 
 # DID Method or DID schema
 
-The DID method is a specific implementation of a DID scheme that will be identified by method name. For this case the method name is “polygon”, and the identifier is an Ethereum address derived from scep256k1 publickey.
+The DID method is a specific implementation of a DID scheme that will be identified by method name. For this case the method name is “polygon”, and the identifier is an Ethereum address.
 
 ## The DID for Polygon looks like:
 
@@ -50,13 +50,35 @@ Where,
 
 ## Create
 
-Creation of DID is done by logging the transaction on the polygon-register contract, by invoking
+Creating a DID refers to generation of a DID uri, based on either a newly generated wallet or user's existing wallet. Note that the wallet should hold Matic tokens.
+
+Can be invoked using 2 methods
+
+Method 1: With user's perosonal privateKey
 
 ```
-npm run start:register
+import { createDID } from "polygon-did-registrar";
+const txHash = await createDID(privateKey);
 ```
 
-The assign the address type id variable, to the reference the respective struct, which will store the DID doc. 
+Method 2: Without a privateKey
+
+```
+import { createDID } from "polygon-did-registrar";
+const txHash = await createDID();
+```
+The function returns, address, publicKey (base58 format), privateKey and DID uri.
+
+## Register
+
+Register of DID is done by logging the transaction on the polygon-register smart contract, by invoking
+
+```
+import { registerDID } from "polygon-did-registrar";
+const txHash = await registerDID(did, privateKey, url?, contractAddress?);
+```
+The function returns a txhash and DID uri on successful execution.
+ 
 
 
 ## Update
@@ -64,7 +86,8 @@ The assign the address type id variable, to the reference the respective struct,
 The DID controller requests for the update functionality, if the controller wishes to edit the did doc store on the ledger using :
 
 ```
-npm run start:update
+import { updateDidDoc } from "polygon-did-registrar";
+const txHash = await updateDidDoc(did, didDoc, privateKey, url?, contractAddress?);
 ```
 
 ## Delete
@@ -72,5 +95,6 @@ npm run start:update
 To remove the instance of DID from the ledger the above function is used as follows :
 
 ```
-npm run start:delete
+import { deleteDidDoc } from "polygon-did-registrar";
+const txHash = await deleteDidDoc(did, privateKey, url, contractAddress);
 ```
