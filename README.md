@@ -40,7 +40,11 @@ Every DID on chain has the same structure, defined as:
         string doc;
     }
 ```
-Here, ‘controller’ is the address of the person who creates and manages the DID, ‘created’ holds the timestamp of the block when DID was created, ‘updated’ initially holds the timestamp of when the DID was created, but is updated if the controller updates the DID on chain, and ‘doc’ holds the entire DID document in form of string.
+Where,
+- [1] controller is the address of the person who creates and manages the DID
+- [2] created holds the timestamp of the block when DID was created
+- [3] updated initially holds the timestamp of when the DID was created, but is updated if the controller updates the DID on chain, and
+- [4] doc holds the entire DID document in form of string.
 
 # DID Operations
 
@@ -70,5 +74,3 @@ To remove the instance of DID from the ledger the above function is used as foll
 ```
 npm run start:delete
 ```
-
-
