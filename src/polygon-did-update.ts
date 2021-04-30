@@ -3,7 +3,7 @@ import * as log4js from "log4js";
 import { ethers } from "ethers";
 import { BaseResponse } from "./base-response";
 import { default as CommonConstants } from "./configuration";
-const DidRegistryContract = require('polygon-did-registry-contract');
+const DidRegistryContract = require('@ayanworks/polygon-did-registry-contract');
 
 dot.config();
 

@@ -1,6 +1,6 @@
 {
-  "name": "polygon-did-registrar",
-  "version": "1.0.0",
+  "name": "@ayanworks/polygon-did-registrar",
+  "version": "0.0.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -15,8 +15,8 @@
     "test": "jest",
     "lint": "tslint -p tsconfig.json"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Shashank Kulkarni <shashank.kulkarni@ayanworks.com>",
+  "license": "MIT",
   "dependencies": {
     "@metamask/detect-provider": "^1.2.0",
     "buffer": "^6.0.3",
@@ -35,7 +35,7 @@
     "truffle-contract": "^4.0.31",
     "typescript": "^4.2.4",
     "web3": "1.3.0",
-    "polygon-did-registry-contract": "1.0.0"
+    "@ayanworks/polygon-did-registry-contract": "0.0.1"
   },
   "devDependencies": {
     "@types/bs58": "^4.0.1",
@@ -45,5 +45,20 @@
     "ethers": "^5.1.0",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.5"
-  }
+  },
+  "description": "The polygon DID method library uses Ethereum based addresses as fully functional DID’s or Decentralized identifiers, on the Polygon network. The following allows one to create a key Pair based and facilitates its storage on the registry smart contract, deployed on Polygon chain. Third party users can use this to create polygon DID identities. It allows the controller to perform actions like resolve, update and delete by encapsulating polygonDID registry and PolygonDID resolver. The DID identifier allows the controller to resolve DID document for usage in different scenarios.",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/polygon-did/polygon-did-registrar.git"
+  },
+  "keywords": [
+    "did-method"
+  ],
+  "bugs": {
+    "url": "https://gitlab.com/polygon-did/polygon-did-registrar/issues"
+  },
+  "homepage": "https://gitlab.com/polygon-did/polygon-did-registrar#readme"
 }
