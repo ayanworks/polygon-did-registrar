@@ -26,9 +26,16 @@ The DID method is a specific implementation of a DID scheme that will be identif
 
 ## The DID for Polygon looks like:
 
+### On Polygon mainnet
 ```
 did:polygon:0xdce5306fb5f9ba6797546dcd2e11eb5c5201bfeb
 ```
+
+### On Polygon testnet
+```
+did:polygon:testnet:0xdce5306fb5f9ba6797546dcd2e11eb5c5201bfeb
+```
+
 ## DID On-Chain
 
 Every DID on chain has the same structure, defined as:
@@ -54,18 +61,18 @@ Creating a DID refers to generation of a DID uri, based on either a newly genera
 
 Can be invoked using 2 methods
 
-Method 1: With user's perosonal privateKey
+Method 1: With user's personal privateKey and network type(mainnet/testnet)
 
 ```
 import { createDID } from "polygon-did-registrar";
-const txHash = await createDID(privateKey);
+const txHash = await createDID(network, privateKey);
 ```
 
-Method 2: Without a privateKey
+Method 2: With only network type(mainnet/testnet)
 
 ```
 import { createDID } from "polygon-did-registrar";
-const txHash = await createDID();
+const txHash = await createDID(network);
 ```
 The function returns, address, publicKey (base58 format), privateKey and DID uri.
 
@@ -78,8 +85,6 @@ import { registerDID } from "polygon-did-registrar";
 const txHash = await registerDID(did, privateKey, url?, contractAddress?);
 ```
 The function returns a txhash and DID uri on successful execution.
- 
-
 
 ## Update
 

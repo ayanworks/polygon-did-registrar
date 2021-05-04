@@ -1,4 +1,4 @@
-import { testDid, updateDidDocument, privateKey, url, contractAddress } from "./test.data";
+import { testDid, updateDidDocument, privateKey, network } from "./test.data";
 import { registerDID, createDID } from '../src/polygon-did-registrar';
 import { updateDidDoc } from '../src/polygon-did-update';
 import { deleteDidDoc } from '../src/polygon-did-delete';
@@ -17,10 +17,20 @@ describe("test create did function", () => {
     await expect(privateKey).not.toBe('');
     await expect(privateKey.length).toBe(66);
     await expect(privateKey.slice(0, 2)).toMatch('0x');
+
+    if (network === 'testnet') {
+      await expect(network).not.toBeNull();
+      await expect(network).not.toBe('');
+      await expect(network).toMatch('testnet');
+    } else {
+      await expect(network).not.toBeNull();
+      await expect(network).not.toBe('');
+      await expect(network).toMatch('mainnet');
+    }
   })
 
   beforeAll(async () => {
-    createDidRes = await createDID(privateKey);
+    createDidRes = await createDID(network, privateKey);
     return true;
   })
 
@@ -39,14 +49,27 @@ describe("test create did function", () => {
   })
 
   it('should get polygon DID', async () => {
-    await expect(createDidRes.data.did).toBeDefined();
-    await expect(createDidRes.data.did).not.toBeNull();
-    await expect(createDidRes.data.did).not.toBe('');
-    await expect(createDidRes.data.did.slice(0, 12)).toMatch('did:polygon:');
-    await expect(createDidRes.data.did.slice(12, 14)).toMatch('0x');
-    await expect(createDidRes.data.did.split(":")[2].length).toBe(42);
 
-    polygonDID = createDidRes.data.did;
+    if (createDidRes && createDidRes.data && createDidRes.data.did.split(':')[2] === 'testnet') {
+
+      await expect(createDidRes.data.did).toBeDefined();
+      await expect(createDidRes.data.did).not.toBeNull();
+      await expect(createDidRes.data.did).not.toBe('');
+      await expect(createDidRes.data.did.slice(0, 19)).toMatch('did:polygon:testnet');
+      await expect(createDidRes.data.did.slice(20, 22)).toMatch('0x');
+      await expect(createDidRes.data.did.split(":")[3].length).toBe(42);
+
+      polygonDID = createDidRes.data.did;
+    } else {
+      await expect(createDidRes.data.did).toBeDefined();
+      await expect(createDidRes.data.did).not.toBeNull();
+      await expect(createDidRes.data.did).not.toBe('');
+      await expect(createDidRes.data.did.slice(0, 12)).toMatch('did:polygon');
+      await expect(createDidRes.data.did.slice(12, 14)).toMatch('0x');
+      await expect(createDidRes.data.did.split(":")[2].length).toBe(42);
+
+      polygonDID = createDidRes.data.did;
+    }
   })
 })
 
@@ -60,8 +83,6 @@ describe("test register DID function", () => {
     await expect(polygonDID).not.toBeNull();
     await expect(polygonDID).not.toBe('');
     await expect(polygonDID.slice(0, 12)).toMatch('did:polygon:');
-    await expect(polygonDID.slice(12, 14)).toMatch('0x');
-    await expect(polygonDID.split(":")[2].length).toBe(42);
   })
 
   it('should be privateKey for register DID', async () => {
@@ -78,28 +99,39 @@ describe("test register DID function", () => {
 
   it('should get register polygon DID for register DID', async () => {
 
-    if (registerDidRes.data.did) {
-      await expect(registerDidRes.data.did).toBeDefined();
-      await expect(registerDidRes.data.did).not.toBeNull();
-      await expect(registerDidRes.data.did).not.toBe('');
-      await expect(registerDidRes.data.did.slice(0, 12)).toMatch('did:polygon:');
-      await expect(registerDidRes.data.did.slice(12, 14)).toMatch('0x');
-      await expect(registerDidRes.data.did.split(":")[2].length).toBe(42);
+    if (registerDidRes && registerDidRes.data && registerDidRes.data.did) {
+      if (registerDidRes.data.did.split(':')[2] === 'testnet') {
+
+        await expect(registerDidRes.data.did).toBeDefined();
+        await expect(registerDidRes.data.did).not.toBeNull();
+        await expect(registerDidRes.data.did).not.toBe('');
+        await expect(registerDidRes.data.did.slice(0, 19)).toMatch('did:polygon:testnet');
+        await expect(registerDidRes.data.did.slice(20, 22)).toMatch('0x');
+        await expect(registerDidRes.data.did.split(":")[3].length).toBe(42);
+      } else {
+
+        await expect(registerDidRes.data.did).toBeDefined();
+        await expect(registerDidRes.data.did).not.toBeNull();
+        await expect(registerDidRes.data.did).not.toBe('');
+        await expect(registerDidRes.data.did.slice(0, 12)).toMatch('did:polygon');
+        await expect(registerDidRes.data.did.slice(12, 14)).toMatch('0x');
+        await expect(registerDidRes.data.did.split(":")[2].length).toBe(42);
+      }
     } else {
-      await expect(registerDidRes.data.did).toBeFalsy();
+      await expect(registerDidRes).toBeFalsy();
     }
   })
 
   it('should get transaction hash after DID register ', async () => {
 
-    if (registerDidRes.data.txnHash) {
+    if (registerDidRes && registerDidRes.data && registerDidRes.data.txnHash) {
       await expect(registerDidRes.data.txnHash).toBeDefined();
       await expect(registerDidRes.data.txnHash).not.toBeNull();
       await expect(registerDidRes.data.txnHash).not.toBe('');
       await expect(Object.keys(registerDidRes.data.txnHash))
         .toEqual(expect.arrayContaining(['nonce', 'gasPrice', 'gasLimit', 'to', 'value', 'data', 'chainId', 'v', 'r', 's', 'from', 'hash', 'type', 'wait']));
     } else {
-      await expect(registerDidRes.data.txnHash).toBeFalsy();
+      await expect(registerDidRes).toBeFalsy();
     }
   })
 })
@@ -110,11 +142,23 @@ describe("test update DID doc function", () => {
 
   it('should be polygon DID for update DID document', async () => {
 
-    await expect(polygonDID).not.toBeNull();
-    await expect(polygonDID).not.toBe('');
-    await expect(polygonDID.slice(0, 12)).toMatch('did:polygon:');
-    await expect(polygonDID.slice(12, 14)).toMatch('0x');
-    await expect(polygonDID.split(":")[2].length).toBe(42);
+    if (polygonDID && polygonDID.split(':')[2] === 'testnet') {
+
+      await expect(polygonDID).toBeDefined();
+      await expect(polygonDID).not.toBeNull();
+      await expect(polygonDID).not.toBe('');
+      await expect(polygonDID.slice(0, 19)).toMatch('did:polygon:testnet');
+      await expect(polygonDID.slice(20, 22)).toMatch('0x');
+      await expect(polygonDID.split(":")[3].length).toBe(42);
+    } else {
+
+      await expect(polygonDID).toBeDefined();
+      await expect(polygonDID).not.toBeNull();
+      await expect(polygonDID).not.toBe('');
+      await expect(polygonDID.slice(0, 12)).toMatch('did:polygon');
+      await expect(polygonDID.slice(12, 14)).toMatch('0x');
+      await expect(polygonDID.split(":")[2].length).toBe(42);
+    }
   })
 
   it('should be updated DID Document for update DID document', async () => {
@@ -139,7 +183,7 @@ describe("test update DID doc function", () => {
 
   it('should get transaction hash after update DID document', async () => {
 
-    if (updateDidRes.data.txnHash) {
+    if (updateDidRes && updateDidRes.data && updateDidRes.data.txnHash) {
       await expect(updateDidRes.data.txnHash).toBeDefined();
       await expect(updateDidRes.data.txnHash).not.toBeNull();
       await expect(updateDidRes.data.txnHash).not.toBe('');
@@ -157,11 +201,23 @@ describe("test delete function", () => {
 
   it('should be polygon DID for delete DID document', async () => {
 
-    await expect(polygonDID).not.toBeNull();
-    await expect(polygonDID).not.toBe('');
-    await expect(polygonDID.slice(0, 12)).toMatch('did:polygon:');
-    await expect(polygonDID.slice(12, 14)).toMatch('0x');
-    await expect(polygonDID.split(":")[2].length).toBe(42);
+    if (polygonDID && polygonDID.split(':')[2] === 'testnet') {
+
+      await expect(polygonDID).toBeDefined();
+      await expect(polygonDID).not.toBeNull();
+      await expect(polygonDID).not.toBe('');
+      await expect(polygonDID.slice(0, 19)).toMatch('did:polygon:testnet');
+      await expect(polygonDID.slice(20, 22)).toMatch('0x');
+      await expect(polygonDID.split(":")[3].length).toBe(42);
+    } else {
+
+      await expect(polygonDID).toBeDefined();
+      await expect(polygonDID).not.toBeNull();
+      await expect(polygonDID).not.toBe('');
+      await expect(polygonDID.slice(0, 12)).toMatch('did:polygon');
+      await expect(polygonDID.slice(12, 14)).toMatch('0x');
+      await expect(polygonDID.split(":")[2].length).toBe(42);
+    }
   })
 
   it('should be private key for delete DID document', async () => {
@@ -178,7 +234,7 @@ describe("test delete function", () => {
 
   it('should get transaction hash after delete DID document', async () => {
 
-    if (deleteDidRes.data.txnHash) {
+    if (deleteDidRes && deleteDidRes.data && deleteDidRes.data.txnHash) {
 
       await expect(deleteDidRes.data.txnHash).toBeDefined();
       await expect(deleteDidRes.data.txnHash).not.toBeNull();
