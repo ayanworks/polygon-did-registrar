@@ -1,18 +1,18 @@
 import * as dot from "dotenv";
 import * as log4js from "log4js";
 import * as bs58 from "bs58";
+import * as networkConfiguration from './configuration.json';
 import { ethers } from "ethers";
 import { Wallet } from '@ethersproject/wallet'
 import { computeAddress } from "@ethersproject/transactions";
 import { computePublicKey } from "@ethersproject/signing-key";
 import { BaseResponse } from "./base-response";
-import { default as CommonConstants } from "./configuration";
 const DidRegistryContract = require('@ayanworks/polygon-did-registry-contract');
 
 dot.config();
 
 const logger = log4js.getLogger();
-logger.level = `${CommonConstants.LOGGER_LEVEL}`;
+logger.level = `debug`;
 
 /**
  * Create DID Document.
@@ -67,9 +67,12 @@ async function createKeyPair(
  * @returns Returns the address, public key of type base58, private key and DID Uri
  */
 export async function createDID(
+    network: string,
     privateKey?: string
 ): Promise<BaseResponse> {
     try {
+
+        let errorMessage: string;
 
         let did: string;
         let _privateKey: string;
@@ -82,7 +85,17 @@ export async function createDID(
         }
 
         const { address, publicKeyBase58 } = await createKeyPair(_privateKey);
-        did = `did:polygon:${address}`;
+
+        if (network === "testnet") {
+            did = `did:polygon:testnet:${address}`;
+
+        } else if (network === "mainnet") {
+            did = `did:polygon:${address}`;
+        } else {
+            errorMessage = `Wrong network enter!`;
+            logger.error(errorMessage);
+            throw new Error(errorMessage);
+        }
 
         logger.debug(`[createDID] address - ${JSON.stringify(address)} \n\n\n`);
         logger.debug(`[createDID] did - ${JSON.stringify(did)} \n\n\n`);
@@ -112,27 +125,54 @@ export async function registerDID(
 
         let errorMessage: string;
 
-        if (did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/)) {
-            if (did.match(/^did:polygon:\w{0,42}$/)) {
+        if (did && did.split(':')[2] === 'testnet' && did.match(/^did:polygon:testnet:0x[0-9a-fA-F]{40}$/) ||
+            did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/)
+        ) {
+            if (did.split(':')[2] === 'testnet' && did.match(/^did:polygon:testnet:\w{0,42}$/) ||
+                did.match(/^did:polygon:\w{0,42}$/)
+            ) {
 
                 const kp: any = await createKeyPair(privateKey);
 
-                if (did.split(":")[2] === kp.address) {
-                    const URL: string = url || `${CommonConstants.URL}`;
-                    const CONTRACT_ADDRESS: string = contractAddress || `${CommonConstants.CONTRACT_ADDRESS}`;
+                if (url && url === `${networkConfiguration[0].testnet?.URL}` && did && did.split(':')[2] === 'testnet') {
+
+                    url = `${networkConfiguration[0].testnet?.URL}`;
+                    contractAddress = `${networkConfiguration[0].testnet?.CONTRACT_ADDRESS}`;
+
+                } else if (!url && did && did.split(':')[2] === 'testnet') {
+
+                    url = `${networkConfiguration[0].testnet?.URL}`;
+                    contractAddress = `${networkConfiguration[0].testnet?.CONTRACT_ADDRESS}`;
+
+                } else if (!url && did && did.split(':')[2] !== 'testnet') {
+
+                    url = `${networkConfiguration[1].mainnet?.URL}`;
+                    contractAddress = `${networkConfiguration[1].mainnet?.CONTRACT_ADDRESS}`;
+
+                } else {
+                    errorMessage = `The DID and url did not match!`;
+                    logger.error(errorMessage);
+                    throw new Error(errorMessage);
+                }
+
+                if (did && did.split(':')[2] === 'testnet' && did.split(":")[3] === kp.address ||
+                    did && did.split(":")[2] === kp.address
+                ) {
 
                     const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
-                        URL
+                        url
                     );
                     const wallet: ethers.Wallet = new ethers.Wallet(privateKey, provider);
                     const registry: ethers.Contract = new ethers.Contract(
-                        CONTRACT_ADDRESS,
+                        contractAddress,
                         DidRegistryContract.abi,
                         wallet
                     );
 
+                    const didAddress = did.split(":")[2] === 'testnet' ? did.split(":")[3] : did.split(":")[2];
+                    
                     let resolveDidDoc: any = await registry.functions
-                        .getDID(did.split(":")[2])
+                        .getDID(didAddress)
                         .then((resValue: any) => {
                             return resValue;
                         });
@@ -145,7 +185,7 @@ export async function registerDID(
 
                         // Calling smart contract with register DID document on matic chain
                         const txnHash: any = await registry.functions
-                            .createDID(did.split(":")[2], stringDidDoc)
+                            .createDID(didAddress, stringDidDoc)
                             .then((resValue: any) => {
                                 return resValue;
                             });
@@ -173,6 +213,7 @@ export async function registerDID(
             logger.error(errorMessage);
             throw new Error(errorMessage);
         }
+
     } catch (error) {
         logger.error(`Error occurred in registerDID function  ${error}`);
         throw error;

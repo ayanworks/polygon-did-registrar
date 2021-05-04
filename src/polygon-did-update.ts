@@ -1,14 +1,14 @@
 import * as dot from "dotenv";
 import * as log4js from "log4js";
+import * as networkConfiguration from './configuration.json';
 import { ethers } from "ethers";
 import { BaseResponse } from "./base-response";
-import { default as CommonConstants } from "./configuration";
 const DidRegistryContract = require('@ayanworks/polygon-did-registry-contract');
 
 dot.config();
 
 const logger = log4js.getLogger();
-logger.level = `${CommonConstants.LOGGER_LEVEL}`;
+logger.level = `debug`;
 
 /**
  * Update DID document on matic chain
@@ -27,32 +27,57 @@ export async function updateDidDoc(
     contractAddress?: string
 ): Promise<BaseResponse> {
     try {
-        const URL: string = url || `${CommonConstants.URL}`;
-        const CONTRACT_ADDRESS: string = contractAddress || `${CommonConstants.CONTRACT_ADDRESS}`;
-
-        const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
-            URL
-        );
-        const wallet: ethers.Wallet = new ethers.Wallet(privateKey, provider);
-        const registry: ethers.Contract = new ethers.Contract(
-            CONTRACT_ADDRESS,
-            DidRegistryContract.abi,
-            wallet
-        );
-
         let errorMessage: string;
 
-        if (didDocJson && JSON.parse(didDocJson)) {
+        if (url && url === `${networkConfiguration[0].testnet?.URL}` && did && did.split(':')[2] === 'testnet') {
 
-            if ('@context' in JSON.parse(didDocJson) &&
-                'id' in JSON.parse(didDocJson) &&
-                'verificationMethod' in JSON.parse(didDocJson)) {
+            url = `${networkConfiguration[0].testnet?.URL}`;
+            contractAddress = `${networkConfiguration[0].testnet?.CONTRACT_ADDRESS}`;
 
-                if (did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/)) {
-                    if (did.match(/^did:polygon:\w{0,42}$/)) {
+        } else if (!url && did && did.split(':')[2] === 'testnet') {
+
+            url = `${networkConfiguration[0].testnet?.URL}`;
+            contractAddress = `${networkConfiguration[0].testnet?.CONTRACT_ADDRESS}`;
+
+        } else if (!url && did && did.split(':')[2] !== 'testnet') {
+
+            url = `${networkConfiguration[1].mainnet?.URL}`;
+            contractAddress = `${networkConfiguration[1].mainnet?.CONTRACT_ADDRESS}`;
+
+        } else {
+            errorMessage = `The DID and url did not match!`;
+            logger.error(errorMessage);
+            throw new Error(errorMessage);
+        }
+
+        if (did && did.split(':')[2] === 'testnet' && did.match(/^did:polygon:testnet:0x[0-9a-fA-F]{40}$/) ||
+            did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/)
+        ) {
+            if (did.split(':')[2] === 'testnet' && did.match(/^did:polygon:testnet:\w{0,42}$/) ||
+                did.match(/^did:polygon:\w{0,42}$/)
+            ) {
+
+                const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
+                    url
+                );
+                const wallet: ethers.Wallet = new ethers.Wallet(privateKey, provider);
+                const registry: ethers.Contract = new ethers.Contract(
+                    contractAddress,
+                    DidRegistryContract.abi,
+                    wallet
+                );
+
+                if (didDocJson && JSON.parse(didDocJson)) {
+
+                    if ('@context' in JSON.parse(didDocJson) &&
+                        'id' in JSON.parse(didDocJson) &&
+                        'verificationMethod' in JSON.parse(didDocJson)) {
+
                         // Calling smart contract with update DID document on matic chain
+
+                        const didAddress = did.split(":")[2] === 'testnet' ? did.split(":")[3] : did.split(":")[2];
                         let txnHash: any = await registry.functions
-                            .updateDID(did.split(":")[2], didDocJson)
+                            .updateDID(didAddress, didDocJson)
                             .then((resValue) => {
                                 return resValue;
                             });

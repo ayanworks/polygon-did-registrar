@@ -1,14 +1,14 @@
 import * as dot from "dotenv";
 import * as log4js from "log4js";
+import * as networkConfiguration from './configuration.json';
 import { ethers } from "ethers";
 import { BaseResponse } from "./base-response";
-import { default as CommonConstants } from "./configuration";
 const DidRegistryContract = require('@ayanworks/polygon-did-registry-contract');
 
 dot.config();
 
 const logger = log4js.getLogger();
-logger.level = `${CommonConstants.LOGGER_LEVEL}`;
+logger.level = `debug`;
 
 /**
  * Delete DID Document
@@ -25,25 +25,49 @@ export async function deleteDidDoc(
     contractAddress?: string
 ): Promise<BaseResponse> {
     try {
-        const URL: string = url || `${CommonConstants.URL}`;
-        const CONTRACT_ADDRESS: string = contractAddress || `${CommonConstants.CONTRACT_ADDRESS}`;
-
-        const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
-            URL
-        );
-        const wallet: ethers.Wallet = new ethers.Wallet(privateKey, provider);
-        const registry: ethers.Contract = new ethers.Contract(
-            CONTRACT_ADDRESS,
-            DidRegistryContract.abi,
-            wallet
-        );
-
         let errorMessage: string;
 
-        if (did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/)) {
-            if (did.match(/^did:polygon:\w{0,42}$/)) {
+        if (url && url === `${networkConfiguration[0].testnet?.URL}` && did && did.split(':')[2] === 'testnet') {
+
+            url = `${networkConfiguration[0].testnet?.URL}`;
+            contractAddress = `${networkConfiguration[0].testnet?.CONTRACT_ADDRESS}`;
+
+        } else if (!url && did && did.split(':')[2] === 'testnet') {
+
+            url = `${networkConfiguration[0].testnet?.URL}`;
+            contractAddress = `${networkConfiguration[0].testnet?.CONTRACT_ADDRESS}`;
+
+        } else if (!url && did && did.split(':')[2] !== 'testnet') {
+
+            url = `${networkConfiguration[1].mainnet?.URL}`;
+            contractAddress = `${networkConfiguration[1].mainnet?.CONTRACT_ADDRESS}`;
+
+        } else {
+            errorMessage = `The DID and url did not match!`;
+            logger.error(errorMessage);
+            throw new Error(errorMessage);
+        }
+
+        if (did && did.split(':')[2] === 'testnet' && did.match(/^did:polygon:testnet:0x[0-9a-fA-F]{40}$/) ||
+            did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/)
+        ) {
+            if (did.split(':')[2] === 'testnet' && did.match(/^did:polygon:testnet:\w{0,42}$/) ||
+                did.match(/^did:polygon:\w{0,42}$/)
+            ) {
+
+                const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
+                    url
+                );
+                const wallet: ethers.Wallet = new ethers.Wallet(privateKey, provider);
+                const registry: ethers.Contract = new ethers.Contract(
+                    contractAddress,
+                    DidRegistryContract.abi,
+                    wallet
+                );
+
+                const didAddress = did.split(":")[2] === 'testnet' ? did.split(":")[3] : did.split(":")[2];
                 let txnHash: any = await registry.functions
-                    .deleteDID(did.split(":")[2])
+                    .deleteDID(didAddress)
                     .then((resValue: any) => {
                         return resValue;
                     });
