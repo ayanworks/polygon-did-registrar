@@ -1,17 +1,14 @@
-import * as dot from "dotenv";
 import * as log4js from "log4js";
-import { ethers } from "ethers";
+import { DidUriValidation } from "./did-uri-validation";
 import { BaseResponse } from "./base-response";
-import { default as CommonConstants } from "./configuration";
-const DidRegistryContract = require('@ayanworks/polygon-did-registry-contract');
-
-dot.config();
+import { RegistryContractInitialization } from "./registry-contract-initialization";
+import { ethers } from "ethers";
 
 const logger = log4js.getLogger();
-logger.level = `${CommonConstants.LOGGER_LEVEL}`;
+logger.level = `debug`;
 
 /**
- * Delete DID Document
+ * Delete DID Document.
  * @param did
  * @param privateKey
  * @param url
@@ -19,52 +16,52 @@ logger.level = `${CommonConstants.LOGGER_LEVEL}`;
  * @returns Return transaction hash after deleting DID Document on chain.
  */
 export async function deleteDidDoc(
-    did: string,
-    privateKey: string,
-    url?: string,
-    contractAddress?: string
+      did: string,
+      privateKey: string,
+      url?: string,
+      contractAddress?: string
 ): Promise<BaseResponse> {
-    try {
-        const URL: string = url || `${CommonConstants.URL}`;
-        const CONTRACT_ADDRESS: string = contractAddress || `${CommonConstants.CONTRACT_ADDRESS}`;
+      try {
+            let errorMessage: string;
+            const didUriValidation: DidUriValidation = new DidUriValidation();
+            const registryContractInitialization: RegistryContractInitialization = new RegistryContractInitialization();
 
-        const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
-            URL
-        );
-        const wallet: ethers.Wallet = new ethers.Wallet(privateKey, provider);
-        const registry: ethers.Contract = new ethers.Contract(
-            CONTRACT_ADDRESS,
-            DidRegistryContract.abi,
-            wallet
-        );
+            const didMethodCheck: Boolean = await didUriValidation.polygonDidMatch(did);
+            const didWithTestnet: string = await didUriValidation.splitPolygonDid(did);
 
-        let errorMessage: string;
+            if (didMethodCheck) {
+                  const networkCheckWithUrl: any = await didUriValidation.networkMatch(
+                        did,
+                        url,
+                        contractAddress
+                  );
 
-        if (did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/)) {
-            if (did.match(/^did:polygon:\w{0,42}$/)) {
-                let txnHash: any = await registry.functions
-                    .deleteDID(did.split(":")[2])
-                    .then((resValue: any) => {
-                        return resValue;
-                    });
+                  const registry: ethers.Contract = await registryContractInitialization.instanceCreation(
+                        privateKey,
+                        networkCheckWithUrl.url,
+                        networkCheckWithUrl.contractAddress
+                  );
+                  const didAddress: string =
+                        didWithTestnet === "testnet" ? did.split(":")[3] : didWithTestnet;
 
-                logger.debug(
-                    `[deleteDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`
-                );
+                  let txnHash: any = await registry.functions
+                        .deleteDID(didAddress)
+                        .then((resValue: any) => {
+                              return resValue;
+                        });
 
-                return BaseResponse.from(txnHash, 'Delete DID document successfully');
+                  logger.debug(
+                        `[deleteDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`
+                  );
+
+                  return BaseResponse.from(txnHash, "Delete DID document successfully");
             } else {
-                errorMessage = `Invalid method-specific identifier has been entered!`;
-                logger.error(errorMessage);
-                throw new Error(errorMessage);
+                  errorMessage = `DID does not match!`;
+                  logger.error(errorMessage);
+                  throw new Error(errorMessage);
             }
-        } else {
-            errorMessage = `Invalid DID has been entered!`;
-            logger.error(errorMessage);
-            throw new Error(errorMessage);
-        }
-    } catch (error) {
-        logger.error(`Error occurred in deleteDidDoc function ${error}`);
-        throw error;
-    }
+      } catch (error) {
+            logger.error(`Error occurred in deleteDidDoc function ${error}`);
+            throw error;
+      }
 }
