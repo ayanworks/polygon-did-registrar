@@ -1,6 +1,6 @@
 {
   "name": "@ayanworks/polygon-did-registrar",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -15,9 +15,11 @@
     "test": "jest",
     "lint": "tslint -p tsconfig.json"
   },
-  "author": "Shashank Kulkarni <shashank.kulkarni@ayanworks.com>",
+  "author": "Ajay Jadhav <ajay@ayanworks.com>",
+  "contributors": ["Anusha Garg <anusha.garg@ayanworks.com>, Shashank Kulkarni <shashank.kulkarni@ayanworks.com>"],
   "license": "MIT",
   "dependencies": {
+    "@ayanworks/polygon-did-registry-contract": "^0.0.2",
     "@metamask/detect-provider": "^1.2.0",
     "buffer": "^6.0.3",
     "did-jwt": "^5.1.0",
@@ -34,8 +36,7 @@
     "prettier": "^2.2.1",
     "truffle-contract": "^4.0.31",
     "typescript": "^4.2.4",
-    "web3": "1.3.0",
-    "@ayanworks/polygon-did-registry-contract": "0.0.1"
+    "web3": "1.3.0"
   },
   "devDependencies": {
     "@types/bs58": "^4.0.1",
@@ -52,13 +53,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/polygon-did/polygon-did-registrar.git"
+    "url": "https://github.com/ayanworks/polygon-did-registrar"
   },
   "keywords": [
     "did-method"
   ],
   "bugs": {
-    "url": "https://gitlab.com/polygon-did/polygon-did-registrar/issues"
+    "url": "https://github.com/ayanworks/polygon-did-registrar/issues"
   },
-  "homepage": "https://gitlab.com/polygon-did/polygon-did-registrar#readme"
+  "homepage": "https://github.com/ayanworks/polygon-did-registrar#readme"
 }

@@ -26,7 +26,7 @@ async function wrapDidDocument(
             id: did,
             verificationMethod: [
                   {
-                        id: did,
+                        id:`${did}#key-1`,
                         type: "EcdsaSecp256k1VerificationKey2019", // external (property value)
                         controller: did,
                         publicKeyBase58: publicKeyBase58,
