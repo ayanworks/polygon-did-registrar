@@ -1,6 +1,6 @@
 [{
             "testnet": {
-                  "URL": "https://rpc-mumbai.matic.today",
+                  "URL": "https://rpc-mumbai.maticvigil.com/",
                   "CONTRACT_ADDRESS": "0x25D570297E9B24De3362BE0f5c07E6a9f5492300"
             }
       },
