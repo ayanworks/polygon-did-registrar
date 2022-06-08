@@ -55,10 +55,29 @@ export class DidUriValidation {
 
             if (
                   url &&
-                  url === `${networkConfiguration[0].testnet?.URL}` &&
+                  !contractAddress &&
                   did &&
                   didWithTestnet === "testnet"
             ) {
+                  contractAddress = `${networkConfiguration[0].testnet?.CONTRACT_ADDRESS}`;
+
+                  return {
+                        url,
+                        contractAddress,
+                  };
+            } else if (url && !contractAddress && did && didWithTestnet !== "testnet") {
+                  contractAddress = `${networkConfiguration[0].mainnet?.CONTRACT_ADDRESS}`;
+
+                  return {
+                        url,
+                        contractAddress,
+                  };
+            } else if (url && contractAddress && did) {
+                  return {
+                        url,
+                        contractAddress,
+                  };
+            } else if (!url && !contractAddress && did && didWithTestnet === "testnet") {
                   url = `${networkConfiguration[0].testnet?.URL}`;
                   contractAddress = `${networkConfiguration[0].testnet?.CONTRACT_ADDRESS}`;
 
@@ -66,15 +85,7 @@ export class DidUriValidation {
                         url,
                         contractAddress,
                   };
-            } else if (!url && did && didWithTestnet === "testnet") {
-                  url = `${networkConfiguration[0].testnet?.URL}`;
-                  contractAddress = `${networkConfiguration[0].testnet?.CONTRACT_ADDRESS}`;
-
-                  return {
-                        url,
-                        contractAddress,
-                  };
-            } else if (!url && did && didWithTestnet !== "testnet") {
+            } else if (!url && !contractAddress && did && didWithTestnet !== "testnet") {
                   url = `${networkConfiguration[1].mainnet?.URL}`;
                   contractAddress = `${networkConfiguration[1].mainnet?.CONTRACT_ADDRESS}`;
 
