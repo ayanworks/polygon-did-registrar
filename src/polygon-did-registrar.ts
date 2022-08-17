@@ -157,10 +157,9 @@ export async function registerDID(
                               // Get DID document
                               const didDoc: object = await wrapDidDocument(did, kp.publicKeyBase58);
                               const stringDidDoc: string = JSON.stringify(didDoc);
-
                               // Calling smart contract with register DID document on matic chain
                               const txnHash: any = await registry.functions
-                                    .createDID(didAddress, stringDidDoc)
+                                    .createDID(didAddress, stringDidDoc, {gasPrice: ethers.utils.parseUnits('10', 'gwei'), gasLimit: 1000000})
                                     .then((resValue: any) => {
                                           return resValue;
                                     });
@@ -193,3 +192,11 @@ export async function registerDID(
             throw error;
       }
 }
+
+function gasMargin(gasEstimated: any, arg1: number): number {
+      throw new Error("Function not implemented.");
+}
+function gasEstimated(gasEstimated: any, arg1: number): number {
+      throw new Error("Function not implemented.");
+}
+
