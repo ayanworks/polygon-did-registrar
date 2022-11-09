@@ -54,7 +54,7 @@ export async function updateDidDoc(
 
                               // Calling smart contract with update DID document on matic chain
                               let txnHash: any = await registry.functions
-                                    .updateDID(didAddress, didDocJson)
+                                    .updateDIDDoc(didAddress, didDocJson, {gasPrice: ethers.utils.parseUnits('10', 'gwei'), gasLimit: 1000000})
                                     .then((resValue: any) => {
                                           return resValue;
                                     });

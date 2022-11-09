@@ -1,12 +1,13 @@
 import * as log4js from "log4js";
 import * as bs58 from "bs58";
-import { ethers } from "ethers";
+import { ethers, utils } from "ethers";
 import { Wallet } from "@ethersproject/wallet";
 import { computeAddress } from "@ethersproject/transactions";
 import { computePublicKey } from "@ethersproject/signing-key";
 import { BaseResponse } from "./base-response";
 import { DidUriValidation } from "./did-uri-validation";
 import { RegistryContractInitialization } from "./registry-contract-initialization";
+const axios = require('axios').default;
 
 const logger = log4js.getLogger();
 logger.level = `debug`;
@@ -19,20 +20,83 @@ logger.level = `debug`;
  */
 async function wrapDidDocument(
       did: string,
-      publicKeyBase58: string
+      publicKeyBase58: string,
+      serviceEndpoint?: string
+
 ): Promise<object> {
-      return {
-            "@context": "https://w3id.org/did/v1",
-            id: did,
-            verificationMethod: [
-                  {
-                        id:`${did}#key-1`,
-                        type: "EcdsaSecp256k1VerificationKey2019", // external (property value)
-                        controller: did,
-                        publicKeyBase58: publicKeyBase58,
-                  },
-            ],
-      };
+      if(serviceEndpoint){
+            return {
+                  "@context": "https://w3id.org/did/v1",
+                  id: did,
+                  verificationMethod: [
+                        {
+                              id:`${did}#key-1`,
+                              type: "EcdsaSecp256k1VerificationKey2019", // external (property value)
+                              controller: did,
+                              publicKeyBase58: publicKeyBase58,
+                        },
+                  ],
+                  "authentication" : [
+                        did,
+                        {
+                              id:`${did}#key-1`,
+                              type: "EcdsaSecp256k1VerificationKey2019", // external (property value)
+                              controller: did,
+                              publicKeyBase58: publicKeyBase58,
+                        }
+                  ],
+                  "assertionMethod" : [
+                        did,
+                        {
+                              id:`${did}#key-1`,
+                              type: "EcdsaSecp256k1VerificationKey2019", // external (property value)
+                              controller: did,
+                              publicKeyBase58: publicKeyBase58,
+                        }
+                  ],
+                  "service" : [
+                        {
+                        id:`${did}#linked-domain`,
+                        type: "LinkedDomains", 
+                        serviceEndpoint: `${serviceEndpoint}`
+                      }]
+      
+            };
+
+      }else {
+            return {
+                  "@context": "https://w3id.org/did/v1",
+                  id: did,
+                  verificationMethod: [
+                        {
+                              id:`${did}#key-1`,
+                              type: "EcdsaSecp256k1VerificationKey2019", // external (property value)
+                              controller: did,
+                              publicKeyBase58: publicKeyBase58,
+                        },
+                  ],
+                  "authentication" : [
+                        did,
+                        {
+                              id:`${did}#key-1`,
+                              type: "EcdsaSecp256k1VerificationKey2019", // external (property value)
+                              controller: did,
+                              publicKeyBase58: publicKeyBase58,
+                        }
+                  ],
+                  "assertionMethod" : [
+                        did,
+                        {
+                              id:`${did}#key-1`,
+                              type: "EcdsaSecp256k1VerificationKey2019", // external (property value)
+                              controller: did,
+                              publicKeyBase58: publicKeyBase58,
+                        }
+                  ],
+      
+            };
+      }
+     
 }
 
 /**
@@ -114,10 +178,12 @@ export async function registerDID(
       did: string,
       privateKey: string,
       url?: string,
-      contractAddress?: string
+      contractAddress?: string, 
+      serviceEndpoint?: string
 ): Promise<BaseResponse> {
       try {
             let errorMessage: string;
+            let didDoc: object;
             const didUriValidation: DidUriValidation = new DidUriValidation();
             const registryContractInitialization: RegistryContractInitialization = new RegistryContractInitialization();
 
@@ -148,19 +214,22 @@ export async function registerDID(
                               didWithTestnet === "testnet" ? did.split(":")[3] : didWithTestnet;
 
                         let resolveDidDoc: any = await registry.functions
-                              .getDID(didAddress)
+                              .getDIDDoc(didAddress)
                               .then((resValue: any) => {
                                     return resValue;
                               });
-
                         if (resolveDidDoc.includes("")) {
                               // Get DID document
-                              const didDoc: object = await wrapDidDocument(did, kp.publicKeyBase58);
+                              if(serviceEndpoint){
+                                     didDoc = await wrapDidDocument(did, kp.publicKeyBase58, serviceEndpoint);  
+                              } else{
+                                     didDoc = await wrapDidDocument(did, kp.publicKeyBase58);
+                              }
+                              
                               const stringDidDoc: string = JSON.stringify(didDoc);
 
-                              // Calling smart contract with register DID document on matic chain
                               const txnHash: any = await registry.functions
-                                    .createDID(didAddress, stringDidDoc)
+                                    .createDID( didAddress, stringDidDoc )
                                     .then((resValue: any) => {
                                           return resValue;
                                     });

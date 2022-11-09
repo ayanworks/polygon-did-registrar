@@ -1,13 +1,13 @@
 [{
             "testnet": {
                   "URL": "https://rpc-mumbai.maticvigil.com/",
-                  "CONTRACT_ADDRESS": "0x3463F1f3D5639AFA5507493ffF207be292aC7E33"
+                  "CONTRACT_ADDRESS": "0x8B335A167DA81CCef19C53eE629cf2F6291F2255"
             }
       },
       {
             "mainnet": {
-                  "URL": "https://rpc-mainnet.maticvigil.com/",
-                  "CONTRACT_ADDRESS": ""
+                  "URL": "https://polygon-rpc.com/",
+                  "CONTRACT_ADDRESS": "0x98bF771e1E93Db917A89986bcdaBa3b43643F367"
             }
       }
 ]

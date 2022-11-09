@@ -1,6 +1,6 @@
 {
   "name": "@ayanworks/polygon-did-registrar",
-  "version": "0.0.11",
+  "version": "0.0.13",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -18,7 +18,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@ayanworks/polygon-did-registry-contract": "^1.1.1",
+    "@ayanworks/polygon-did-registry-contract": "^1.1.2",
     "@metamask/detect-provider": "^1.2.0",
     "buffer": "^6.0.3",
     "did-jwt": "^5.1.0",
