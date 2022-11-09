@@ -52,7 +52,6 @@ export class DidUriValidation {
       ): Promise<any> {
             let errorMessage: string;
             const didWithTestnet: string = await this.splitPolygonDid(did);
-
             if (
                   url &&
                   url === `${networkConfiguration[0].testnet?.URL}` &&
@@ -64,23 +63,21 @@ export class DidUriValidation {
 
                   return {
                         url,
-                        contractAddress,
+                        contractAddress
                   };
             } else if (!url && did && didWithTestnet === "testnet") {
                   url = `${networkConfiguration[0].testnet?.URL}`;
                   contractAddress = `${networkConfiguration[0].testnet?.CONTRACT_ADDRESS}`;
-
                   return {
                         url,
-                        contractAddress,
+                        contractAddress
                   };
             } else if (!url && did && didWithTestnet !== "testnet") {
                   url = `${networkConfiguration[1].mainnet?.URL}`;
                   contractAddress = `${networkConfiguration[1].mainnet?.CONTRACT_ADDRESS}`;
-
                   return {
                         url,
-                        contractAddress,
+                        contractAddress
                   };
             } else {
                   errorMessage = `The DID and url do not match!`;
