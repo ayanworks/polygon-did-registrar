@@ -45,7 +45,7 @@ export async function deleteDidDoc(
                         didWithTestnet === "testnet" ? did.split(":")[3] : didWithTestnet;
 
                   let txnHash: any = await registry.functions
-                        .deleteDIDDoc(didAddress, {gasPrice: ethers.utils.parseUnits('10', 'gwei'), gasLimit: 1000000})
+                        .deleteDIDDoc(didAddress)
                         .then((resValue: any) => {
                               return resValue;
                         });
