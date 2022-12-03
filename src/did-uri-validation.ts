@@ -73,12 +73,8 @@ export class DidUriValidation {
                         contractAddress
                   };
             } else if (!url && did && didWithTestnet !== "testnet") {
-                  url = `${networkConfiguration[1].mainnet?.URL}`;
-                  contractAddress = `${networkConfiguration[1].mainnet?.CONTRACT_ADDRESS}`;
-                  return {
-                        url,
-                        contractAddress
-                  };
+                  errorMessage = `Mainnet not supported yet!`;
+                  logger.error(errorMessage);
             } else {
                   errorMessage = `The DID and url do not match!`;
                   logger.error(errorMessage);

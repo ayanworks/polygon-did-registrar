@@ -146,7 +146,9 @@ export async function createDID(
             if (network === "testnet") {
                   did = `did:fvm:testnet:${address}`;
             } else if (network === "mainnet") {
-                  did = `did:fvm:${address}`;
+                  errorMessage = `Mainnet not supported!`;
+                  logger.error(errorMessage);
+                  throw new Error(errorMessage);
             } else {
                   errorMessage = `Wrong network enter!`;
                   logger.error(errorMessage);

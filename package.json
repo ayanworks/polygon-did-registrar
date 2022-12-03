@@ -1,62 +1,64 @@
 {
-  "name": "fvm-did-registrar",
-  "version": "0.0.16",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "prestart": "tsc",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "start:register": "npm run prestart && node ./dist/fvm-did-registrar.js",
-    "start:update": "npm run prestart && node ./dist/fvm-did-update.js",
-    "start:delete": "npm run prestart && node ./dist/fvm-did-delete.js",
-    "test": "jest",
-    "lint": "tslint -p tsconfig.json"
-  },
-  "author": "Aman Yadav <amanyadavlko2502@gmail.com>",
-  "contributors": ["Pushkar Patel <thepushkarp@gmail.com>"],
-  "license": "MIT",
-  "dependencies": {
-    "fvm-did-registry-contract": "^2.0.0",
-    "@metamask/detect-provider": "^1.2.0",
-    "buffer": "^6.0.3",
-    "did-jwt": "^5.1.0",
-    "did-resolver": "^3.1.0",
-    "dotenv": "^8.0.0",
-    "eth-did-resolver": "^0.1.1",
-    "ethjs": "^0.4.0",
-    "ethjs-contract": "^0.2.3",
-    "ethjs-provider-http": "^0.1.6",
-    "ethjs-query": "^0.3.8",
-    "ethr-did-resolver": "^3.0.3",
-    "ganache-cli": "^6.12.2",
-    "log4js": "^6.3.0",
-    "prettier": "^2.2.1",
-    "truffle-contract": "^4.0.31",
-    "typescript": "^4.2.4",
-    "web3": "1.3.0"
-  },
-  "devDependencies": {
-    "@types/bs58": "^4.0.1",
-    "@types/jest": "^26.0.23",
-    "@types/mocha": "^8.2.2",
-    "@types/node": "^14.14.37",
-    "ethers": "^5.1.0",
-    "jest": "^26.6.3",
-    "ts-jest": "^26.5.5"
-  },
-  "description": "The fvm DID method library uses Ethereum based addresses as fully functional DID’s or Decentralized identifiers, on the fvm network. The following allows one to create a key Pair based and facilitates its storage on the registry smart contract, deployed on fvm chain. Third party users can use this to create fvm DID identities. It allows the controller to perform actions like resolve, update and delete by encapsulating fvmDID registry and fvmDID resolver. The DID identifier allows the controller to resolve DID document for usage in different scenarios.",
-  "directories": {
-    "test": "test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/amany9000/fvm-did-registrar"
-  },
-  "keywords": [
-    "did-method"
-  ],
-  "bugs": {
-    "url": "https://github.com/amany9000/fvm-did-registrar/issues"
-  },
-  "homepage": "https://github.com/amany9000/fvm-did-registrar#readme"
+    "name": "fvm-did-registrar",
+    "version": "0.0.17",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "prestart": "tsc",
+        "format": "prettier --write \"src/**/*.ts\"",
+        "start:register": "npm run prestart && node ./dist/fvm-did-registrar.js",
+        "start:update": "npm run prestart && node ./dist/fvm-did-update.js",
+        "start:delete": "npm run prestart && node ./dist/fvm-did-delete.js",
+        "test": "jest",
+        "lint": "tslint -p tsconfig.json"
+    },
+    "author": "Aman Yadav <amanyadavlko2502@gmail.com>",
+    "contributors": [
+        "Pushkar Patel <thepushkarp@gmail.com>"
+    ],
+    "license": "MIT",
+    "dependencies": {
+        "fvm-did-registry-contract": "^2.0.0",
+        "@metamask/detect-provider": "^1.2.0",
+        "buffer": "^6.0.3",
+        "did-jwt": "^5.1.0",
+        "did-resolver": "^3.1.0",
+        "dotenv": "^8.0.0",
+        "eth-did-resolver": "^0.1.1",
+        "ethjs": "^0.4.0",
+        "ethjs-contract": "^0.2.3",
+        "ethjs-provider-http": "^0.1.6",
+        "ethjs-query": "^0.3.8",
+        "ethr-did-resolver": "^3.0.3",
+        "ganache-cli": "^6.12.2",
+        "log4js": "^6.3.0",
+        "prettier": "^2.2.1",
+        "truffle-contract": "^4.0.31",
+        "typescript": "^4.2.4",
+        "web3": "1.3.0"
+    },
+    "devDependencies": {
+        "@types/bs58": "^4.0.1",
+        "@types/jest": "^26.0.23",
+        "@types/mocha": "^8.2.2",
+        "@types/node": "^14.14.37",
+        "ethers": "^5.1.0",
+        "jest": "^26.6.3",
+        "ts-jest": "^26.5.5"
+    },
+    "description": "The fvm DID method library uses Ethereum based addresses as fully functional DID’s or Decentralized identifiers, on the fvm network. The following allows one to create a key Pair based and facilitates its storage on the registry smart contract, deployed on fvm chain. Third party users can use this to create fvm DID identities. It allows the controller to perform actions like resolve, update and delete by encapsulating fvmDID registry and fvmDID resolver. The DID identifier allows the controller to resolve DID document for usage in different scenarios.",
+    "directories": {
+        "test": "test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/amany9000/fvm-did-registrar"
+    },
+    "keywords": [
+        "did-method"
+    ],
+    "bugs": {
+        "url": "https://github.com/amany9000/fvm-did-registrar/issues"
+    },
+    "homepage": "https://github.com/amany9000/fvm-did-registrar#readme"
 }
