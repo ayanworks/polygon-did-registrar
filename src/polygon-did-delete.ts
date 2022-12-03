@@ -26,8 +26,8 @@ export async function deleteDidDoc(
             const didUriValidation: DidUriValidation = new DidUriValidation();
             const registryContractInitialization: RegistryContractInitialization = new RegistryContractInitialization();
 
-            const didMethodCheck: Boolean = await didUriValidation.polygonDidMatch(did);
-            const didWithTestnet: string = await didUriValidation.splitPolygonDid(did);
+            const didMethodCheck: Boolean = await didUriValidation.fvmDidMatch(did);
+            const didWithTestnet: string = await didUriValidation.splitfvmDid(did);
 
             if (didMethodCheck) {
                   const networkCheckWithUrl: any = await didUriValidation.networkMatch(

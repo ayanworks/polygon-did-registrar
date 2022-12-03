@@ -6,24 +6,24 @@ logger.level = `debug`;
 
 export class DidUriValidation {
       /**
-       * Polygon DID match or not.
+       * fvm DID match or not.
        * @param did
-       * @returns Returns true after polygon DID match successfully.
+       * @returns Returns true after fvm DID match successfully.
        */
-      async polygonDidMatch(did: string): Promise<Boolean> {
+      async fvmDidMatch(did: string): Promise<Boolean> {
             let errorMessage: string;
-            const didWithTestnet: string = await this.splitPolygonDid(did);
+            const didWithTestnet: string = await this.splitfvmDid(did);
 
             if (
                   (did &&
                         didWithTestnet === "testnet" &&
-                        did.match(/^did:polygon:testnet:0x[0-9a-fA-F]{40}$/)) ||
-                  (did && did.match(/^did:polygon:0x[0-9a-fA-F]{40}$/))
+                        did.match(/^did:fvm:testnet:0x[0-9a-fA-F]{40}$/)) ||
+                  (did && did.match(/^did:fvm:0x[0-9a-fA-F]{40}$/))
             ) {
                   if (
                         (didWithTestnet === "testnet" &&
-                              did.match(/^did:polygon:testnet:\w{0,42}$/)) ||
-                        did.match(/^did:polygon:\w{0,42}$/)
+                              did.match(/^did:fvm:testnet:\w{0,42}$/)) ||
+                        did.match(/^did:fvm:\w{0,42}$/)
                   ) {
                         return true;
                   } else {
@@ -39,7 +39,7 @@ export class DidUriValidation {
       }
 
       /**
-       * Polygon DID and Network match or not.
+       * fvm DID and Network match or not.
        * @param did
        * @param url
        * @param contractAddress
@@ -51,7 +51,7 @@ export class DidUriValidation {
             contractAddress?: string
       ): Promise<any> {
             let errorMessage: string;
-            const didWithTestnet: string = await this.splitPolygonDid(did);
+            const didWithTestnet: string = await this.splitfvmDid(did);
             if (
                   url &&
                   url === `${networkConfiguration[0].testnet?.URL}` &&
@@ -87,11 +87,11 @@ export class DidUriValidation {
       }
 
       /**
-       * Split polygon DID.
+       * Split fvm DID.
        * @param did
-       * @returns Returns Split data value to polygon DID.
+       * @returns Returns Split data value to fvm DID.
        */
-      async splitPolygonDid(did: string): Promise<string> {
+      async splitfvmDid(did: string): Promise<string> {
             const splitDidValue: string = did.split(":")[2];
             return splitDidValue;
       }

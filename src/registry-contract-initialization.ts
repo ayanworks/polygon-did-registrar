@@ -1,9 +1,9 @@
 import { ethers } from "ethers";
-const DidRegistryContract = require("@ayanworks/polygon-did-registry-contract");
+const DidRegistryContract = require("@ayanworks/fvm-did-registry-contract");
 
 export class RegistryContractInitialization {
       /**
-       * Creates an instance of the polygon DID registry smart contract.
+       * Creates an instance of the fvm DID registry smart contract.
        * @param url
        * @param privateKey
        * @param contractAddress

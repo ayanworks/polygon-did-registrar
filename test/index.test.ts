@@ -1,11 +1,11 @@
 import { testDid, updateDidDocument, privateKey, network } from "./test.data";
-import { registerDID, createDID } from '../src/polygon-did-registrar';
-import { updateDidDoc } from '../src/polygon-did-update';
-import { deleteDidDoc } from '../src/polygon-did-delete';
+import { registerDID, createDID } from '../src/fvm-did-registrar';
+import { updateDidDoc } from '../src/fvm-did-update';
+import { deleteDidDoc } from '../src/fvm-did-delete';
 import { BaseResponse } from "../src/base-response";
 
 jest.setTimeout(30000);
-let polygonDID: string;
+let fvmDID: string;
 
 describe("test create did function", () => {
 
@@ -48,27 +48,27 @@ describe("test create did function", () => {
     await expect(createDidRes.data.publicKeyBase58).not.toBe('');
   })
 
-  it('should get polygon DID', async () => {
+  it('should get fvm DID', async () => {
 
     if (createDidRes && createDidRes.data && createDidRes.data.did.split(':')[2] === 'testnet') {
 
       await expect(createDidRes.data.did).toBeDefined();
       await expect(createDidRes.data.did).not.toBeNull();
       await expect(createDidRes.data.did).not.toBe('');
-      await expect(createDidRes.data.did.slice(0, 19)).toMatch('did:polygon:testnet');
+      await expect(createDidRes.data.did.slice(0, 19)).toMatch('did:fvm:testnet');
       await expect(createDidRes.data.did.slice(20, 22)).toMatch('0x');
       await expect(createDidRes.data.did.split(":")[3].length).toBe(42);
 
-      polygonDID = createDidRes.data.did;
+      fvmDID = createDidRes.data.did;
     } else {
       await expect(createDidRes.data.did).toBeDefined();
       await expect(createDidRes.data.did).not.toBeNull();
       await expect(createDidRes.data.did).not.toBe('');
-      await expect(createDidRes.data.did.slice(0, 12)).toMatch('did:polygon');
+      await expect(createDidRes.data.did.slice(0, 12)).toMatch('did:fvm');
       await expect(createDidRes.data.did.slice(12, 14)).toMatch('0x');
       await expect(createDidRes.data.did.split(":")[2].length).toBe(42);
 
-      polygonDID = createDidRes.data.did;
+      fvmDID = createDidRes.data.did;
     }
   })
 })
@@ -78,11 +78,11 @@ describe("test register DID function", () => {
 
   let registerDidRes: BaseResponse;
 
-  it('should be polygon DID for register DID', async () => {
+  it('should be fvm DID for register DID', async () => {
 
-    await expect(polygonDID).not.toBeNull();
-    await expect(polygonDID).not.toBe('');
-    await expect(polygonDID.slice(0, 12)).toMatch('did:polygon:');
+    await expect(fvmDID).not.toBeNull();
+    await expect(fvmDID).not.toBe('');
+    await expect(fvmDID.slice(0, 12)).toMatch('did:fvm:');
   })
 
   it('should be privateKey for register DID', async () => {
@@ -94,10 +94,10 @@ describe("test register DID function", () => {
   })
 
   beforeAll(async () => {
-    registerDidRes = await registerDID(polygonDID, privateKey);
+    registerDidRes = await registerDID(fvmDID, privateKey);
   })
 
-  it('should get register polygon DID for register DID', async () => {
+  it('should get register fvm DID for register DID', async () => {
 
     if (registerDidRes && registerDidRes.data && registerDidRes.data.did) {
       if (registerDidRes.data.did.split(':')[2] === 'testnet') {
@@ -105,7 +105,7 @@ describe("test register DID function", () => {
         await expect(registerDidRes.data.did).toBeDefined();
         await expect(registerDidRes.data.did).not.toBeNull();
         await expect(registerDidRes.data.did).not.toBe('');
-        await expect(registerDidRes.data.did.slice(0, 19)).toMatch('did:polygon:testnet');
+        await expect(registerDidRes.data.did.slice(0, 19)).toMatch('did:fvm:testnet');
         await expect(registerDidRes.data.did.slice(20, 22)).toMatch('0x');
         await expect(registerDidRes.data.did.split(":")[3].length).toBe(42);
       } else {
@@ -113,7 +113,7 @@ describe("test register DID function", () => {
         await expect(registerDidRes.data.did).toBeDefined();
         await expect(registerDidRes.data.did).not.toBeNull();
         await expect(registerDidRes.data.did).not.toBe('');
-        await expect(registerDidRes.data.did.slice(0, 12)).toMatch('did:polygon');
+        await expect(registerDidRes.data.did.slice(0, 12)).toMatch('did:fvm');
         await expect(registerDidRes.data.did.slice(12, 14)).toMatch('0x');
         await expect(registerDidRes.data.did.split(":")[2].length).toBe(42);
       }
@@ -140,24 +140,24 @@ describe("test update DID doc function", () => {
 
   let updateDidRes: BaseResponse;
 
-  it('should be polygon DID for update DID document', async () => {
+  it('should be fvm DID for update DID document', async () => {
 
-    if (polygonDID && polygonDID.split(':')[2] === 'testnet') {
+    if (fvmDID && fvmDID.split(':')[2] === 'testnet') {
 
-      await expect(polygonDID).toBeDefined();
-      await expect(polygonDID).not.toBeNull();
-      await expect(polygonDID).not.toBe('');
-      await expect(polygonDID.slice(0, 19)).toMatch('did:polygon:testnet');
-      await expect(polygonDID.slice(20, 22)).toMatch('0x');
-      await expect(polygonDID.split(":")[3].length).toBe(42);
+      await expect(fvmDID).toBeDefined();
+      await expect(fvmDID).not.toBeNull();
+      await expect(fvmDID).not.toBe('');
+      await expect(fvmDID.slice(0, 19)).toMatch('did:fvm:testnet');
+      await expect(fvmDID.slice(20, 22)).toMatch('0x');
+      await expect(fvmDID.split(":")[3].length).toBe(42);
     } else {
 
-      await expect(polygonDID).toBeDefined();
-      await expect(polygonDID).not.toBeNull();
-      await expect(polygonDID).not.toBe('');
-      await expect(polygonDID.slice(0, 12)).toMatch('did:polygon');
-      await expect(polygonDID.slice(12, 14)).toMatch('0x');
-      await expect(polygonDID.split(":")[2].length).toBe(42);
+      await expect(fvmDID).toBeDefined();
+      await expect(fvmDID).not.toBeNull();
+      await expect(fvmDID).not.toBe('');
+      await expect(fvmDID.slice(0, 12)).toMatch('did:fvm');
+      await expect(fvmDID.slice(12, 14)).toMatch('0x');
+      await expect(fvmDID.split(":")[2].length).toBe(42);
     }
   })
 
@@ -178,7 +178,7 @@ describe("test update DID doc function", () => {
   })
 
   beforeAll(async () => {
-    updateDidRes = await updateDidDoc(polygonDID, updateDidDocument, privateKey);
+    updateDidRes = await updateDidDoc(fvmDID, updateDidDocument, privateKey);
   })
 
   it('should get transaction hash after update DID document', async () => {
@@ -199,24 +199,24 @@ describe("test delete function", () => {
 
   let deleteDidRes: BaseResponse;
 
-  it('should be polygon DID for delete DID document', async () => {
+  it('should be fvm DID for delete DID document', async () => {
 
-    if (polygonDID && polygonDID.split(':')[2] === 'testnet') {
+    if (fvmDID && fvmDID.split(':')[2] === 'testnet') {
 
-      await expect(polygonDID).toBeDefined();
-      await expect(polygonDID).not.toBeNull();
-      await expect(polygonDID).not.toBe('');
-      await expect(polygonDID.slice(0, 19)).toMatch('did:polygon:testnet');
-      await expect(polygonDID.slice(20, 22)).toMatch('0x');
-      await expect(polygonDID.split(":")[3].length).toBe(42);
+      await expect(fvmDID).toBeDefined();
+      await expect(fvmDID).not.toBeNull();
+      await expect(fvmDID).not.toBe('');
+      await expect(fvmDID.slice(0, 19)).toMatch('did:fvm:testnet');
+      await expect(fvmDID.slice(20, 22)).toMatch('0x');
+      await expect(fvmDID.split(":")[3].length).toBe(42);
     } else {
 
-      await expect(polygonDID).toBeDefined();
-      await expect(polygonDID).not.toBeNull();
-      await expect(polygonDID).not.toBe('');
-      await expect(polygonDID.slice(0, 12)).toMatch('did:polygon');
-      await expect(polygonDID.slice(12, 14)).toMatch('0x');
-      await expect(polygonDID.split(":")[2].length).toBe(42);
+      await expect(fvmDID).toBeDefined();
+      await expect(fvmDID).not.toBeNull();
+      await expect(fvmDID).not.toBe('');
+      await expect(fvmDID.slice(0, 12)).toMatch('did:fvm');
+      await expect(fvmDID.slice(12, 14)).toMatch('0x');
+      await expect(fvmDID.split(":")[2].length).toBe(42);
     }
   })
 
@@ -229,7 +229,7 @@ describe("test delete function", () => {
   })
 
   beforeAll(async () => {
-    deleteDidRes = await deleteDidDoc(polygonDID, privateKey);
+    deleteDidRes = await deleteDidDoc(fvmDID, privateKey);
   })
 
   it('should get transaction hash after delete DID document', async () => {

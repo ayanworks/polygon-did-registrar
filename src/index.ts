@@ -1,3 +1,3 @@
-export { deleteDidDoc } from "./polygon-did-delete";
-export { createDID, registerDID } from "./polygon-did-registrar";
-export { updateDidDoc } from "./polygon-did-update";
+export { deleteDidDoc } from "./fvm-did-delete";
+export { createDID, registerDID } from "./fvm-did-registrar";
+export { updateDidDoc } from "./fvm-did-update";

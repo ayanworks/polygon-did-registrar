@@ -5,8 +5,8 @@ export const updateDidDocument = "";
 
 export const privateKey = "";
 
-export const url = "https://rpc-mumbai.maticvigil.com/";
+export const url = "https://wallaby.node.glif.io/rpc/v0";
 
-export const contractAddress = "0x8B335A167DA81CCef19C53eE629cf2F6291F2255";
+export const contractAddress = "0xD3c51785968E4Cdb55726c85194eB97105b99b80";
 
 export const network = "testnet";

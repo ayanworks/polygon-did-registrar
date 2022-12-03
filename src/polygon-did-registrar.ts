@@ -144,9 +144,9 @@ export async function createDID(
             const { address, publicKeyBase58 } = await createKeyPair(_privateKey);
 
             if (network === "testnet") {
-                  did = `did:polygon:testnet:${address}`;
+                  did = `did:fvm:testnet:${address}`;
             } else if (network === "mainnet") {
-                  did = `did:polygon:${address}`;
+                  did = `did:fvm:${address}`;
             } else {
                   errorMessage = `Wrong network enter!`;
                   logger.error(errorMessage);
@@ -167,7 +167,7 @@ export async function createDID(
 }
 
 /**
- * Registers DID document on matic chain.
+ * Registers DID document on fvm chain.
  * @param did
  * @param privateKey
  * @param url
@@ -187,8 +187,8 @@ export async function registerDID(
             const didUriValidation: DidUriValidation = new DidUriValidation();
             const registryContractInitialization: RegistryContractInitialization = new RegistryContractInitialization();
 
-            const didMethodCheck: Boolean = await didUriValidation.polygonDidMatch(did);
-            const didWithTestnet: string = await didUriValidation.splitPolygonDid(did);
+            const didMethodCheck: Boolean = await didUriValidation.fvmDidMatch(did);
+            const didWithTestnet: string = await didUriValidation.splitfvmDid(did);
 
             if (didMethodCheck) {
                   const kp: any = await createKeyPair(privateKey);

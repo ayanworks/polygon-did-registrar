@@ -8,7 +8,7 @@ const logger = log4js.getLogger();
 logger.level = `debug`;
 
 /**
- * Update DID document on matic chain.
+ * Update DID document on fvm chain.
  * @param did
  * @param didDocJson
  * @param privateKey
@@ -28,8 +28,8 @@ export async function updateDidDoc(
             const didUriValidation: DidUriValidation = new DidUriValidation();
             const registryContractInitialization: RegistryContractInitialization = new RegistryContractInitialization();
 
-            const didMethodCheck: Boolean = await didUriValidation.polygonDidMatch(did);
-            const didWithTestnet: string = await didUriValidation.splitPolygonDid(did);
+            const didMethodCheck: Boolean = await didUriValidation.fvmDidMatch(did);
+            const didWithTestnet: string = await didUriValidation.splitfvmDid(did);
 
             if (didMethodCheck) {
                   const networkCheckWithUrl: any = await didUriValidation.networkMatch(
@@ -52,7 +52,7 @@ export async function updateDidDoc(
                               const didAddress: string =
                                     didWithTestnet === "testnet" ? did.split(":")[3] : didWithTestnet;
 
-                              // Calling smart contract with update DID document on matic chain
+                              // Calling smart contract with update DID document on fvm chain
                               let txnHash: any = await registry.functions
                                     .updateDIDDoc(didAddress, didDocJson)
                                     .then((resValue: any) => {

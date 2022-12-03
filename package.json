@@ -1,14 +1,14 @@
 {
-  "name": "@ayanworks/polygon-did-registrar",
+  "name": "@ayanworks/fvm-did-registrar",
   "version": "0.0.15",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "prestart": "tsc",
     "format": "prettier --write \"src/**/*.ts\"",
-    "start:register": "npm run prestart && node ./dist/polygon-did-registrar.js",
-    "start:update": "npm run prestart && node ./dist/polygon-did-update.js",
-    "start:delete": "npm run prestart && node ./dist/polygon-did-delete.js",
+    "start:register": "npm run prestart && node ./dist/fvm-did-registrar.js",
+    "start:update": "npm run prestart && node ./dist/fvm-did-update.js",
+    "start:delete": "npm run prestart && node ./dist/fvm-did-delete.js",
     "test": "jest",
     "lint": "tslint -p tsconfig.json"
   },
@@ -18,7 +18,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@ayanworks/polygon-did-registry-contract": "^2.0.0",
+    "@ayanworks/fvm-did-registry-contract": "^2.0.0",
     "@metamask/detect-provider": "^1.2.0",
     "buffer": "^6.0.3",
     "did-jwt": "^5.1.0",
@@ -46,19 +46,19 @@
     "jest": "^26.6.3",
     "ts-jest": "^26.5.5"
   },
-  "description": "The polygon DID method library uses Ethereum based addresses as fully functional DID’s or Decentralized identifiers, on the Polygon network. The following allows one to create a key Pair based and facilitates its storage on the registry smart contract, deployed on Polygon chain. Third party users can use this to create polygon DID identities. It allows the controller to perform actions like resolve, update and delete by encapsulating polygonDID registry and PolygonDID resolver. The DID identifier allows the controller to resolve DID document for usage in different scenarios.",
+  "description": "The fvm DID method library uses Ethereum based addresses as fully functional DID’s or Decentralized identifiers, on the fvm network. The following allows one to create a key Pair based and facilitates its storage on the registry smart contract, deployed on fvm chain. Third party users can use this to create fvm DID identities. It allows the controller to perform actions like resolve, update and delete by encapsulating fvmDID registry and fvmDID resolver. The DID identifier allows the controller to resolve DID document for usage in different scenarios.",
   "directories": {
     "test": "test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ayanworks/polygon-did-registrar"
+    "url": "https://github.com/ayanworks/fvm-did-registrar"
   },
   "keywords": [
     "did-method"
   ],
   "bugs": {
-    "url": "https://github.com/ayanworks/polygon-did-registrar/issues"
+    "url": "https://github.com/ayanworks/fvm-did-registrar/issues"
   },
-  "homepage": "https://github.com/ayanworks/polygon-did-registrar#readme"
+  "homepage": "https://github.com/ayanworks/fvm-did-registrar#readme"
 }
