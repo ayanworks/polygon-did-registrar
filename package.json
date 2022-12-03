@@ -1,5 +1,5 @@
 {
-  "name": "@ayanworks/fvm-did-registrar",
+  "name": "@amany9000/fvm-did-registrar",
   "version": "0.0.15",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,10 +12,8 @@
     "test": "jest",
     "lint": "tslint -p tsconfig.json"
   },
-  "author": "Ajay Jadhav <ajay@ayanworks.com>",
-  "contributors": [
-    "Anusha Garg <anusha.garg@ayanworks.com>, Shashank Kulkarni <shashank.kulkarni@ayanworks.com>"
-  ],
+  "author": "Aman Yadav <amanyadavlko2502@gmail.com>",
+  "contributors": ["Pushkar Patel <thepushkarp@gmail.com>"],
   "license": "MIT",
   "dependencies": {
     "@ayanworks/fvm-did-registry-contract": "^2.0.0",
@@ -52,13 +50,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ayanworks/fvm-did-registrar"
+    "url": "https://github.com/amany9000/fvm-did-registrar"
   },
   "keywords": [
     "did-method"
   ],
   "bugs": {
-    "url": "https://github.com/ayanworks/fvm-did-registrar/issues"
+    "url": "https://github.com/amany9000/fvm-did-registrar/issues"
   },
-  "homepage": "https://github.com/ayanworks/fvm-did-registrar#readme"
+  "homepage": "https://github.com/amany9000/fvm-did-registrar#readme"
 }
