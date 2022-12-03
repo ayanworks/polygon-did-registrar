@@ -16,7 +16,7 @@
   "contributors": ["Pushkar Patel <thepushkarp@gmail.com>"],
   "license": "MIT",
   "dependencies": {
-    "@ayanworks/fvm-did-registry-contract": "^2.0.0",
+    "fvm-did-registry-contract": "^2.0.0",
     "@metamask/detect-provider": "^1.2.0",
     "buffer": "^6.0.3",
     "did-jwt": "^5.1.0",

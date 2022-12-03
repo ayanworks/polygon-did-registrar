@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-const DidRegistryContract = require("@ayanworks/fvm-did-registry-contract");
+const DidRegistryContract = require("fvm-did-registry-contract");
 
 export class RegistryContractInitialization {
       /**
