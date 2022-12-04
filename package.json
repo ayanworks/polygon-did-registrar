@@ -1,6 +1,6 @@
 {
     "name": "fvm-did-registrar",
-    "version": "0.0.19",
+    "version": "0.0.20",
     "main": "dist/index.js",
     "scripts": {
         "prestart": "tsc",
@@ -19,6 +19,7 @@
     "license": "MIT",
     "dependencies": {
         "@metamask/detect-provider": "^1.2.0",
+        "ethers": "^5.7.2",
         "buffer": "^6.0.3",
         "did-jwt": "^5.1.0",
         "did-resolver": "^3.1.0",
