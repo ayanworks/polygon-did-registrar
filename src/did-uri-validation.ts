@@ -75,6 +75,7 @@ export class DidUriValidation {
             } else if (!url && did && didWithTestnet !== "testnet") {
                   errorMessage = `Mainnet not supported yet!`;
                   logger.error(errorMessage);
+                  throw new Error(errorMessage);
             } else {
                   errorMessage = `The DID and url do not match!`;
                   logger.error(errorMessage);

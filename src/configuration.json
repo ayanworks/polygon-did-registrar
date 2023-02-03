@@ -1,7 +1,7 @@
 [{
             "testnet": {
-                  "URL": "https://wallaby.node.glif.io/rpc/v0",
-                  "CONTRACT_ADDRESS": "0xD3c51785968E4Cdb55726c85194eB97105b99b80"
+                  "URL": "https://api.hyperspace.node.glif.io/rpc/v1",
+                  "CONTRACT_ADDRESS": "0x74Cff4ee330854182D6FF5A2Bbe3449037e8b0Df"
             }
       }
 ]
