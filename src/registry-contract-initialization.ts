@@ -25,4 +25,29 @@ export class RegistryContractInitialization {
             );
             return registry;
       }
+
+
+      /**
+       * Creates an instance of the fvm DID registry smart contract.
+       * @param url
+       * @param signer
+       * @param contractAddress
+       * @returns Returns the instance created.
+       */
+            async instanceCreationSigner(
+                  signer: ethers.Signer,
+                  url: string,
+                  contractAddress: string
+            ): Promise<ethers.Contract> {
+                  const provider: ethers.providers.JsonRpcProvider = new ethers.providers.JsonRpcProvider(
+                        url
+                  );
+                  signer.connect( provider );
+                  const registry: ethers.Contract = new ethers.Contract(
+                        contractAddress,
+                        DidRegistryContract.abi,
+                        signer
+                  );
+                  return registry;
+            }
 }

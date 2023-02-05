@@ -264,3 +264,104 @@ export async function registerDID(
             throw error;
       }
 }
+
+
+
+
+
+/**
+ * Registers DID document on fvm chain.
+ * @param did
+ * @param signer
+ * @param url
+ * @param contractAddress
+ * @returns Returns DID and transaction hash.
+ */
+export async function registerDIDSigner(
+      did: string,
+      signer: ethers.Signer,
+      url?: string,
+      contractAddress?: string, 
+      serviceEndpoint?: string
+): Promise<BaseResponse> {
+      try {
+            let errorMessage: string;
+            let didDoc: object;
+            const didUriValidation: DidUriValidation = new DidUriValidation();
+            const registryContractInitialization: RegistryContractInitialization = new RegistryContractInitialization();
+
+            const didMethodCheck: Boolean = await didUriValidation.fvmDidMatch(did);
+            const didWithTestnet: string = await didUriValidation.splitfvmDid(did);
+
+            if (didMethodCheck) {
+                  const address: any = await signer.getAddress();
+
+                  const networkCheckWithUrl: any = await didUriValidation.networkMatch(
+                        did,
+                        url,
+                        contractAddress
+                  );
+
+                  if (
+                        (did &&
+                              didWithTestnet === "testnet" &&
+                              did.split(":")[3] === address) ||
+                        (did && didWithTestnet === address)
+                  ) {
+                        const registry: ethers.Contract = await registryContractInitialization.instanceCreationSigner(
+                              signer,
+                              networkCheckWithUrl.url,
+                              networkCheckWithUrl.contractAddress
+                        );
+                        const didAddress: string =
+                              didWithTestnet === "testnet" ? did.split(":")[3] : didWithTestnet;
+
+                        let resolveDidDoc: any = await registry.functions
+                              .getDIDDoc(didAddress)
+                              .then((resValue: any) => {
+                                    return resValue;
+                              });
+                        if (resolveDidDoc.includes("")) {
+                              // Get DID document
+                              if(serviceEndpoint){
+                                     didDoc = await wrapDidDocument(did, address, serviceEndpoint);  
+                              } else{
+                                     didDoc = await wrapDidDocument(did, address);
+                              }
+                              
+                              const stringDidDoc: string = JSON.stringify(didDoc);
+
+                              const txnHash: any = await registry.functions
+                                    .createDID( didAddress, stringDidDoc )
+                                    .then((resValue: any) => {
+                                          return resValue;
+                                    });
+
+                              logger.debug(
+                                    `[registerDID] txnHash - ${JSON.stringify(txnHash)} \n\n\n`
+                              );
+
+                              return BaseResponse.from(
+                                    { did, txnHash },
+                                    "Registered DID document successfully."
+                              );
+                        } else {
+                              errorMessage = `The DID document already registered!`;
+                              logger.error(errorMessage);
+                              throw new Error(errorMessage);
+                        }
+                  } else {
+                        errorMessage = `Private key and DID uri do not match!`;
+                        logger.error(errorMessage);
+                        throw new Error(errorMessage);
+                  }
+            } else {
+                  errorMessage = `DID does not match!`;
+                  logger.error(errorMessage);
+                  throw new Error(errorMessage);
+            }
+      } catch (error) {
+            logger.error(`Error occurred in registerDID function  ${error}`);
+            throw error;
+      }
+}

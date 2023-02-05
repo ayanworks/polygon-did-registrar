@@ -1,6 +1,6 @@
 {
     "name": "fvm-did-registrar",
-    "version": "0.0.22",
+    "version": "0.0.24",
     "main": "dist/index.js",
     "scripts": {
         "prestart": "tsc",
