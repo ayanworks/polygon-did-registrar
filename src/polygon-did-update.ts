@@ -1,11 +1,11 @@
-import * as log4js from "log4js";
-import { DidUriValidation } from "./did-uri-validation";
-import { BaseResponse } from "./base-response";
-import { RegistryContractInitialization } from "./registry-contract-initialization";
-import { ethers } from "ethers";
+import * as log4js from 'log4js'
+import { DidUriValidation } from './did-uri-validation'
+import { BaseResponse } from './base-response'
+import { RegistryContractInitialization } from './registry-contract-initialization'
+import { ethers } from 'ethers'
 
-const logger = log4js.getLogger();
-logger.level = `debug`;
+const logger = log4js.getLogger()
+logger.level = `debug`
 
 /**
  * Update DID document on matic chain.
@@ -17,70 +17,72 @@ logger.level = `debug`;
  * @returns Returns transaction hash after updating DID Document on chain.
  */
 export async function updateDidDoc(
-      did: string,
-      didDocJson: string,
-      privateKey: string, // Todo: look for better way to address private key passing mechanism
-      url?: string,
-      contractAddress?: string
+  did: string,
+  didDocJson: string,
+  privateKey: string, // Todo: look for better way to address private key passing mechanism
+  url?: string,
+  contractAddress?: string,
 ): Promise<BaseResponse> {
-      try {
-            let errorMessage: string;
-            const didUriValidation: DidUriValidation = new DidUriValidation();
-            const registryContractInitialization: RegistryContractInitialization = new RegistryContractInitialization();
+  try {
+    let errorMessage: string
+    const didUriValidation: DidUriValidation = new DidUriValidation()
+    const registryContractInitialization: RegistryContractInitialization =
+      new RegistryContractInitialization()
 
-            const didMethodCheck: Boolean = await didUriValidation.polygonDidMatch(did);
-            const didWithTestnet: string = await didUriValidation.splitPolygonDid(did);
+    const didMethodCheck: Boolean = await didUriValidation.polygonDidMatch(did)
+    const didWithTestnet: string = await didUriValidation.splitPolygonDid(did)
 
-            if (didMethodCheck) {
-                  const networkCheckWithUrl: any = await didUriValidation.networkMatch(
-                        did,
-                        url,
-                        contractAddress
-                  );
+    if (didMethodCheck) {
+      const networkCheckWithUrl: any = await didUriValidation.networkMatch(
+        did,
+        url,
+        contractAddress,
+      )
 
-                  const registry: ethers.Contract = await registryContractInitialization.instanceCreation(
-                        privateKey,
-                        networkCheckWithUrl.url,
-                        networkCheckWithUrl.contractAddress
-                  );
-                  if (didDocJson && JSON.parse(didDocJson)) {
-                        if (
-                              "@context" in JSON.parse(didDocJson) &&
-                              "id" in JSON.parse(didDocJson) &&
-                              "verificationMethod" in JSON.parse(didDocJson)
-                        ) {
-                              const didAddress: string =
-                                    didWithTestnet === "testnet" ? did.split(":")[3] : didWithTestnet;
+      const registry: ethers.Contract =
+        await registryContractInitialization.instanceCreation(
+          privateKey,
+          networkCheckWithUrl.url,
+          networkCheckWithUrl.contractAddress,
+        )
+      if (didDocJson && JSON.parse(didDocJson)) {
+        if (
+          '@context' in JSON.parse(didDocJson) &&
+          'id' in JSON.parse(didDocJson) &&
+          'verificationMethod' in JSON.parse(didDocJson)
+        ) {
+          const didAddress: string =
+            didWithTestnet === 'testnet' ? did.split(':')[3] : didWithTestnet
 
-                              // Calling smart contract with update DID document on matic chain
-                              let txnHash: any = await registry.functions
-                                    .updateDIDDoc(didAddress, didDocJson)
-                                    .then((resValue: any) => {
-                                          return resValue;
-                                    });
+          // Calling smart contract with update DID document on matic chain
+          let txnHash: any = await registry.functions
+            .updateDIDDoc(didAddress, didDocJson)
+            .then((resValue: any) => {
+              return resValue
+            })
 
-                              logger.debug(
-                                    `[updateDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`
-                              );
+          logger.debug(
+            `[updateDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`,
+          )
 
-                              return BaseResponse.from(txnHash, "Update DID document successfully");
-                        } else {
-                              errorMessage = `Invalid method-specific identifier has been entered!`;
-                              logger.error(errorMessage);
-                              throw new Error(errorMessage);
-                        }
-                  } else {
-                        errorMessage = `Invalid DID has been entered!`;
-                        logger.error(errorMessage);
-                        throw new Error(errorMessage);
-                  }
-            } else {
-                  errorMessage = `DID does not match!`;
-                  logger.error(errorMessage);
-                  throw new Error(errorMessage);
-            }
-      } catch (error) {
-            logger.error(`Error occurred in updateDidDoc function ${error}`);
-            throw error;
+          return BaseResponse.from(txnHash, 'Update DID document successfully')
+        } else {
+          errorMessage = `Invalid method-specific identifier has been entered!`
+          logger.error(errorMessage)
+          throw new Error(errorMessage)
+        }
+      } else {
+        errorMessage = `Invalid DID has been entered!`
+        logger.error(errorMessage)
+        throw new Error(errorMessage)
       }
+    } else {
+      errorMessage = `DID does not match!`
+      logger.error(errorMessage)
+      throw new Error(errorMessage)
+    }
+  } catch (error) {
+    logger.error(`Error occurred in updateDidDoc function ${error}`)
+    throw error
+  }
 }
