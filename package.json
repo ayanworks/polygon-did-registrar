@@ -1,8 +1,7 @@
 {
   "name": "@ayanworks/polygon-did-registrar",
   "version": "0.0.15",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "build/index.js",
   "scripts": {
     "clean": "rm -rf build",
     "clean:deps": "pnpm clean && rm -rf node_modules",
