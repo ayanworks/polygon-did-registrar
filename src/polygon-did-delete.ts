@@ -1,11 +1,8 @@
-import * as log4js from 'log4js'
 import { DidUriValidation } from './did-uri-validation'
 import { BaseResponse } from './base-response'
 import { RegistryContractInitialization } from './registry-contract-initialization'
 import { ethers } from 'ethers'
 
-const logger = log4js.getLogger()
-logger.level = `debug`
 
 /**
  * Delete DID Document.
@@ -52,16 +49,16 @@ export async function deleteDidDoc(
           return resValue
         })
 
-      logger.debug(`[deleteDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`)
+      console.debug(`[deleteDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`)
 
       return BaseResponse.from(txnHash, 'Delete DID document successfully')
     } else {
       errorMessage = `DID does not match!`
-      logger.error(errorMessage)
+      console.error(errorMessage)
       throw new Error(errorMessage)
     }
   } catch (error) {
-    logger.error(`Error occurred in deleteDidDoc function ${error}`)
+    console.error(`Error occurred in deleteDidDoc function ${error}`)
     throw error
   }
 }

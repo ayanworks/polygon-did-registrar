@@ -1,8 +1,5 @@
-import * as log4js from 'log4js'
 import { networkConfig } from './config'
 
-const logger = log4js.getLogger()
-logger.level = `debug`
 
 export class DidUriValidation {
   /**
@@ -28,12 +25,12 @@ export class DidUriValidation {
         return true
       } else {
         errorMessage = `Invalid method-specific identifier has been entered!`
-        logger.error(errorMessage)
+        console.error(errorMessage)
         throw new Error(errorMessage)
       }
     } else {
       errorMessage = `Invalid DID has been entered!`
-      logger.error(errorMessage)
+      console.error(errorMessage)
       throw new Error(errorMessage)
     }
   }
@@ -81,7 +78,7 @@ export class DidUriValidation {
       }
     } else {
       errorMessage = `The DID and url do not match!`
-      logger.error(errorMessage)
+      console.error(errorMessage)
       throw new Error(errorMessage)
     }
   }

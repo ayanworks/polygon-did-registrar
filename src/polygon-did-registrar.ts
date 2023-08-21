@@ -1,5 +1,4 @@
 // @ts-nocheck
-import * as log4js from 'log4js'
 import * as bs58 from 'bs58'
 import { ethers } from 'ethers'
 import { Wallet } from '@ethersproject/wallet'
@@ -8,9 +7,6 @@ import { computePublicKey } from '@ethersproject/signing-key'
 import { BaseResponse } from './base-response'
 import { DidUriValidation } from './did-uri-validation'
 import { RegistryContractInitialization } from './registry-contract-initialization'
-
-const logger = log4js.getLogger()
-logger.level = `debug`
 
 /**
  * Create DID Document.
@@ -111,7 +107,7 @@ async function createKeyPair(privateKey: string): Promise<any> {
 
     return { address, publicKeyBase58 }
   } catch (error) {
-    logger.error(`Error occurred in createKeyPair function ${error}`)
+    console.error(`Error occurred in createKeyPair function ${error}`)
     throw error
   }
 }
@@ -145,19 +141,19 @@ export async function createDID(
       did = `did:polygon:${address}`
     } else {
       errorMessage = `Wrong network enter!`
-      logger.error(errorMessage)
+      console.error(errorMessage)
       throw new Error(errorMessage)
     }
 
-    logger.debug(`[createDID] address - ${JSON.stringify(address)} \n\n\n`)
-    logger.debug(`[createDID] did - ${JSON.stringify(did)} \n\n\n`)
+    console.debug(`[createDID] address - ${JSON.stringify(address)} \n\n\n`)
+    console.debug(`[createDID] did - ${JSON.stringify(did)} \n\n\n`)
 
     return BaseResponse.from(
       { address, publicKeyBase58, _privateKey, did },
       'Created DID uri successfully',
     )
   } catch (error) {
-    logger.error(`Error occurred in createDID function ${error}`)
+    console.error(`Error occurred in createDID function ${error}`)
     throw error
   }
 }
@@ -236,7 +232,7 @@ export async function registerDID(
               return resValue
             })
 
-          logger.debug(
+          console.debug(
             `[registerDID] txnHash - ${JSON.stringify(txnHash)} \n\n\n`,
           )
 
@@ -246,21 +242,21 @@ export async function registerDID(
           )
         } else {
           errorMessage = `The DID document already registered!`
-          logger.error(errorMessage)
+          console.error(errorMessage)
           throw new Error(errorMessage)
         }
       } else {
         errorMessage = `Private key and DID uri do not match!`
-        logger.error(errorMessage)
+        console.error(errorMessage)
         throw new Error(errorMessage)
       }
     } else {
       errorMessage = `DID does not match!`
-      logger.error(errorMessage)
+      console.error(errorMessage)
       throw new Error(errorMessage)
     }
   } catch (error) {
-    logger.error(`Error occurred in registerDID function  ${error}`)
+    console.error(`Error occurred in registerDID function  ${error}`)
     throw error
   }
 }

@@ -1,11 +1,8 @@
-import * as log4js from 'log4js'
 import { DidUriValidation } from './did-uri-validation'
 import { BaseResponse } from './base-response'
 import { RegistryContractInitialization } from './registry-contract-initialization'
 import { ethers } from 'ethers'
 
-const logger = log4js.getLogger()
-logger.level = `debug`
 
 /**
  * Update DID document on matic chain.
@@ -61,28 +58,28 @@ export async function updateDidDoc(
               return resValue
             })
 
-          logger.debug(
+          console.debug(
             `[updateDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`,
           )
 
           return BaseResponse.from(txnHash, 'Update DID document successfully')
         } else {
           errorMessage = `Invalid method-specific identifier has been entered!`
-          logger.error(errorMessage)
+          console.error(errorMessage)
           throw new Error(errorMessage)
         }
       } else {
         errorMessage = `Invalid DID has been entered!`
-        logger.error(errorMessage)
+        console.error(errorMessage)
         throw new Error(errorMessage)
       }
     } else {
       errorMessage = `DID does not match!`
-      logger.error(errorMessage)
+      console.error(errorMessage)
       throw new Error(errorMessage)
     }
   } catch (error) {
-    logger.error(`Error occurred in updateDidDoc function ${error}`)
+    console.error(`Error occurred in updateDidDoc function ${error}`)
     throw error
   }
 }
