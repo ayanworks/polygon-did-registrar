@@ -17,19 +17,6 @@ describe('Polygon-did-registrar', () => {
   })
 
   describe('test create did function', () => {
-    it('should be privateKey for create DID', async () => {
-      assert.ok(privateKey)
-      assert.strictEqual(privateKey.slice(0, 2), '0x')
-
-      if (network === 'testnet') {
-        assert.ok(network)
-        assert.strictEqual(network, 'testnet')
-      } else {
-        assert.ok(network)
-        assert.strictEqual(network, 'mainnet')
-      }
-    })
-
     it('should get address', async () => {
       assert.ok(createDidRes.data.address)
       assert.strictEqual(createDidRes.data.address.slice(0, 2), '0x')
@@ -69,14 +56,10 @@ describe('Polygon-did-registrar', () => {
       registerDidRes = await registerDID(polygonDID, privateKey)
     })
 
-    it('should get transaction hash after DID register ', async () => {
-      if (
-        registerDidRes &&
-        registerDidRes.data &&
-        registerDidRes.data.txnHash
-      ) {
-        assert.ok(registerDidRes.data.txnHash)
-        assert.equal(Object.keys(registerDidRes.data.txnHash), [
+    it('should get transaction hash after DID register ', () => {
+      assert.ok(registerDidRes.data.txnHash)
+      assert.equal(
+        arrayHasKeys(Object.keys(registerDidRes.data.txnHash), [
           'nonce',
           'gasPrice',
           'gasLimit',
@@ -91,10 +74,9 @@ describe('Polygon-did-registrar', () => {
           'hash',
           'type',
           'wait',
-        ])
-      } else {
-        assert.fail('registerDidRes is not valid')
-      }
+        ]),
+        true,
+      )
     })
   })
 
@@ -110,7 +92,7 @@ describe('Polygon-did-registrar', () => {
     })
 
     it('should be updated DID Document for update DID document', async () => {
-      assert.ok(updateDidDocument)
+      assert.ok(updateDidRes)
       assert.equal(Object.keys(JSON.parse(updateDidDocument)), [
         '@context',
         'id',
@@ -154,30 +136,26 @@ describe('Polygon-did-registrar', () => {
     })
 
     it('should get transaction hash after delete DID document', async () => {
-      if (deleteDidRes && deleteDidRes.data && deleteDidRes.data.txnHash) {
-        assert.ok(deleteDidRes.data.txnHash)
-        assert.equal(
-          arrayHasKeys(Object.keys(deleteDidRes.data.txnHash), [
-            'nonce',
-            'gasPrice',
-            'gasLimit',
-            'to',
-            'value',
-            'data',
-            'chainId',
-            'v',
-            'r',
-            's',
-            'from',
-            'hash',
-            'type',
-            'wait',
-          ]),
-          true,
-        )
-      } else {
-        assert.fail('deleteDidRes is not valid')
-      }
+      assert.ok(deleteDidRes.data.txnHash)
+      assert.equal(
+        arrayHasKeys(Object.keys(deleteDidRes.data.txnHash), [
+          'nonce',
+          'gasPrice',
+          'gasLimit',
+          'to',
+          'value',
+          'data',
+          'chainId',
+          'v',
+          'r',
+          's',
+          'from',
+          'hash',
+          'type',
+          'wait',
+        ]),
+        true,
+      )
     })
   })
 })

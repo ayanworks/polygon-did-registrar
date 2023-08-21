@@ -1,12 +1,10 @@
-// @ts-nocheck
-import * as bs58 from 'bs58'
-import { ethers } from 'ethers'
 import { Wallet } from '@ethersproject/wallet'
 import { computeAddress } from '@ethersproject/transactions'
 import { computePublicKey } from '@ethersproject/signing-key'
 import { BaseResponse } from './base-response'
-import { DidUriValidation } from './did-uri-validation'
 import { RegistryContractInitialization } from './registry-contract-initialization'
+import { getDidFromAddress, parseDid, validateDid } from './utils/did'
+import { Base58 } from '@ethersproject/basex'
 
 /**
  * Create DID Document.
@@ -18,76 +16,47 @@ async function wrapDidDocument(
   did: string,
   publicKeyBase58: string,
   serviceEndpoint?: string,
-): Promise<object> {
-  if (serviceEndpoint) {
-    return {
-      '@context': 'https://w3id.org/did/v1',
-      id: did,
-      verificationMethod: [
-        {
-          id: `${did}#key-1`,
-          type: 'EcdsaSecp256k1VerificationKey2019', // external (property value)
-          controller: did,
-          publicKeyBase58: publicKeyBase58,
-        },
-      ],
-      authentication: [
-        did,
-        {
-          id: `${did}#key-1`,
-          type: 'EcdsaSecp256k1VerificationKey2019', // external (property value)
-          controller: did,
-          publicKeyBase58: publicKeyBase58,
-        },
-      ],
-      assertionMethod: [
-        did,
-        {
-          id: `${did}#key-1`,
-          type: 'EcdsaSecp256k1VerificationKey2019', // external (property value)
-          controller: did,
-          publicKeyBase58: publicKeyBase58,
-        },
-      ],
-      service: [
-        {
-          id: `${did}#linked-domain`,
-          type: 'LinkedDomains',
-          serviceEndpoint: `${serviceEndpoint}`,
-        },
-      ],
-    }
-  } else {
-    return {
-      '@context': 'https://w3id.org/did/v1',
-      id: did,
-      verificationMethod: [
-        {
-          id: `${did}#key-1`,
-          type: 'EcdsaSecp256k1VerificationKey2019', // external (property value)
-          controller: did,
-          publicKeyBase58: publicKeyBase58,
-        },
-      ],
-      authentication: [
-        did,
-        {
-          id: `${did}#key-1`,
-          type: 'EcdsaSecp256k1VerificationKey2019', // external (property value)
-          controller: did,
-          publicKeyBase58: publicKeyBase58,
-        },
-      ],
-      assertionMethod: [
-        did,
-        {
-          id: `${did}#key-1`,
-          type: 'EcdsaSecp256k1VerificationKey2019', // external (property value)
-          controller: did,
-          publicKeyBase58: publicKeyBase58,
-        },
-      ],
-    }
+) {
+  return {
+    '@context': 'https://w3id.org/did/v1',
+    id: did,
+    verificationMethod: [
+      {
+        id: `${did}#key-1`,
+        type: 'EcdsaSecp256k1VerificationKey2019', // external (property value)
+        controller: did,
+        publicKeyBase58: publicKeyBase58,
+      },
+    ],
+    authentication: [
+      did,
+      {
+        id: `${did}#key-1`,
+        type: 'EcdsaSecp256k1VerificationKey2019', // external (property value)
+        controller: did,
+        publicKeyBase58: publicKeyBase58,
+      },
+    ],
+    assertionMethod: [
+      did,
+      {
+        id: `${did}#key-1`,
+        type: 'EcdsaSecp256k1VerificationKey2019', // external (property value)
+        controller: did,
+        publicKeyBase58: publicKeyBase58,
+      },
+    ],
+    ...(serviceEndpoint
+      ? {
+          service: [
+            {
+              id: `${did}#linked-domain`,
+              type: 'LinkedDomains',
+              serviceEndpoint: `${serviceEndpoint}`,
+            },
+          ],
+        }
+      : {}),
   }
 }
 
@@ -96,18 +65,18 @@ async function wrapDidDocument(
  * @param privateKey
  * @returns Returns the address and public key of type base58.
  */
-async function createKeyPair(privateKey: string): Promise<any> {
+async function createKeyPair(privateKey: string) {
   try {
-    const publicKey: string = computePublicKey(privateKey, true)
+    const publicKey = computePublicKey(privateKey, true)
 
-    const bufferPublicKey: Buffer = Buffer.from(publicKey)
-    const publicKeyBase58: string = bs58.encode(bufferPublicKey)
+    const bufferPublicKey = Buffer.from(publicKey)
+    const publicKeyBase58 = Base58.encode(bufferPublicKey)
 
-    const address: string = computeAddress(privateKey)
+    const address = computeAddress(privateKey)
 
     return { address, publicKeyBase58 }
   } catch (error) {
-    console.error(`Error occurred in createKeyPair function ${error}`)
+    console.log(`Error occurred in createKeyPair function ${error}`)
     throw error
   }
 }
@@ -117,43 +86,31 @@ async function createKeyPair(privateKey: string): Promise<any> {
  * @param privateKey
  * @returns Returns the address, public key of type base58, private key and DID Uri.
  */
-export async function createDID(
-  network: string,
-  privateKey?: string,
-): Promise<BaseResponse> {
+export async function createDID(network: string, privateKey?: string) {
   try {
-    let errorMessage: string
-    let did: string
     let _privateKey: string
 
     if (privateKey) {
       _privateKey = privateKey
     } else {
-      const wallet: ethers.Wallet = Wallet.createRandom()
+      const wallet = Wallet.createRandom()
       _privateKey = wallet.privateKey
     }
 
     const { address, publicKeyBase58 } = await createKeyPair(_privateKey)
 
-    if (network === 'testnet') {
-      did = `did:polygon:testnet:${address}`
-    } else if (network === 'mainnet') {
-      did = `did:polygon:${address}`
-    } else {
-      errorMessage = `Wrong network enter!`
-      console.error(errorMessage)
-      throw new Error(errorMessage)
+    if (network !== ('testnet' || 'mainnet')) {
+      throw new Error('Invalid network provided')
     }
 
-    console.debug(`[createDID] address - ${JSON.stringify(address)} \n\n\n`)
-    console.debug(`[createDID] did - ${JSON.stringify(did)} \n\n\n`)
+    const did = getDidFromAddress(address, network)
 
     return BaseResponse.from(
       { address, publicKeyBase58, _privateKey, did },
       'Created DID uri successfully',
     )
   } catch (error) {
-    console.error(`Error occurred in createDID function ${error}`)
+    console.log(`Error occurred in createDID function ${error}`)
     throw error
   }
 }
@@ -169,94 +126,54 @@ export async function createDID(
 export async function registerDID(
   did: string,
   privateKey: string,
-  url?: string,
-  contractAddress?: string,
   serviceEndpoint?: string,
-): Promise<BaseResponse> {
+) {
   try {
-    let errorMessage: string
-    let didDoc: object
-    const didUriValidation: DidUriValidation = new DidUriValidation()
-    const registryContractInitialization: RegistryContractInitialization =
-      new RegistryContractInitialization()
+    const registryContractInitialization = new RegistryContractInitialization()
 
-    const didMethodCheck: Boolean = await didUriValidation.polygonDidMatch(did)
-    const didWithTestnet: string = await didUriValidation.splitPolygonDid(did)
-
-    if (didMethodCheck) {
-      const kp: any = await createKeyPair(privateKey)
-
-      const networkCheckWithUrl: any = await didUriValidation.networkMatch(
-        did,
-        url,
-        contractAddress,
-      )
-
-      if (
-        (did &&
-          didWithTestnet === 'testnet' &&
-          did.split(':')[3] === kp.address) ||
-        (did && didWithTestnet === kp.address)
-      ) {
-        const registry: ethers.Contract =
-          await registryContractInitialization.instanceCreation(
-            privateKey,
-            networkCheckWithUrl.url,
-            networkCheckWithUrl.contractAddress,
-          )
-        const didAddress: string =
-          didWithTestnet === 'testnet' ? did.split(':')[3] : didWithTestnet
-
-        let resolveDidDoc: any = await registry.functions
-          .getDIDDoc(didAddress)
-          .then((resValue: any) => {
-            return resValue
-          })
-        if (resolveDidDoc.includes('')) {
-          // Get DID document
-          if (serviceEndpoint) {
-            didDoc = await wrapDidDocument(
-              did,
-              kp.publicKeyBase58,
-              serviceEndpoint,
-            )
-          } else {
-            didDoc = await wrapDidDocument(did, kp.publicKeyBase58)
-          }
-
-          const stringDidDoc: string = JSON.stringify(didDoc)
-
-          const txnHash: any = await registry.functions
-            .createDID(didAddress, stringDidDoc)
-            .then((resValue: any) => {
-              return resValue
-            })
-
-          console.debug(
-            `[registerDID] txnHash - ${JSON.stringify(txnHash)} \n\n\n`,
-          )
-
-          return BaseResponse.from(
-            { did, txnHash },
-            'Registered DID document successfully.',
-          )
-        } else {
-          errorMessage = `The DID document already registered!`
-          console.error(errorMessage)
-          throw new Error(errorMessage)
-        }
-      } else {
-        errorMessage = `Private key and DID uri do not match!`
-        console.error(errorMessage)
-        throw new Error(errorMessage)
-      }
-    } else {
-      errorMessage = `DID does not match!`
-      console.error(errorMessage)
-      throw new Error(errorMessage)
+    const isValidDid = validateDid(did)
+    if (!isValidDid) {
+      throw new Error('invalid did provided')
     }
+
+    const parsedDid = parseDid(did)
+
+    const keyPair = await createKeyPair(privateKey)
+
+    const registry = await registryContractInitialization.instanceCreation(
+      privateKey,
+      parsedDid.networkUrl,
+      parsedDid.contractAddress,
+    )
+
+    const resolveDidDoc = await registry.functions.getDIDDoc(
+      parsedDid.didAddress,
+    )
+
+    if (!resolveDidDoc) {
+      throw new Error('The DID document already registered!')
+    }
+
+    // Get DID document
+    const didDoc = await wrapDidDocument(
+      did,
+      keyPair.publicKeyBase58,
+      serviceEndpoint,
+    )
+
+    const stringDidDoc = JSON.stringify(didDoc)
+
+    const txnHash = await registry.functions.createDID(
+      parsedDid.didAddress,
+      stringDidDoc,
+    )
+
+    return BaseResponse.from(
+      { did, txnHash },
+      'Registered DID document successfully.',
+    )
   } catch (error) {
-    console.error(`Error occurred in registerDID function  ${error}`)
+    console.log(`Error occurred in registerDID function  ${error}`)
     throw error
   }
 }

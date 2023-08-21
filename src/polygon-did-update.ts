@@ -1,8 +1,6 @@
-import { DidUriValidation } from './did-uri-validation'
 import { BaseResponse } from './base-response'
 import { RegistryContractInitialization } from './registry-contract-initialization'
-import { ethers } from 'ethers'
-
+import { parseDid, validateDid } from './utils/did'
 
 /**
  * Update DID document on matic chain.
@@ -15,71 +13,47 @@ import { ethers } from 'ethers'
  */
 export async function updateDidDoc(
   did: string,
-  didDocJson: string,
+  didDoc: string,
   privateKey: string, // Todo: look for better way to address private key passing mechanism
-  url?: string,
-  contractAddress?: string,
 ): Promise<BaseResponse> {
   try {
-    let errorMessage: string
-    const didUriValidation: DidUriValidation = new DidUriValidation()
-    const registryContractInitialization: RegistryContractInitialization =
-      new RegistryContractInitialization()
+    const registryContractInitialization = new RegistryContractInitialization()
 
-    const didMethodCheck: Boolean = await didUriValidation.polygonDidMatch(did)
-    const didWithTestnet: string = await didUriValidation.splitPolygonDid(did)
-
-    if (didMethodCheck) {
-      const networkCheckWithUrl: any = await didUriValidation.networkMatch(
-        did,
-        url,
-        contractAddress,
-      )
-
-      const registry: ethers.Contract =
-        await registryContractInitialization.instanceCreation(
-          privateKey,
-          networkCheckWithUrl.url,
-          networkCheckWithUrl.contractAddress,
-        )
-      if (didDocJson && JSON.parse(didDocJson)) {
-        if (
-          '@context' in JSON.parse(didDocJson) &&
-          'id' in JSON.parse(didDocJson) &&
-          'verificationMethod' in JSON.parse(didDocJson)
-        ) {
-          const didAddress: string =
-            didWithTestnet === 'testnet' ? did.split(':')[3] : didWithTestnet
-
-          // Calling smart contract with update DID document on matic chain
-          let txnHash: any = await registry.functions
-            .updateDIDDoc(didAddress, didDocJson)
-            .then((resValue: any) => {
-              return resValue
-            })
-
-          console.debug(
-            `[updateDidDoc] txnHash - ${JSON.stringify(txnHash)} \n\n\n`,
-          )
-
-          return BaseResponse.from(txnHash, 'Update DID document successfully')
-        } else {
-          errorMessage = `Invalid method-specific identifier has been entered!`
-          console.error(errorMessage)
-          throw new Error(errorMessage)
-        }
-      } else {
-        errorMessage = `Invalid DID has been entered!`
-        console.error(errorMessage)
-        throw new Error(errorMessage)
-      }
-    } else {
-      errorMessage = `DID does not match!`
-      console.error(errorMessage)
-      throw new Error(errorMessage)
+    const isValidDid = validateDid(did)
+    if (!isValidDid) {
+      throw new Error('invalid did provided')
     }
+
+    const parsedDid = parseDid(did)
+
+    const registry = await registryContractInitialization.instanceCreation(
+      privateKey,
+      parsedDid.networkUrl,
+      parsedDid.contractAddress,
+    )
+
+    if (!didDoc && !JSON.parse(didDoc)) {
+      throw new Error('Invalid DID has been entered!')
+    }
+    const didDocJson = JSON.parse(didDoc)
+
+    if (
+      !didDocJson['@context'] ||
+      !didDocJson['id'] ||
+      !didDocJson['verificationMethod']
+    ) {
+      throw new Error('Invalid DID doc')
+    }
+
+    // Calling smart contract with update DID document on matic chain
+    const txnHash = await registry.functions.updateDIDDoc(
+      parsedDid.didAddress,
+      didDocJson,
+    )
+
+    return BaseResponse.from(txnHash, 'Update DID document successfully')
   } catch (error) {
-    console.error(`Error occurred in updateDidDoc function ${error}`)
+    console.log(`Error occurred in updateDidDoc function ${error}`)
     throw error
   }
 }

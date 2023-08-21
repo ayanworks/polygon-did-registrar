@@ -1,5 +1,5 @@
-import { ethers } from 'ethers'
-const DidRegistryContract = require('@ayanworks/polygon-did-registry-contract')
+import { Contract, Wallet, providers } from 'ethers'
+import DidRegistryContract from '@ayanworks/polygon-did-registry-contract'
 
 export class RegistryContractInitialization {
   /**
@@ -13,11 +13,10 @@ export class RegistryContractInitialization {
     privateKey: string,
     url: string,
     contractAddress: string,
-  ): Promise<ethers.Contract> {
-    const provider: ethers.providers.JsonRpcProvider =
-      new ethers.providers.JsonRpcProvider(url)
-    const wallet: ethers.Wallet = new ethers.Wallet(privateKey, provider)
-    const registry: ethers.Contract = new ethers.Contract(
+  ) {
+    const provider = new providers.JsonRpcProvider(url)
+    const wallet = new Wallet(privateKey, provider)
+    const registry = new Contract(
       contractAddress,
       DidRegistryContract.abi,
       wallet,

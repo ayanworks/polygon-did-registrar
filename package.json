@@ -19,8 +19,12 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@ayanworks/polygon-did-registry-contract": "^2.0.0",
-    "ethers": "^5.1.0"
+    "@ayanworks/polygon-did-registry-contract": "2.0.1-alpha.1",
+    "ethers": "^5.1.0",
+    "@ethersproject/basex": "^5.7.0",
+    "@ethersproject/signing-key": "^5.7.0",
+    "@ethersproject/transactions": "^5.7.0",
+    "@ethersproject/wallet": "^5.7.0"
   },
   "devDependencies": {
     "@types/node": "^18.17.0",

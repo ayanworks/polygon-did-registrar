@@ -7,7 +7,8 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "resolveJsonModule": true
   },
-  "exclude": ["tests"]
+  "exclude": ["tests", "node_modules"]
 }
