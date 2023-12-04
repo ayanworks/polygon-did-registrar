@@ -46,7 +46,7 @@ export async function updateDidDoc(
     }
 
     // Calling smart contract with update DID document on matic chain
-    const txnHash = await registry.functions.updateDIDDoc(
+    const txnHash = await registry.updateDIDDoc(
       parsedDid.didAddress,
       didDocJson,
     )

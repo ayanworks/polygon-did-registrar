@@ -12,7 +12,7 @@ import { Base58 } from '@ethersproject/basex'
  * @param address
  * @returns Returns the DID Document.
  */
-async function wrapDidDocument(
+export async function wrapDidDocument(
   did: string,
   publicKeyBase58: string,
   serviceEndpoint?: string,
@@ -65,7 +65,7 @@ async function wrapDidDocument(
  * @param privateKey
  * @returns Returns the address and public key of type base58.
  */
-async function createKeyPair(privateKey: string) {
+export async function createKeyPair(privateKey: string) {
   try {
     const publicKey = computePublicKey(privateKey, true)
 
@@ -146,9 +146,7 @@ export async function registerDID(
       parsedDid.contractAddress,
     )
 
-    const resolveDidDoc = await registry.functions.getDIDDoc(
-      parsedDid.didAddress,
-    )
+    const resolveDidDoc = await registry.getDIDDoc(parsedDid.didAddress)
 
     if (!resolveDidDoc) {
       throw new Error('The DID document already registered!')
@@ -163,10 +161,7 @@ export async function registerDID(
 
     const stringDidDoc = JSON.stringify(didDoc)
 
-    const txnHash = await registry.functions.createDID(
-      parsedDid.didAddress,
-      stringDidDoc,
-    )
+    const txnHash = await registry.createDID(parsedDid.didAddress, stringDidDoc)
 
     return BaseResponse.from(
       { did, txnHash },

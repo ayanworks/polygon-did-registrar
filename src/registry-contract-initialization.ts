@@ -1,4 +1,4 @@
-import { Contract, Wallet, providers } from 'ethers'
+import { Contract, JsonRpcProvider, Wallet } from 'ethers'
 import DidRegistryContract from '@ayanworks/polygon-did-registry-contract'
 
 export class RegistryContractInitialization {
@@ -14,7 +14,7 @@ export class RegistryContractInitialization {
     url: string,
     contractAddress: string,
   ) {
-    const provider = new providers.JsonRpcProvider(url)
+    const provider = new JsonRpcProvider(url)
     const wallet = new Wallet(privateKey, provider)
     const registry = new Contract(
       contractAddress,

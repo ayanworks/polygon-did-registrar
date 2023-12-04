@@ -33,7 +33,7 @@ export async function deleteDidDoc(
         parsedDid.contractAddress,
       )
 
-    const txnHash = await registry.functions.deleteDIDDoc(parsedDid.didAddress)
+    const txnHash = await registry.deleteDIDDoc(parsedDid.didAddress)
 
     return BaseResponse.from(txnHash, 'Delete DID document successfully')
   } catch (error) {
