@@ -1,13 +1,13 @@
 {
   "name": "@ayanworks/polygon-did-registrar",
-  "version": "0.0.15",
+  "version": "0.0.16-alpha.0",
   "main": "build/index.js",
   "scripts": {
     "clean": "rm -rf build",
     "clean:deps": "pnpm clean && rm -rf node_modules",
     "build": "pnpm clean && tsc",
     "test": "node --require ts-node/register --test ./tests/*.test.ts",
-    "prettier": "prettier --ignore-path .gitignore .",
+    "prettier": "prettier --ignore-path .prettierignore .",
     "check-format": "pnpm prettier --list-different",
     "check-types": "pnpm build --noEmit",
     "format": "pnpm prettier --write",
@@ -19,9 +19,12 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@ayanworks/polygon-did-registry-contract": "^2.0.0",
-    "ethers": "^5.1.0",
-    "log4js": "^6.3.0"
+    "@ayanworks/polygon-did-registry-contract": "2.0.1-alpha.2",
+    "@ethersproject/basex": "^5.7.0",
+    "@ethersproject/signing-key": "^5.7.0",
+    "@ethersproject/transactions": "^5.7.0",
+    "@ethersproject/wallet": "^5.7.0",
+    "ethers": "^6.9.0"
   },
   "devDependencies": {
     "@types/node": "^18.17.0",

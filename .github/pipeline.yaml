@@ -1,0 +1,88 @@
+name: 'Pipeline'
+
+concurrency:
+  # Cancel previous runs that are not completed yet
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: ['main']
+
+  pull_request:
+    types: [opened, synchronize]
+
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: 'Type of release (major, minor, patch, alpha)'
+        required: true
+        default: alpha
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+          - alpha
+
+jobs:
+  continuous-integration:
+    name: 'Continuous Integration'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.6.0
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check formatting
+        run: pnpm check-format
+
+      - name: Check types
+        run: pnpm check-types
+
+  continuous-deployment:
+    if: github.event_name == 'workflow_dispatch'
+
+    name: 'Continuous Deployment'
+    runs-on: ubuntu-latest
+    needs: ['continuous-integration']
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.6.0
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      - name: Initialize the NPM config
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+
+      - name: Publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo ${{ inputs.release-type }}
+          git config --global user.email "amit.padmani@ayanworks.com"
+          git config --global user.name "Amit Padmani"
+
+          if [ ${{ inputs.release-type }} == 'alpha' ]; then
+            pnpm release --preRelease=${{ inputs.release-type }} --npm.tag=alpha
+          else
+            pnpm release ${{ inputs.release-type }} --npm.tag=latest
+          fi
