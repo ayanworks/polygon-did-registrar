@@ -1,5 +1,10 @@
 {
+  "git": {
+    "commitMessage": "chore: release v${version} [skip ci]",
+    "commitArgs": ["--signoff"]
+  },
   "github": {
-    "release": true
+    "release": true,
+    "autoGenerate": true
   }
 }
