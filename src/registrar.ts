@@ -68,7 +68,7 @@ export class PolygonDID {
 
       const resolveDidDoc = await this.registry.getDIDDoc(parsedDid.didAddress)
 
-      if (!resolveDidDoc) {
+      if (resolveDidDoc) {
         throw new Error('The DID document already registered!')
       }
 
