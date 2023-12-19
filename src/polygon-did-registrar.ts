@@ -18,7 +18,10 @@ export async function wrapDidDocument(
   serviceEndpoint?: string,
 ) {
   return {
-    '@context': 'https://w3id.org/did/v1',
+    '@context': [
+      'https://w3id.org/did/v1',
+      'https://w3id.org/security/suites/secp256k1-2019/v1',
+    ],
     id: did,
     verificationMethod: [
       {

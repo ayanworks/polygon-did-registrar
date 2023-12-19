@@ -122,7 +122,7 @@ export class PolygonDID {
       // Calling smart contract with update DID document on matic chain
       const txnHash = await this.registry.updateDIDDoc(
         parsedDid.didAddress,
-        didDocJson,
+        didDoc,
       )
 
       return {
