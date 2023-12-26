@@ -35,6 +35,7 @@ export async function updateDidDoc(
     if (!didDoc && !JSON.parse(didDoc)) {
       throw new Error('Invalid DID has been entered!')
     }
+
     const didDocJson = JSON.parse(didDoc)
 
     if (
@@ -46,10 +47,7 @@ export async function updateDidDoc(
     }
 
     // Calling smart contract with update DID document on matic chain
-    const txnHash = await registry.updateDIDDoc(
-      parsedDid.didAddress,
-      didDocJson,
-    )
+    const txnHash = await registry.updateDIDDoc(parsedDid.didAddress, didDoc)
 
     return BaseResponse.from(txnHash, 'Update DID document successfully')
   } catch (error) {
