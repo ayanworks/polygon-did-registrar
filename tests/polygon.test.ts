@@ -1,11 +1,17 @@
-import { updateDidDocument } from './fixtures/test.data'
+import {
+  testDidDetails,
+  resourceJson,
+  testResourceId,
+  updateDidDocument,
+  testContractDetails,
+} from './fixtures/test.data'
 import { describe, it, before } from 'node:test'
 import assert from 'node:assert'
 import { arrayHasKeys } from './utils/array'
 import { PolygonDID } from '../src/registrar'
 
-const NETWORK_URL = 'https://rpc-mumbai.maticvigil.com'
-const CONTRACT_ADDRESS = '0x8B335A167DA81CCef19C53eE629cf2F6291F2255'
+const NETWORK_URL = testContractDetails.networkUrl
+const CONTRACT_ADDRESS = testContractDetails.contractAddress //Can add external smart contract address
 
 describe('Registrar', () => {
   let polygonDidRegistrar: PolygonDID
@@ -15,11 +21,25 @@ describe('Registrar', () => {
     privateKey: string
     publicKeyBase58: string
     did: string
+  } = {
+    address: '',
+    privateKey: '',
+    publicKeyBase58: '',
+    did: '',
   }
 
   before(async () => {
-    keyPair = PolygonDID.createKeyPair('testnet')
-    polygonDID = keyPair.did
+    keyPair.address = testDidDetails.address
+    keyPair.did = testDidDetails.did
+    keyPair.privateKey = testDidDetails.privateKey //test key
+    keyPair.publicKeyBase58 = testDidDetails.publicKeyBase58
+    polygonDID = testDidDetails.did
+
+    if (!keyPair.address && !keyPair.did) {
+      keyPair = PolygonDID.createKeyPair('testnet')
+      polygonDID = keyPair.did
+    }
+
     polygonDidRegistrar = new PolygonDID({
       contractAddress: CONTRACT_ADDRESS,
       rpcUrl: NETWORK_URL,
@@ -63,32 +83,36 @@ describe('Registrar', () => {
         publicKeyBase58: keyPair.publicKeyBase58,
         serviceEndpoint: 'https://example.com',
       })
-      console.log('first registerDidRes', registerDidRes)
     })
 
     it('should get transaction hash after DID register ', () => {
       assert.ok(registerDidRes.txnHash)
       assert.equal(
         arrayHasKeys(Object.keys(registerDidRes.txnHash), [
-          'nonce',
-          'gasPrice',
-          'gasLimit',
-          'to',
-          'value',
-          'data',
-          'chainId',
-          'v',
-          'r',
-          's',
-          'from',
+          'provider',
+          'blockNumber',
+          'blockHash',
+          'index',
           'hash',
           'type',
-          'wait',
+          'to',
+          'from',
+          'nonce',
+          'gasLimit',
+          'gasPrice',
+          'maxPriorityFeePerGas',
+          'maxFeePerGas',
+          'data',
+          'value',
+          'chainId',
+          'signature',
+          'accessList',
         ]),
         true,
       )
     })
   })
+
 
   describe('test update DID doc function', () => {
     let updateDidRes: any
@@ -99,7 +123,6 @@ describe('Registrar', () => {
         updateDidDocument,
       )
     })
-
     it('should be updated DID Document for update DID document', async () => {
       assert.ok(updateDidRes)
       assert.equal(Object.keys(JSON.parse(updateDidDocument)), [
@@ -137,17 +160,20 @@ describe('Registrar', () => {
     })
   })
 
-  describe('test delete function', () => {
-    let deleteDidRes: any
+  describe('test register DID linked-resource function', () => {
+    let addResource: any;
 
     before(async () => {
-      deleteDidRes = await polygonDidRegistrar.deactivate(polygonDID)
+      addResource = await polygonDidRegistrar.addResource(
+        polygonDID,
+        resourceJson
+      )
     })
 
-    it('should get transaction hash after delete DID document', async () => {
-      assert.ok(deleteDidRes.txnHash)
+    it('should get transaction hash after register DID document', async () => {
+      assert.ok(addResource.txnHash)
       assert.equal(
-        arrayHasKeys(Object.keys(deleteDidRes.txnHash), [
+        arrayHasKeys(Object.keys(addResource.txnHash), [
           'nonce',
           'gasPrice',
           'gasLimit',
@@ -166,5 +192,67 @@ describe('Registrar', () => {
         true,
       )
     })
+
+  })
+
+  describe('test resolve all DID linked-resource by DID function', () => {
+    let resolveResourceByDid:any;
+
+    before(async () => {
+      resolveResourceByDid = await polygonDidRegistrar.getResourcesByDid(
+        polygonDID
+      )
+    })
+
+    it('should match correct resource details after resolving linked resource with valid DID', async () => {
+
+      const expectedKeys = [
+        'resourceURI',
+        'resourceCollectionId',
+        'resourceId',
+        'resourceName',
+        'resourceType',
+        'mediaType',
+        'created',
+        'checksum',
+        'previousVersionId',
+        'nextVersionId',
+      ];
+
+      resolveResourceByDid.linkedResource.forEach((resource:any) => {
+        assert.deepStrictEqual(Object.keys(resource), expectedKeys);
+      });
+    });
+
+  })
+
+  describe('test resolve DID linked-resource by DID and resourceId function', () => {
+    let resolveResourceByDid: any;
+
+    before(async () => {
+      resolveResourceByDid = await polygonDidRegistrar.getResourceByDidAndResourceId(
+        polygonDID,
+        testResourceId
+      )
+    })
+
+    it('should match correct resource details after resolving linked resource with valid DID', async () => {
+
+      const expectedKeys = [
+        'resourceURI',
+        'resourceCollectionId',
+        'resourceId',
+        'resourceName',
+        'resourceType',
+        'mediaType',
+        'created',
+        'checksum',
+        'previousVersionId',
+        'nextVersionId',
+      ];
+
+     assert.deepStrictEqual(Object.keys(resolveResourceByDid), expectedKeys);
+    });
+
   })
 })
