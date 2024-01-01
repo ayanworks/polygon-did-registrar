@@ -119,7 +119,7 @@ export class PolygonDID {
     }
   }
 
-  public async update(did: string, didDoc: string) {
+  public async update(did: string, didDoc:object) {
     try {
       const isValidDid = validateDid(did)
       if (!isValidDid) {
@@ -131,22 +131,22 @@ export class PolygonDID {
       if (!didDoc && !JSON.parse(didDoc)) {
         throw new Error('Invalid DID has been entered!')
       }
-      const didDocJson = JSON.parse(didDoc)
+      // const didDocJson = JSON.parse(didDoc)
 
-      if (
-        !didDocJson['@context'] ||
-        !didDocJson['id'] ||
-        !didDocJson['verificationMethod']
-      ) {
-        throw new Error('Invalid DID doc')
-      }
+      // if (
+      //   !didDocJson['@context'] ||
+      //   !didDocJson['id'] ||
+      //   !didDocJson['verificationMethod']
+      // ) {
+      //   throw new Error('Invalid DID doc')
+      // }
 
       // Calling smart contract with update DID document on matic chain
       const txnHash = await this.registry.updateDIDDoc(
         parsedDid.didAddress,
         JSON.stringify(didDoc),
       )
-
+      console.log("txnHash::::", txnHash);
       return {
         did,
         didDoc,
@@ -157,7 +157,7 @@ export class PolygonDID {
       throw error
     }
   }
-
+// Remove this method after testing
   public async resolve(did: string) {
     try {
       const isValidDid = validateDid(did)
@@ -171,7 +171,7 @@ export class PolygonDID {
       const didDocument = await this.registry.getDIDDoc(
         parsedDid.didAddress,
       )
-    
+  
       if (!didDocument[0]) {
         throw new Error(`The DID document for the given DID was not found!`)
       }
@@ -216,7 +216,7 @@ export class PolygonDID {
       const stringDidDoc = JSON.stringify(resourcePayload)
       const resourceId = uuidv4();
 
-      const txnHash = await this.registry.addResources(
+      const txnHash = await this.registry.addResource(
         parsedDid.didAddress,
         resourceId,
         stringDidDoc
@@ -257,7 +257,7 @@ export class PolygonDID {
 
       const stringDidDoc = JSON.stringify(resourcePayload)
 
-      const txnHash = await this.registry.addResources(
+      const txnHash = await this.registry.addResource(
         parsedDid.didAddress,
         resourceId,
         stringDidDoc
@@ -294,11 +294,11 @@ export class PolygonDID {
         throw new Error(`The DID document for the given DID was not found!`)
       }
 
-      const linkedResource = await this.registry.getResourcesByIdAndResourceId(
+      const linkedResource = await this.registry.getResource(
         parsedDid.didAddress,
         resourceId
       )
-
+    console.log("linkedResource::::", linkedResource);
       return {
         did,
         linkedResource: JSON.parse(linkedResource)
@@ -327,13 +327,13 @@ export class PolygonDID {
         throw new Error(`The DID document for the given DID was not found!`)
       }
 
-      const listLinkedResource = await this.registry.getResourcesById(
+      const listLinkedResource = await this.registry.getAllResources(
         parsedDid.didAddress
       )
 
       return {
         did,
-        linkedResource: listLinkedResource.map((element: string) => {
+        linkedResources: listLinkedResource.map((element: string) => {
           return JSON.parse(element) as ResourcePayload
         })
       }

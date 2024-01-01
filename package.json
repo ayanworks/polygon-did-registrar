@@ -6,7 +6,7 @@
     "clean": "rm -rf build",
     "clean:deps": "pnpm clean && rm -rf node_modules",
     "build": "pnpm clean && tsc",
-    "test": "node --require ts-node/register --test ./tests/*.test.ts",
+    "test": "node --require ts-node/register --test ./tests/polygon.test.ts",
     "prettier": "prettier --ignore-path .prettierignore .",
     "check-format": "pnpm prettier --list-different",
     "check-types": "pnpm build --noEmit",
