@@ -19,7 +19,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@ayanworks/polygon-did-registry-contract": "2.0.1-alpha.2",
+    "@ayanworks/polygon-did-registry-contract": "2.0.1-alpha.3",
     "@ethersproject/basex": "^5.7.0",
     "@ethersproject/signing-key": "^5.7.0",
     "@ethersproject/transactions": "^5.7.0",

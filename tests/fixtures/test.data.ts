@@ -72,6 +72,6 @@ export const testDidDetails = {
 }
 
 export const testContractDetails = {
-  contractAddress: '0x9bd1A5d2ac2D391AaF7177Ee27A5520C4844f1C3',
+  contractAddress: '0x12513116875BB3E4F098Ce74624739Ee51bAf023',
   networkUrl: 'https://rpc-mumbai.maticvigil.com',
 }

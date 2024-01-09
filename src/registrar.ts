@@ -1,13 +1,11 @@
 import { Contract, JsonRpcProvider, Wallet, computeAddress } from 'ethers'
-import {  wrapDidDocument } from './polygon-did-registrar'
+import { wrapDidDocument } from './polygon-did-registrar'
 import { parseDid, validateDid } from './utils/did'
 import { validateResourcePayload } from './utils/linkedResource'
 import DidRegistryContract from '@ayanworks/polygon-did-registry-contract'
 import { Base58 } from '@ethersproject/basex'
 import { computePublicKey } from '@ethersproject/signing-key'
-import {v4 as uuidv4} from "uuid";
-import abi from '../tests/fixtures/testAbi.json'
-
+import { v4 as uuidv4 } from 'uuid'
 
 export type PolygonDidInitOptions = {
   contractAddress: string
@@ -22,19 +20,17 @@ export type PolygonDidRegisterOptions = {
 }
 
 export type ResourcePayload = {
-  resourceURI: string;
-  resourceCollectionId: string;
-  resourceId: string;
-  resourceName: string;
-  resourceType: string;
-  mediaType: string;
-  created: string;
-  checksum: string;
-  previousVersionId: string | null;
-  nextVersionId: string | null;
+  resourceURI: string
+  resourceCollectionId: string
+  resourceId: string
+  resourceName: string
+  resourceType: string
+  mediaType: string
+  created: string
+  checksum: string
+  previousVersionId: string | null
+  nextVersionId: string | null
 }
-
-
 
 export class PolygonDID {
   private registry: Contract
@@ -48,19 +44,19 @@ export class PolygonDID {
     const wallet = new Wallet(privateKey, provider)
     this.registry = new Contract(
       contractAddress,
-      abi, //test ABI
+      DidRegistryContract.abi,
       wallet,
     )
   }
 
   static createKeyPair(network: string) {
-    let did: string = '';
+    let did: string = ''
     const wallet = Wallet.createRandom()
     const privateKey = wallet.privateKey
     const address = computeAddress(privateKey)
 
     const publicKey = computePublicKey(privateKey, true)
-    
+
     const bufferPublicKey = Buffer.from(publicKey)
     const publicKeyBase58 = Base58.encode(bufferPublicKey)
 
@@ -114,12 +110,12 @@ export class PolygonDID {
         didDoc,
       }
     } catch (error) {
-      console.log(`Error occurred in registerDID function ${ error } `)
+      console.log(`Error occurred in registerDID function ${error} `)
       throw error
     }
   }
 
-  public async update(did: string, didDoc:object) {
+  public async update(did: string, didDoc: object) {
     try {
       const isValidDid = validateDid(did)
       if (!isValidDid) {
@@ -131,72 +127,25 @@ export class PolygonDID {
       if (!didDoc && !JSON.parse(didDoc)) {
         throw new Error('Invalid DID has been entered!')
       }
-      // const didDocJson = JSON.parse(didDoc)
-
-      // if (
-      //   !didDocJson['@context'] ||
-      //   !didDocJson['id'] ||
-      //   !didDocJson['verificationMethod']
-      // ) {
-      //   throw new Error('Invalid DID doc')
-      // }
-
+      
       // Calling smart contract with update DID document on matic chain
       const txnHash = await this.registry.updateDIDDoc(
         parsedDid.didAddress,
         JSON.stringify(didDoc),
       )
-      console.log("txnHash::::", txnHash);
       return {
         did,
         didDoc,
         txnHash,
       }
     } catch (error) {
-      console.log(`Error occurred in update ${ error } `)
-      throw error
-    }
-  }
-// Remove this method after testing
-  public async resolve(did: string) {
-    try {
-      const isValidDid = validateDid(did)
-      if (!isValidDid) {
-        throw new Error('Invalid did provided')
-      }
-
-      const parsedDid = parseDid(did)
-
-      // Calling smart contract with getting DID Document
-      const didDocument = await this.registry.getDIDDoc(
-        parsedDid.didAddress,
-      )
-  
-      if (!didDocument[0]) {
-        throw new Error(`The DID document for the given DID was not found!`)
-      }
-      // TODO: return only the did document instead of array
-      return {
-        didDocument: JSON.parse(didDocument[0]),
-        didDocumentMetadata: {
-          linkedResourceMetadata:
-            didDocument[1].map((element: string) => {
-              return JSON.parse(element)
-            })
-        },
-        didResolutionMetadata: { contentType: 'application/did+ld+json' },
-      }
-    } catch (error) {
+      console.log(`Error occurred in update ${error} `)
       throw error
     }
   }
 
-  public async addResource(
-    did: string,
-    resourcePayload: ResourcePayload
-  ) {
+  public async addResource(did: string, resourcePayload: ResourcePayload) {
     try {
-
       const isValidDid = validateDid(did)
       if (!isValidDid) {
         throw new Error('Invalid did provided')
@@ -212,33 +161,32 @@ export class PolygonDID {
         throw new Error(`The DID document for the given DID was not found!`)
       }
 
-
       const stringDidDoc = JSON.stringify(resourcePayload)
-      const resourceId = uuidv4();
+      const resourceId = uuidv4()
 
       const txnHash = await this.registry.addResource(
         parsedDid.didAddress,
         resourceId,
-        stringDidDoc
+        stringDidDoc,
       )
-    
+
       return {
         did,
         resourceId,
-        txnHash
+        txnHash,
       }
     } catch (error) {
-      console.log(`Error occurred in addResource function ${ error } `)
+      console.log(`Error occurred in addResource function ${error} `)
       throw error
     }
   }
+
   public async updateResource(
     did: string,
     resourceId: string,
-    resourcePayload: ResourcePayload
+    resourcePayload: ResourcePayload,
   ) {
     try {
-
       const isValidDid = validateDid(did)
       if (!isValidDid && resourceId) {
         throw new Error('Invalid DID or resourceId provided!')
@@ -254,32 +202,27 @@ export class PolygonDID {
         throw new Error(`The DID document for the given DID was not found!`)
       }
 
-
       const stringDidDoc = JSON.stringify(resourcePayload)
 
       const txnHash = await this.registry.addResource(
         parsedDid.didAddress,
         resourceId,
-        stringDidDoc
+        stringDidDoc,
       )
 
       return {
         did,
         resourceId,
-        txnHash
+        txnHash,
       }
     } catch (error) {
-      console.log(`Error occurred in addResource function ${ error } `)
+      console.log(`Error occurred in addResource function ${error} `)
       throw error
     }
   }
 
-  public async getResourceByDidAndResourceId(
-    did: string,
-    resourceId: string
-  ) {
+  public async getResourceByDidAndResourceId(did: string, resourceId: string) {
     try {
-
       const isValidDid = validateDid(did)
 
       if (!isValidDid) {
@@ -296,24 +239,23 @@ export class PolygonDID {
 
       const linkedResource = await this.registry.getResource(
         parsedDid.didAddress,
-        resourceId
+        resourceId,
       )
-    console.log("linkedResource::::", linkedResource);
+      
       return {
         did,
-        linkedResource: JSON.parse(linkedResource)
+        linkedResource: JSON.parse(linkedResource),
       }
     } catch (error) {
-      console.log(`Error occurred in getResourcesByDidAndResourceId function ${ error } `)
+      console.log(
+        `Error occurred in getResourcesByDidAndResourceId function ${error} `,
+      )
       throw error
     }
   }
 
-  public async getResourcesByDid(
-    did: string
-  ) {
+  public async getResourcesByDid(did: string) {
     try {
-
       const isValidDid = validateDid(did)
       if (!isValidDid) {
         throw new Error('invalid did provided')
@@ -328,19 +270,18 @@ export class PolygonDID {
       }
 
       const listLinkedResource = await this.registry.getAllResources(
-        parsedDid.didAddress
+        parsedDid.didAddress,
       )
 
       return {
         did,
         linkedResources: listLinkedResource.map((element: string) => {
           return JSON.parse(element) as ResourcePayload
-        })
+        }),
       }
     } catch (error) {
-      console.log(`Error occurred in getResourcesByDid function ${ error } `)
+      console.log(`Error occurred in getResourcesByDid function ${error} `)
       throw error
     }
   }
-
 }

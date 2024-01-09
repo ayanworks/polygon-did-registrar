@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@ayanworks/polygon-did-registry-contract':
-    specifier: 2.0.1-alpha.2
-    version: 2.0.1-alpha.2
+    specifier: 2.0.1-alpha.3
+    version: 2.0.1-alpha.3
   '@ethersproject/basex':
     specifier: ^5.7.0
     version: 5.7.0
@@ -53,8 +53,8 @@ packages:
     resolution: {integrity: sha512-nA9XHtlAkYfJxY7bce8DcN7eKxWWCWkU+1GR9d+U6MbNpfwQp8TI7vqOsBsMcHoT4mBu2kypKoSKnghEzOOq5Q==}
     dev: false
 
-  /@ayanworks/polygon-did-registry-contract@2.0.1-alpha.2:
-    resolution: {integrity: sha512-RsLa6dRQksORuN6GwSkyCSBWmP/Wjrmv6H4wbIrte/DBxvB9mUGdEDD3FtDHyXtSSB1NlrEdTqazy2hbgT6oGA==}
+  /@ayanworks/polygon-did-registry-contract@2.0.1-alpha.3:
+    resolution: {integrity: sha512-8FZZVAmzXZn0pjZasuxdRblL0obK91JoaoXzpM4oZ7hD5VRUbiWf7BTh17WsWc6Oaf6XtafT4csuBo11fZiUoQ==}
     dev: false
 
   /@babel/code-frame@7.22.10:

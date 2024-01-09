@@ -113,14 +113,6 @@ describe('Registrar', () => {
     })
   })
 
-  describe('test resolve DID doc function', () => {
-    let resolvedDidDoc: any
-
-    before(async () => {
-      resolvedDidDoc = await polygonDidRegistrar.resolve(polygonDID)
-    })
-  })
-
   describe('test update DID doc function', () => {
     let updateDidRes: any
 
@@ -129,7 +121,6 @@ describe('Registrar', () => {
         polygonDID,
         updateDidDocument,
       )
-      console.log('updateDidRes::::', updateDidRes)
     })
 
     it('should have a valid updateDidRes object', () => {
@@ -150,10 +141,6 @@ describe('Registrar', () => {
 
     it('should get transaction hash after register DID document', async () => {
       assert.ok(addedResource.txnHash)
-      console.log(
-        'Object.keys(addResource.txnHash::::',
-        Object.keys(addedResource.txnHash),
-      )
       assert.equal(
         arrayHasKeys(Object.keys(addedResource.txnHash), [
           'provider',
@@ -186,7 +173,6 @@ describe('Registrar', () => {
     before(async () => {
       resolveResourceByDid =
         await polygonDidRegistrar.getResourcesByDid(polygonDID)
-      console.log('resolveResourceByDid:::', resolveResourceByDid)
     })
 
     it('should match correct resource details after resolving linked resource with valid DID', async () => {
@@ -216,7 +202,7 @@ describe('Registrar', () => {
       resolveResourceByDid =
         await polygonDidRegistrar.getResourceByDidAndResourceId(
           polygonDID,
-          '20831275-eaff-4607-98de-8ff68d32f3da',
+          testResourceId,
         )
     })
 
