@@ -127,7 +127,7 @@ export class PolygonDID {
       if (!didDoc && !JSON.parse(didDoc)) {
         throw new Error('Invalid DID has been entered!')
       }
-      
+
       // Calling smart contract with update DID document on matic chain
       const txnHash = await this.registry.updateDIDDoc(
         parsedDid.didAddress,
@@ -241,7 +241,7 @@ export class PolygonDID {
         parsedDid.didAddress,
         resourceId,
       )
-      
+
       return {
         did,
         linkedResource: JSON.parse(linkedResource),
