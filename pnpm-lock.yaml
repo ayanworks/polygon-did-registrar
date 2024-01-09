@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@ayanworks/polygon-did-registry-contract':
-    specifier: 2.0.1-alpha.2
-    version: 2.0.1-alpha.2
+    specifier: 2.0.1-alpha.3
+    version: 2.0.1-alpha.3
   '@ethersproject/basex':
     specifier: ^5.7.0
     version: 5.7.0
@@ -23,11 +23,17 @@ dependencies:
   ethers:
     specifier: ^6.9.0
     version: 6.9.0
+  uuid:
+    specifier: ^9.0.1
+    version: 9.0.1
 
 devDependencies:
   '@types/node':
     specifier: ^18.17.0
     version: 18.17.0
+  '@types/uuid':
+    specifier: ^9.0.7
+    version: 9.0.7
   prettier:
     specifier: ^3.0.2
     version: 3.0.2
@@ -47,8 +53,8 @@ packages:
     resolution: {integrity: sha512-nA9XHtlAkYfJxY7bce8DcN7eKxWWCWkU+1GR9d+U6MbNpfwQp8TI7vqOsBsMcHoT4mBu2kypKoSKnghEzOOq5Q==}
     dev: false
 
-  /@ayanworks/polygon-did-registry-contract@2.0.1-alpha.2:
-    resolution: {integrity: sha512-RsLa6dRQksORuN6GwSkyCSBWmP/Wjrmv6H4wbIrte/DBxvB9mUGdEDD3FtDHyXtSSB1NlrEdTqazy2hbgT6oGA==}
+  /@ayanworks/polygon-did-registry-contract@2.0.1-alpha.3:
+    resolution: {integrity: sha512-8FZZVAmzXZn0pjZasuxdRblL0obK91JoaoXzpM4oZ7hD5VRUbiWf7BTh17WsWc6Oaf6XtafT4csuBo11fZiUoQ==}
     dev: false
 
   /@babel/code-frame@7.22.10:
@@ -589,6 +595,10 @@ packages:
     resolution: {integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==}
     dependencies:
       '@types/node': 18.17.0
+    dev: true
+
+  /@types/uuid@9.0.7:
+    resolution: {integrity: sha512-WUtIVRUZ9i5dYXefDEAI7sh9/O7jGvHg7Df/5O/gtH3Yabe5odI3UWopVR1qbPXQtvOxWu3mM4XxlYeZtMWF4g==}
     dev: true
 
   /acorn-walk@8.2.0:
@@ -3176,6 +3186,11 @@ packages:
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
+
+  /uuid@9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    hasBin: true
+    dev: false
 
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
