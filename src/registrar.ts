@@ -49,8 +49,7 @@ export class PolygonDID {
     )
   }
 
-  static createKeyPair(network: string) {
-    let did: string = ''
+  static createKeyPair(network?: string) {
     const wallet = Wallet.createRandom()
     const privateKey = wallet.privateKey
     const address = computeAddress(privateKey)
@@ -59,16 +58,20 @@ export class PolygonDID {
 
     const bufferPublicKey = Buffer.from(publicKey)
     const publicKeyBase58 = Base58.encode(bufferPublicKey)
+    if (network) {
+      if (network !== 'testnet' && network !== 'mainnet') {
+        throw new Error('Invalid network provided')
+      }
+      let did: string = ''
+      if (network === 'mainnet') {
+        did = `did:polygon:${address}`
+      } else {
+        did = `did:polygon:${network}:${address}`
+      }
+      return { address, privateKey, publicKeyBase58, did }
+    }
 
-    if (network !== 'testnet' && network !== 'mainnet') {
-      throw new Error('Invalid network provided')
-    }
-    if (network === 'mainnet') {
-      did = `did:polygon:${address}`
-    } else {
-      did = `did:polygon:${network}:${address}`
-    }
-    return { address, privateKey, publicKeyBase58, did }
+    return { address, privateKey, publicKeyBase58 }
   }
 
   public async create({
