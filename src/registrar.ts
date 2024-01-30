@@ -1,4 +1,10 @@
-import { Contract, JsonRpcProvider, Wallet, computeAddress } from 'ethers'
+import {
+  Contract,
+  JsonRpcProvider,
+  SigningKey,
+  Wallet,
+  computeAddress,
+} from 'ethers'
 import { wrapDidDocument } from './polygon-did-registrar'
 import { parseDid, validateDid } from './utils/did'
 import { validateResourcePayload } from './utils/linkedResource'
@@ -10,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid'
 export type PolygonDidInitOptions = {
   contractAddress: string
   rpcUrl: string
-  privateKey: string
+  signingKey: SigningKey
 }
 
 export type PolygonDidRegisterOptions = {
@@ -38,10 +44,10 @@ export class PolygonDID {
   public constructor({
     contractAddress,
     rpcUrl,
-    privateKey,
+    signingKey,
   }: PolygonDidInitOptions) {
     const provider = new JsonRpcProvider(rpcUrl)
-    const wallet = new Wallet(privateKey, provider)
+    const wallet = new Wallet(signingKey, provider)
     this.registry = new Contract(
       contractAddress,
       DidRegistryContract.abi,
