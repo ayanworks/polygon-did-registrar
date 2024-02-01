@@ -1,6 +1,7 @@
 import {
   Contract,
   JsonRpcProvider,
+  Network,
   SigningKey,
   Wallet,
   computeAddress,
@@ -38,14 +39,29 @@ export type ResourcePayload = {
   nextVersionId: string | null
 }
 
+export type EstimatedTxDetails = {
+  transactionFee: string
+  gasLimit: string
+  gasPrice: string
+  maxFeePerGas: number
+  maxPriorityFeePerGas: number
+  network: string
+  chainId: string
+  method: string
+}
+
 export class PolygonDID {
   private registry: Contract
+  private contractAddress: string
+  private rpcUrl: string
 
   public constructor({
     contractAddress,
     rpcUrl,
     signingKey,
   }: PolygonDidInitOptions) {
+    this.contractAddress = contractAddress
+    this.rpcUrl = rpcUrl
     const provider = new JsonRpcProvider(rpcUrl)
     const wallet = new Wallet(signingKey, provider)
     this.registry = new Contract(
@@ -55,7 +71,8 @@ export class PolygonDID {
     )
   }
 
-  static createKeyPair(network?: string) {
+  static createKeyPair(network: string) {
+    let did: string = ''
     const wallet = Wallet.createRandom()
     const privateKey = wallet.privateKey
     const address = computeAddress(privateKey)
@@ -68,16 +85,13 @@ export class PolygonDID {
       if (network !== 'testnet' && network !== 'mainnet') {
         throw new Error('Invalid network provided')
       }
-      let did: string = ''
       if (network === 'mainnet') {
         did = `did:polygon:${address}`
       } else {
         did = `did:polygon:${network}:${address}`
       }
-      return { address, privateKey, publicKeyBase58, did }
     }
-
-    return { address, privateKey, publicKeyBase58 }
+    return { address, privateKey, publicKeyBase58, did }
   }
 
   public async create({
@@ -291,6 +305,80 @@ export class PolygonDID {
     } catch (error) {
       console.log(`Error occurred in getResourcesByDid function ${error} `)
       throw error
+    }
+  }
+
+  public async estimateTxFee(
+    method: string,
+    argument: string[],
+  ): Promise<EstimatedTxDetails | null> {
+    try {
+      const provider = new JsonRpcProvider(this.rpcUrl)
+      const contract = new Contract(
+        this.contractAddress,
+        DidRegistryContract.abi,
+        provider,
+      )
+
+      // Encode function data
+      const encodedFunction = await contract.interface.encodeFunctionData(
+        method,
+        argument,
+      )
+
+      // Check if encodedFunction is null or empty
+      if (!encodedFunction) {
+        throw new Error('Error while getting encoded function details')
+      }
+
+      // Estimate gas limit
+      const gasLimit = await provider.estimateGas({
+        to: this.contractAddress,
+        data: encodedFunction,
+      })
+
+      // Convert gas limit to Gwei
+      const gasLimitGwei = parseFloat(String(gasLimit)) / 1e9
+
+      // Get gas price details
+      const gasPriceDetails = await provider.getFeeData()
+
+      // Check if gas price details are available
+      if (!gasPriceDetails || !gasPriceDetails.gasPrice) {
+        throw new Error('Gas price details not found!')
+      }
+
+      // Convert gas price to Gwei
+      const gasPriceGwei = parseFloat(String(gasPriceDetails.gasPrice)) / 1e9
+
+      // Get network details
+      const networkDetails: Network = await provider.getNetwork()
+
+      // Check if network details are available
+      if (!networkDetails) {
+        throw new Error('Network details not found!')
+      }
+
+      // Calculate transaction fee
+      const transactionFee = gasLimitGwei * gasPriceGwei
+
+      // Create EstimatedTxDetails object
+      const estimatedTxDetails: EstimatedTxDetails = {
+        transactionFee: String(transactionFee),
+        gasLimit: String(gasLimitGwei),
+        gasPrice: String(gasPriceGwei),
+        maxFeePerGas: parseFloat(String(gasPriceDetails.maxFeePerGas)) / 1e9,
+        maxPriorityFeePerGas:
+          parseFloat(String(gasPriceDetails.maxPriorityFeePerGas)) / 1e9,
+        network: String(networkDetails.name),
+        chainId: String(networkDetails.chainId),
+        method,
+      }
+      console.log('estimatedTxDetails:::', estimatedTxDetails)
+      return estimatedTxDetails
+    } catch (error) {
+      console.error('Error calculating transaction fee:', error)
+      return null
     }
   }
 }
