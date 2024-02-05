@@ -126,7 +126,9 @@ export class PolygonDID {
         parsedDid.didAddress,
         stringDidDoc,
       )
-
+      if (!txnHash) {
+        throw new Error('Error while creating DID in registry!')
+      }
       return {
         did,
         txnHash,
@@ -156,6 +158,9 @@ export class PolygonDID {
         parsedDid.didAddress,
         JSON.stringify(didDoc),
       )
+      if (!txnHash) {
+        throw new Error('Error while updating DID in registry!')
+      }
       return {
         did,
         didDoc,
@@ -192,7 +197,9 @@ export class PolygonDID {
         resourceId,
         stringDidDoc,
       )
-
+      if (!txnHash) {
+        throw new Error('Error while adding DID resource in registry!')
+      }
       return {
         did,
         resourceId,
@@ -233,6 +240,10 @@ export class PolygonDID {
         stringDidDoc,
       )
 
+      if (!txnHash) {
+        throw new Error('Error while updating DID resource in registry!')
+      }
+
       return {
         did,
         resourceId,
@@ -265,6 +276,10 @@ export class PolygonDID {
         resourceId,
       )
 
+      if (!linkedResource) {
+        throw new Error(`Invalid parameters or resource does not exists!`)
+      }
+
       return {
         did,
         linkedResource: JSON.parse(linkedResource),
@@ -296,6 +311,9 @@ export class PolygonDID {
         parsedDid.didAddress,
       )
 
+      if (!listLinkedResource) {
+        throw new Error(`Invalid parameters or resource does not exists!`)
+      }
       return {
         did,
         linkedResources: listLinkedResource.map((element: string) => {
@@ -374,7 +392,6 @@ export class PolygonDID {
         chainId: String(networkDetails.chainId),
         method,
       }
-      console.log('estimatedTxDetails:::', estimatedTxDetails)
       return estimatedTxDetails
     } catch (error) {
       console.error('Error calculating transaction fee:', error)

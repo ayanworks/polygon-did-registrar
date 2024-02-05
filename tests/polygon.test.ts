@@ -1,7 +1,6 @@
 import {
   testDidDetails,
   resourceJson,
-  testResourceId,
   updateDidDocument,
   testContractDetails,
 } from './fixtures/test.data'
@@ -12,7 +11,7 @@ import { PolygonDID } from '../src/registrar'
 import { SigningKey } from 'ethers'
 
 const NETWORK_URL = testContractDetails.networkUrl
-const CONTRACT_ADDRESS = testContractDetails.contractAddress //Can add external smart contract address
+const CONTRACT_ADDRESS = testContractDetails.unitTestCaseContractAddess //Can add external smart contract address
 
 describe('Registrar', () => {
   let polygonDidRegistrar: PolygonDID
@@ -168,6 +167,38 @@ describe('Registrar', () => {
     })
   })
 
+  describe('test resolve DID linked-resource by DID and resourceId function', () => {
+    let resolveResourceByDidAndId: any
+
+    before(async () => {
+      resolveResourceByDidAndId =
+        await polygonDidRegistrar.getResourceByDidAndResourceId(
+          polygonDID,
+          '9c64d7c6-5678-4bc2-91e2-d4a0688e8a76',
+        )
+    })
+
+    it('should match correct resource details after resolving linked resource with valid DID', async () => {
+      const expectedKeys = [
+        'resourceURI',
+        'resourceCollectionId',
+        'resourceId',
+        'resourceName',
+        'resourceType',
+        'mediaType',
+        'created',
+        'checksum',
+        'previousVersionId',
+        'nextVersionId',
+      ]
+
+      assert.deepStrictEqual(
+        Object.keys(resolveResourceByDidAndId.linkedResource),
+        expectedKeys,
+      )
+    })
+  })
+
   describe('test resolve all DID linked-resource by DID function', () => {
     let resolveResourceByDid: any
 
@@ -196,38 +227,6 @@ describe('Registrar', () => {
     })
   })
 
-  describe('test resolve DID linked-resource by DID and resourceId function', () => {
-    let resolveResourceByDid: any
-
-    before(async () => {
-      resolveResourceByDid =
-        await polygonDidRegistrar.getResourceByDidAndResourceId(
-          polygonDID,
-          testResourceId,
-        )
-    })
-
-    it('should match correct resource details after resolving linked resource with valid DID', async () => {
-      const expectedKeys = [
-        'resourceURI',
-        'resourceCollectionId',
-        'resourceId',
-        'resourceName',
-        'resourceType',
-        'mediaType',
-        'created',
-        'checksum',
-        'previousVersionId',
-        'nextVersionId',
-      ]
-
-      assert.deepStrictEqual(
-        Object.keys(resolveResourceByDid.linkedResource),
-        expectedKeys,
-      )
-    })
-  })
-
   describe('test estimate transaction', () => {
     let transactionDetails: any
 
@@ -240,7 +239,6 @@ describe('Registrar', () => {
         ],
       )
     })
-    console.log('transactionDetails::::', transactionDetails)
 
     it('should have non-empty values for transaction details', () => {
       assert.ok(transactionDetails)
