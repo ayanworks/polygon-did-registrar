@@ -275,6 +275,5 @@ describe('Registrar', () => {
       assert.ok(transactionDetails.method)
       assert.notStrictEqual(transactionDetails.method, '' || null || undefined)
     })
-
   })
 })
