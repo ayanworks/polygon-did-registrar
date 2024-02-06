@@ -13,6 +13,8 @@ import DidRegistryContract from '@ayanworks/polygon-did-registry-contract'
 import { Base58 } from '@ethersproject/basex'
 import { computePublicKey } from '@ethersproject/signing-key'
 import { v4 as uuidv4 } from 'uuid'
+import { getResolver } from '@ayanworks/polygon-did-resolver'
+import { Resolver } from 'did-resolver'
 
 export type PolygonDidInitOptions = {
   contractAddress: string
@@ -54,12 +56,14 @@ export class PolygonDID {
   private registry: Contract
   private contractAddress: string
   private rpcUrl: string
+  public resolver: Resolver
 
   public constructor({
     contractAddress,
     rpcUrl,
     signingKey,
   }: PolygonDidInitOptions) {
+    this.resolver = new Resolver(getResolver())
     this.contractAddress = contractAddress
     this.rpcUrl = rpcUrl
     const provider = new JsonRpcProvider(rpcUrl)
@@ -107,9 +111,9 @@ export class PolygonDID {
 
       const parsedDid = parseDid(did)
 
-      const resolveDidDoc = await this.registry.getDIDDoc(parsedDid.didAddress)
+      const didDetails = await this.resolver.resolve(did)
 
-      if (resolveDidDoc[0]) {
+      if (didDetails.didDocument) {
         throw new Error('The DID document already registered!')
       }
 
@@ -152,6 +156,10 @@ export class PolygonDID {
       if (!didDoc && !JSON.parse(didDoc)) {
         throw new Error('Invalid DID has been entered!')
       }
+      const didDetails = await this.resolver.resolve(did)
+      if (!didDetails.didDocument) {
+        throw new Error(`The DID document for the given DID was not found!`)
+      }
 
       // Calling smart contract with update DID document on matic chain
       const txnHash = await this.registry.updateDIDDoc(
@@ -183,12 +191,10 @@ export class PolygonDID {
 
       validateResourcePayload(resourcePayload)
 
-      const resolveDidDoc = await this.registry.getDIDDoc(parsedDid.didAddress)
-
-      if (!resolveDidDoc[0]) {
+      const didDetails = await this.resolver.resolve(did)
+      if (!didDetails.didDocument) {
         throw new Error(`The DID document for the given DID was not found!`)
       }
-
       const stringDidDoc = JSON.stringify(resourcePayload)
       const resourceId = uuidv4()
 
@@ -226,9 +232,8 @@ export class PolygonDID {
 
       validateResourcePayload(resourcePayload)
 
-      const resolveDidDoc = await this.registry.getDIDDoc(parsedDid.didAddress)
-
-      if (!resolveDidDoc[0]) {
+      const didDetails = await this.resolver.resolve(did)
+      if (!didDetails.didDocument) {
         throw new Error(`The DID document for the given DID was not found!`)
       }
 
@@ -265,9 +270,8 @@ export class PolygonDID {
 
       const parsedDid = parseDid(did)
 
-      const resolveDidDoc = await this.registry.getDIDDoc(parsedDid.didAddress)
-
-      if (!resolveDidDoc[0]) {
+      const didDetails = await this.resolver.resolve(did)
+      if (!didDetails.didDocument) {
         throw new Error(`The DID document for the given DID was not found!`)
       }
 
@@ -301,9 +305,8 @@ export class PolygonDID {
 
       const parsedDid = parseDid(did)
 
-      const resolveDidDoc = await this.registry.getDIDDoc(parsedDid.didAddress)
-
-      if (!resolveDidDoc[0]) {
+      const didDetails = await this.resolver.resolve(did)
+      if (!didDetails.didDocument) {
         throw new Error(`The DID document for the given DID was not found!`)
       }
 
