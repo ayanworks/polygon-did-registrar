@@ -28,6 +28,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@aries-framework/core": "^0.4.2",
     "@types/node": "^18.17.0",
     "@types/uuid": "^9.0.7",
     "prettier": "^3.0.2",
