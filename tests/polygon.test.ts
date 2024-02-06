@@ -6,7 +6,7 @@ import {
 } from './fixtures/test.data'
 import { describe, it, before } from 'node:test'
 import assert from 'node:assert'
-import { arrayHasKeys } from './utils/array'
+import { arrayHasKeys, buildTestDidDoc } from './utils/array'
 import { PolygonDID } from '../src/registrar'
 import { SigningKey } from 'ethers'
 
@@ -78,11 +78,16 @@ describe('Registrar', () => {
     let registerDidRes: any
 
     before(async () => {
-      registerDidRes = await polygonDidRegistrar.create({
-        did: polygonDID,
-        publicKeyBase58: keyPair.publicKeyBase58,
-        serviceEndpoint: 'https://example.com',
-      })
+      const builtTestDidDoc = buildTestDidDoc(
+        polygonDID,
+        keyPair.publicKeyBase58,
+        'https://example.com',
+      )
+
+      registerDidRes = await polygonDidRegistrar.create(
+        polygonDID,
+        builtTestDidDoc,
+      )
     })
 
     it('should get transaction hash after DID register ', () => {
@@ -238,6 +243,37 @@ describe('Registrar', () => {
           '68768734687ytruwytuqyetrywqt',
         ],
       )
+    })
+
+    it('should have non-empty values for transaction details', () => {
+      assert.ok(transactionDetails)
+
+      assert.ok(transactionDetails.transactionFee)
+      assert.notStrictEqual(
+        transactionDetails.transactionFee,
+        '' || null || undefined,
+      )
+
+      assert.ok(transactionDetails.gasLimit)
+      assert.notStrictEqual(
+        transactionDetails.gasLimit,
+        '' || null || undefined,
+      )
+
+      assert.ok(transactionDetails.gasPrice)
+      assert.notStrictEqual(
+        transactionDetails.gasPrice,
+        '' || null || undefined,
+      )
+
+      assert.ok(transactionDetails.network)
+      assert.notStrictEqual(transactionDetails.network, '' || null || undefined)
+
+      assert.ok(transactionDetails.chainId)
+      assert.notStrictEqual(transactionDetails.chainId, '' || null || undefined)
+
+      assert.ok(transactionDetails.method)
+      assert.notStrictEqual(transactionDetails.method, '' || null || undefined)
     })
 
     it('should have non-empty values for transaction details', () => {

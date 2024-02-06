@@ -6,7 +6,6 @@ import {
   Wallet,
   computeAddress,
 } from 'ethers'
-import { wrapDidDocument } from './polygon-did-registrar'
 import { parseDid, validateDid } from './utils/did'
 import { validateResourcePayload } from './utils/linkedResource'
 import DidRegistryContract from '@ayanworks/polygon-did-registry-contract'
@@ -15,6 +14,7 @@ import { computePublicKey } from '@ethersproject/signing-key'
 import { v4 as uuidv4 } from 'uuid'
 import { getResolver } from '@ayanworks/polygon-did-resolver'
 import { Resolver } from 'did-resolver'
+import { DidDocument } from '@aries-framework/core'
 
 export type PolygonDidInitOptions = {
   contractAddress: string
@@ -24,8 +24,7 @@ export type PolygonDidInitOptions = {
 
 export type PolygonDidRegisterOptions = {
   did: string
-  publicKeyBase58: string
-  serviceEndpoint?: string
+  didDoc: DidDocument
 }
 
 export type ResourcePayload = {
@@ -98,11 +97,7 @@ export class PolygonDID {
     return { address, privateKey, publicKeyBase58, did }
   }
 
-  public async create({
-    did,
-    publicKeyBase58,
-    serviceEndpoint,
-  }: PolygonDidRegisterOptions) {
+  public async create(did: string, didDoc: DidDocument) {
     try {
       const isValidDid = validateDid(did)
       if (!isValidDid) {
@@ -116,13 +111,6 @@ export class PolygonDID {
       if (didDetails.didDocument) {
         throw new Error('The DID document already registered!')
       }
-
-      // Get DID document
-      const didDoc = await wrapDidDocument(
-        did,
-        publicKeyBase58,
-        serviceEndpoint,
-      )
 
       const stringDidDoc = JSON.stringify(didDoc)
 
@@ -144,7 +132,7 @@ export class PolygonDID {
     }
   }
 
-  public async update(did: string, didDoc: object) {
+  public async update(did: string, didDoc: DidDocument) {
     try {
       const isValidDid = validateDid(did)
       if (!isValidDid) {
