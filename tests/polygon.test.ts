@@ -276,35 +276,5 @@ describe('Registrar', () => {
       assert.notStrictEqual(transactionDetails.method, '' || null || undefined)
     })
 
-    it('should have non-empty values for transaction details', () => {
-      assert.ok(transactionDetails)
-
-      assert.ok(transactionDetails.transactionFee)
-      assert.notStrictEqual(
-        transactionDetails.transactionFee,
-        '' || null || undefined,
-      )
-
-      assert.ok(transactionDetails.gasLimit)
-      assert.notStrictEqual(
-        transactionDetails.gasLimit,
-        '' || null || undefined,
-      )
-
-      assert.ok(transactionDetails.gasPrice)
-      assert.notStrictEqual(
-        transactionDetails.gasPrice,
-        '' || null || undefined,
-      )
-
-      assert.ok(transactionDetails.network)
-      assert.notStrictEqual(transactionDetails.network, '' || null || undefined)
-
-      assert.ok(transactionDetails.chainId)
-      assert.notStrictEqual(transactionDetails.chainId, '' || null || undefined)
-
-      assert.ok(transactionDetails.method)
-      assert.notStrictEqual(transactionDetails.method, '' || null || undefined)
-    })
   })
 })
