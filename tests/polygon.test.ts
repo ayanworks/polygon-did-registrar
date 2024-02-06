@@ -1,7 +1,6 @@
 import {
   testDidDetails,
   resourceJson,
-  testResourceId,
   updateDidDocument,
   testContractDetails,
 } from './fixtures/test.data'
@@ -9,9 +8,10 @@ import { describe, it, before } from 'node:test'
 import assert from 'node:assert'
 import { arrayHasKeys } from './utils/array'
 import { PolygonDID } from '../src/registrar'
+import { SigningKey } from 'ethers'
 
 const NETWORK_URL = testContractDetails.networkUrl
-const CONTRACT_ADDRESS = testContractDetails.contractAddress //Can add external smart contract address
+const CONTRACT_ADDRESS = testContractDetails.unitTestCaseContractAddess //Can add external smart contract address
 
 describe('Registrar', () => {
   let polygonDidRegistrar: PolygonDID
@@ -43,7 +43,7 @@ describe('Registrar', () => {
     polygonDidRegistrar = new PolygonDID({
       contractAddress: CONTRACT_ADDRESS,
       rpcUrl: NETWORK_URL,
-      privateKey: keyPair.privateKey,
+      signingKey: new SigningKey(`0x${keyPair.privateKey}`),
     })
     await new Promise((r) => setTimeout(r, 5000))
   })
@@ -167,6 +167,38 @@ describe('Registrar', () => {
     })
   })
 
+  describe('test resolve DID linked-resource by DID and resourceId function', () => {
+    let resolveResourceByDidAndId: any
+
+    before(async () => {
+      resolveResourceByDidAndId =
+        await polygonDidRegistrar.getResourceByDidAndResourceId(
+          polygonDID,
+          '9c64d7c6-5678-4bc2-91e2-d4a0688e8a76',
+        )
+    })
+
+    it('should match correct resource details after resolving linked resource with valid DID', async () => {
+      const expectedKeys = [
+        'resourceURI',
+        'resourceCollectionId',
+        'resourceId',
+        'resourceName',
+        'resourceType',
+        'mediaType',
+        'created',
+        'checksum',
+        'previousVersionId',
+        'nextVersionId',
+      ]
+
+      assert.deepStrictEqual(
+        Object.keys(resolveResourceByDidAndId.linkedResource),
+        expectedKeys,
+      )
+    })
+  })
+
   describe('test resolve all DID linked-resource by DID function', () => {
     let resolveResourceByDid: any
 
@@ -195,35 +227,48 @@ describe('Registrar', () => {
     })
   })
 
-  describe('test resolve DID linked-resource by DID and resourceId function', () => {
-    let resolveResourceByDid: any
+  describe('test estimate transaction', () => {
+    let transactionDetails: any
 
     before(async () => {
-      resolveResourceByDid =
-        await polygonDidRegistrar.getResourceByDidAndResourceId(
-          polygonDID,
-          testResourceId,
-        )
+      transactionDetails = await polygonDidRegistrar.estimateTxFee(
+        'createDID',
+        [
+          '0x13cd23928Ae515b86592C630f56C138aE4c7B79a',
+          '68768734687ytruwytuqyetrywqt',
+        ],
+      )
     })
 
-    it('should match correct resource details after resolving linked resource with valid DID', async () => {
-      const expectedKeys = [
-        'resourceURI',
-        'resourceCollectionId',
-        'resourceId',
-        'resourceName',
-        'resourceType',
-        'mediaType',
-        'created',
-        'checksum',
-        'previousVersionId',
-        'nextVersionId',
-      ]
+    it('should have non-empty values for transaction details', () => {
+      assert.ok(transactionDetails)
 
-      assert.deepStrictEqual(
-        Object.keys(resolveResourceByDid.linkedResource),
-        expectedKeys,
+      assert.ok(transactionDetails.transactionFee)
+      assert.notStrictEqual(
+        transactionDetails.transactionFee,
+        '' || null || undefined,
       )
+
+      assert.ok(transactionDetails.gasLimit)
+      assert.notStrictEqual(
+        transactionDetails.gasLimit,
+        '' || null || undefined,
+      )
+
+      assert.ok(transactionDetails.gasPrice)
+      assert.notStrictEqual(
+        transactionDetails.gasPrice,
+        '' || null || undefined,
+      )
+
+      assert.ok(transactionDetails.network)
+      assert.notStrictEqual(transactionDetails.network, '' || null || undefined)
+
+      assert.ok(transactionDetails.chainId)
+      assert.notStrictEqual(transactionDetails.chainId, '' || null || undefined)
+
+      assert.ok(transactionDetails.method)
+      assert.notStrictEqual(transactionDetails.method, '' || null || undefined)
     })
   })
 })
