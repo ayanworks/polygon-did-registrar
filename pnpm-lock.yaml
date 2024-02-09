@@ -9,8 +9,8 @@ dependencies:
     specifier: 2.0.1-alpha.3
     version: 2.0.1-alpha.3
   '@ayanworks/polygon-did-resolver':
-    specifier: ^0.0.16-alpha.3
-    version: 0.0.16-alpha.8
+    specifier: ^0.0.16-alpha.10
+    version: 0.0.16-alpha.10
   '@ethersproject/basex':
     specifier: ^5.7.0
     version: 5.7.0
@@ -67,7 +67,7 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       '@jridgewell/gen-mapping': 0.3.3
-      '@jridgewell/trace-mapping': 0.3.9
+      '@jridgewell/trace-mapping': 0.3.22
     dev: true
     optional: true
 
@@ -113,8 +113,8 @@ packages:
     resolution: {integrity: sha512-8FZZVAmzXZn0pjZasuxdRblL0obK91JoaoXzpM4oZ7hD5VRUbiWf7BTh17WsWc6Oaf6XtafT4csuBo11fZiUoQ==}
     dev: false
 
-  /@ayanworks/polygon-did-resolver@0.0.16-alpha.8:
-    resolution: {integrity: sha512-rTubdjbwGtvIoSpR3OWp/7SseShCZNzJ41Rd5yL/Y/xYlX8PJr2zWUM0pcUouReVQzgeAYuUphHAV0QpqWRoSQ==}
+  /@ayanworks/polygon-did-resolver@0.0.16-alpha.10:
+    resolution: {integrity: sha512-RfxDr+bggYcLsdN6nK+VKwjVLZzy3AqGULSsYT2bU+4n8obptufVIDg1cjbI4zi0eQIVmtkUeaHcJMlaR6wvvA==}
     dependencies:
       '@ayanworks/polygon-did-registry-contract': 2.0.1-alpha.3
       did-resolver: 4.1.0
@@ -127,7 +127,7 @@ packages:
   /@babel/code-frame@7.10.4:
     resolution: {integrity: sha512-vG6SvB6oYEhvgisZNFRmRCUkLz11c7rp+tbNTynGqc6mS1d5ATd/sGyV6W0KZZnXRKMTzZDRgQT3Ou9jhpAfUg==}
     dependencies:
-      '@babel/highlight': 7.22.10
+      '@babel/highlight': 7.23.4
     dev: true
     optional: true
 
@@ -2358,7 +2358,7 @@ packages:
       rimraf: 2.7.1
       sudo-prompt: 8.2.5
       tmp: 0.0.33
-      tslib: 2.6.1
+      tslib: 2.6.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2455,7 +2455,7 @@ packages:
     resolution: {integrity: sha512-bOhuFnlRaS7CU33+rFFIWdcET/Vkyn1vsN8BYFwCDEF5P1fVVvYN7bFOsQLTMD3nvi35C1AGmtqUr/Wfv8Xaow==}
     engines: {node: '>=12'}
     dependencies:
-      '@expo/spawn-async': 1.5.0
+      '@expo/spawn-async': 1.7.2
       exec-async: 2.2.0
     dev: true
     optional: true
@@ -2464,7 +2464,7 @@ packages:
     resolution: {integrity: sha512-LKdo/6y4W7llZ6ghsg1kdx2CeH/qR/c6QI/JI8oPUvppsZoeIYjSkdflce978fAMfR8IXoi0wt0jA2w0kWpwbg==}
     dependencies:
       '@expo/json-file': 8.3.0
-      '@expo/spawn-async': 1.5.0
+      '@expo/spawn-async': 1.7.2
       ansi-regex: 5.0.1
       chalk: 4.1.2
       find-up: 5.0.0
@@ -2669,7 +2669,7 @@ packages:
     dependencies:
       '@jridgewell/set-array': 1.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
-      '@jridgewell/trace-mapping': 0.3.9
+      '@jridgewell/trace-mapping': 0.3.22
     dev: true
     optional: true
 
@@ -2688,7 +2688,7 @@ packages:
     resolution: {integrity: sha512-UTYAUj/wviwdsMfzoSJspJxbkH5o1snzwX0//0ENX1u/55kkZZkcTZP6u9bwKGkv+dkk9at4m1Cpt0uY80kcpQ==}
     dependencies:
       '@jridgewell/gen-mapping': 0.3.3
-      '@jridgewell/trace-mapping': 0.3.9
+      '@jridgewell/trace-mapping': 0.3.22
     dev: true
     optional: true
 
@@ -3838,7 +3838,7 @@ packages:
     resolution: {integrity: sha512-c27loCv9QkZinsa5ProX751khO9DJl/AcB5c2KNtA6NRvHKS0PgLfcftz72KVq504vB0Gku5s2kUZzDBvQWvHg==}
     engines: {node: '>=4'}
     dependencies:
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: true
     optional: true
 
@@ -4817,7 +4817,7 @@ packages:
       supports-color:
         optional: true
     dependencies:
-      ms: 2.1.2
+      ms: 2.1.3
     dev: true
     optional: true
 
@@ -6036,7 +6036,7 @@ packages:
       graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       graphql: 15.8.0
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: true
     optional: true
 
@@ -6775,7 +6775,7 @@ packages:
     resolution: {integrity: sha512-GBEV4GRADeP+qtB2+6u61stea8mGcOT4mCtrYISZwfu9/ISHFJ/5zOMXYbpBE9RsS5+Gb63DW4FgmnKJ79Kf6w==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@babel/code-frame': 7.22.10
+      '@babel/code-frame': 7.23.5
       '@jest/types': 29.6.3
       '@types/stack-utils': 2.0.3
       chalk: 4.1.2
@@ -7545,7 +7545,7 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
     dependencies:
-      '@babel/code-frame': 7.22.10
+      '@babel/code-frame': 7.23.5
       '@babel/core': 7.23.9
       '@babel/generator': 7.23.6
       '@babel/parser': 7.23.9
@@ -8624,7 +8624,7 @@ packages:
     resolution: {integrity: sha512-cq/o30z9W2Wb4rzBefjv5fBalHU0rJGZCHAkf/RHSBWSSYwh8PlQTqqOJmgIIbBtpj27T6FIPXeomIjZtCNVqA==}
     dependencies:
       shell-quote: 1.8.1
-      ws: 7.4.6
+      ws: 7.5.9
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -8772,7 +8772,7 @@ packages:
       ast-types: 0.15.2
       esprima: 4.0.1
       source-map: 0.6.1
-      tslib: 2.6.1
+      tslib: 2.6.2
     dev: true
     optional: true
 
@@ -10411,6 +10411,7 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dev: false
 
   /ws@7.5.9:
     resolution: {integrity: sha512-F+P9Jil7UiSKSkppIiD94dN07AwvFixvLIj1Og1Rl9GGMuNipJnV9JzjD6XuqmAeiswGvUmNLjr5cFuXwNS77Q==}

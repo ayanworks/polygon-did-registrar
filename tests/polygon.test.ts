@@ -11,7 +11,7 @@ import { PolygonDID } from '../src/registrar'
 import { SigningKey } from 'ethers'
 
 const NETWORK_URL = testContractDetails.networkUrl
-const CONTRACT_ADDRESS = testContractDetails.unitTestCaseContractAddess //Can add external smart contract address
+const CONTRACT_ADDRESS = testContractDetails.contractAddress //Can add external smart contract address
 
 describe('Registrar', () => {
   let polygonDidRegistrar: PolygonDID

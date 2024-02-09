@@ -99,15 +99,16 @@ export class PolygonDID {
 
   public async create(did: string, didDoc: DidDocument) {
     try {
+      if (Object.keys(didDoc)?.length === 0) {
+        throw new Error(`Please provide valid did document!`)
+      }
       const isValidDid = validateDid(did)
       if (!isValidDid) {
         throw new Error('invalid did provided')
       }
 
       const parsedDid = parseDid(did)
-
       const didDetails = await this.resolver.resolve(did)
-
       if (didDetails.didDocument) {
         throw new Error('The DID document already registered!')
       }
@@ -134,6 +135,9 @@ export class PolygonDID {
 
   public async update(did: string, didDoc: DidDocument) {
     try {
+      if (Object?.keys(didDoc)?.length === 0) {
+        throw new Error(`Please provide valid did document!`)
+      }
       const isValidDid = validateDid(did)
       if (!isValidDid) {
         throw new Error('Invalid did provided')
@@ -171,13 +175,13 @@ export class PolygonDID {
   public async addResource(did: string, resourcePayload: ResourcePayload) {
     try {
       const isValidDid = validateDid(did)
+
+      validateResourcePayload(resourcePayload)
       if (!isValidDid) {
         throw new Error('Invalid did provided')
       }
 
       const parsedDid = parseDid(did)
-
-      validateResourcePayload(resourcePayload)
 
       const didDetails = await this.resolver.resolve(did)
       if (!didDetails.didDocument) {
@@ -216,10 +220,9 @@ export class PolygonDID {
         throw new Error('Invalid DID or resourceId provided!')
       }
 
-      const parsedDid = parseDid(did)
-
       validateResourcePayload(resourcePayload)
 
+      const parsedDid = parseDid(did)
       const didDetails = await this.resolver.resolve(did)
       if (!didDetails.didDocument) {
         throw new Error(`The DID document for the given DID was not found!`)
@@ -254,6 +257,10 @@ export class PolygonDID {
 
       if (!isValidDid) {
         throw new Error('Invalid did provided')
+      }
+
+      if (!resourceId) {
+        throw new Error('Invalid resource id!')
       }
 
       const parsedDid = parseDid(did)
@@ -319,9 +326,12 @@ export class PolygonDID {
 
   public async estimateTxFee(
     method: string,
-    argument: string[],
+    argument?: string[],
   ): Promise<EstimatedTxDetails | null> {
     try {
+      if (!method) {
+        throw new Error(`Method is required for estimate transaction!`)
+      }
       const provider = new JsonRpcProvider(this.rpcUrl)
       const contract = new Contract(
         this.contractAddress,
