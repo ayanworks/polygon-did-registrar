@@ -327,7 +327,7 @@ export class PolygonDID {
   public async estimateTxFee(
     method: string,
     argument?: string[],
-    from?: string
+    from?: string,
   ): Promise<EstimatedTxDetails | null> {
     try {
       if (!method) {
@@ -355,7 +355,7 @@ export class PolygonDID {
       const gasLimit = await provider.estimateGas({
         to: this.contractAddress,
         data: encodedFunction,
-        from
+        from,
       })
 
       // Convert gas limit to Gwei
