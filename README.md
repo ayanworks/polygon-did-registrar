@@ -108,9 +108,10 @@ const txHash = await updateDidDoc(did, didDoc, privateKey, url?, contractAddress
 Add DID-linked resource for the DID-Doc.
 
 ```js
-import { addResource } from "polygon-did-registrar";
-const txHash = await addResource(did, resourcePayload);
+import { addResource } from 'polygon-did-registrar'
+const txHash = await addResource(did, resourcePayload)
 ```
+
 The function returns a txhash, DID, and resourceId on successful execution.
 
 ## Update Resource
@@ -118,9 +119,10 @@ The function returns a txhash, DID, and resourceId on successful execution.
 Update DID-linked resource for the DID-Doc.
 
 ```js
-import { updateResource } from "polygon-did-registrar";
-const txHash = await updateResource(did, resourceId, resourcePayload);
+import { updateResource } from 'polygon-did-registrar'
+const txHash = await updateResource(did, resourceId, resourcePayload)
 ```
+
 The function returns a txhash, DID, and resourceId on successful execution.
 
 ## Fetch Resource
@@ -128,9 +130,10 @@ The function returns a txhash, DID, and resourceId on successful execution.
 Get a DID-linked resource for a specific DID.
 
 ```js
-import { getResourceByDidAndResourceId } from "polygon-did-registrar";
-const txHash = await getResourceByDidAndResourceId(did, resourceId);
+import { getResourceByDidAndResourceId } from 'polygon-did-registrar'
+const txHash = await getResourceByDidAndResourceId(did, resourceId)
 ```
+
 The function returns DID-linked resource and DID uri on successful execution.
 
 ## Fetch all Resources
@@ -138,7 +141,8 @@ The function returns DID-linked resource and DID uri on successful execution.
 Get all DID-linked resources for a specific DID.
 
 ```js
-import { getResourcesByDid } from "polygon-did-registrar";
-const txHash = await getResourcesByDid(did);
+import { getResourcesByDid } from 'polygon-did-registrar'
+const txHash = await getResourcesByDid(did)
 ```
+
 The function returns the list of DID-linked resources and DID on successful execution.
