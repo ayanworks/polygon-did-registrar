@@ -378,15 +378,17 @@ export class PolygonDID {
         throw new Error('Network details not found!')
       }
 
+      const maxGasFee = parseFloat(String(gasPriceDetails.maxFeePerGas)) / 1e9
+
       // Calculate transaction fee
-      const transactionFee = gasLimitGwei * gasPriceGwei
+      const transactionFee = gasLimitGwei * maxGasFee
 
       // Create EstimatedTxDetails object
       const estimatedTxDetails: EstimatedTxDetails = {
         transactionFee: String(transactionFee),
         gasLimit: String(gasLimitGwei),
         gasPrice: String(gasPriceGwei),
-        maxFeePerGas: parseFloat(String(gasPriceDetails.maxFeePerGas)) / 1e9,
+        maxFeePerGas: maxGasFee,
         maxPriorityFeePerGas:
           parseFloat(String(gasPriceDetails.maxPriorityFeePerGas)) / 1e9,
         network: String(networkDetails.name),
