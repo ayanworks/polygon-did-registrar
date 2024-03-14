@@ -14,7 +14,7 @@ import { computePublicKey } from '@ethersproject/signing-key'
 import { v4 as uuidv4 } from 'uuid'
 import { getResolver } from '@ayanworks/polygon-did-resolver'
 import { Resolver } from 'did-resolver'
-import { DidDocument } from '@aries-framework/core'
+import { DidDocument } from '@credo-ts/core'
 
 export type PolygonDidInitOptions = {
   contractAddress: string

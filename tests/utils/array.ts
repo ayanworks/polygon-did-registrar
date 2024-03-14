@@ -2,7 +2,7 @@ import {
   DidDocument,
   DidDocumentBuilder,
   DidDocumentService,
-} from '@aries-framework/core'
+} from '@credo-ts/core'
 
 export const arrayHasKeys = (array1: string[], array2: string[]) => {
   const keys1 = Object.keys(array1)
