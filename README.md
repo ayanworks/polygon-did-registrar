@@ -81,7 +81,7 @@ import { createDID } from 'polygon-did-registrar'
 const txHash = await createDID(network)
 ```
 
-The function returns, address, publicKey (base58 format), privateKey and DID uri.
+The function returns, address, publicKey (base58 format), privateKey, and DID uri.
 
 ## Register
 
@@ -103,11 +103,46 @@ import { updateDidDoc } from "polygon-did-registrar";
 const txHash = await updateDidDoc(did, didDoc, privateKey, url?, contractAddress?);
 ```
 
-## Delete
+## Add Resource
 
-To remove the instance of DID from the ledger the above function is used as follows :
+Add DID-linked resource for the DID-Doc.
 
 ```js
-import { deleteDidDoc } from "polygon-did-registrar";
-const txHash = await deleteDidDoc(did, privateKey, url?, contractAddress?);
+import { addResource } from 'polygon-did-registrar'
+const txHash = await addResource(did, resourcePayload)
 ```
+
+The function returns a txhash, DID, and resourceId on successful execution.
+
+## Update Resource
+
+Update DID-linked resource for the DID-Doc.
+
+```js
+import { updateResource } from 'polygon-did-registrar'
+const txHash = await updateResource(did, resourceId, resourcePayload)
+```
+
+The function returns a txhash, DID, and resourceId on successful execution.
+
+## Fetch Resource
+
+Get a DID-linked resource for a specific DID.
+
+```js
+import { getResourceByDidAndResourceId } from 'polygon-did-registrar'
+const txHash = await getResourceByDidAndResourceId(did, resourceId)
+```
+
+The function returns DID-linked resource and DID uri on successful execution.
+
+## Fetch all Resources
+
+Get all DID-linked resources for a specific DID.
+
+```js
+import { getResourcesByDid } from 'polygon-did-registrar'
+const txHash = await getResourcesByDid(did)
+```
+
+The function returns the list of DID-linked resources and DID on successful execution.
