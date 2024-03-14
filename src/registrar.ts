@@ -14,7 +14,7 @@ import { computePublicKey } from '@ethersproject/signing-key'
 import { v4 as uuidv4 } from 'uuid'
 import { getResolver } from '@ayanworks/polygon-did-resolver'
 import { Resolver } from 'did-resolver'
-import { DidDocument } from '@aries-framework/core'
+import { DidDocument } from '@credo-ts/core'
 
 export type PolygonDidInitOptions = {
   contractAddress: string
@@ -327,6 +327,7 @@ export class PolygonDID {
   public async estimateTxFee(
     method: string,
     argument?: string[],
+    from?: string,
   ): Promise<EstimatedTxDetails | null> {
     try {
       if (!method) {
@@ -354,6 +355,7 @@ export class PolygonDID {
       const gasLimit = await provider.estimateGas({
         to: this.contractAddress,
         data: encodedFunction,
+        from,
       })
 
       // Convert gas limit to Gwei
