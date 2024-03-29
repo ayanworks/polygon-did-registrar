@@ -12,8 +12,8 @@ dependencies:
     specifier: ^0.0.16-alpha.10
     version: 0.0.16-alpha.10
   '@credo-ts/core':
-    specifier: 0.5.0
-    version: 0.5.0(expo@50.0.6)(react-native@0.73.4)
+    specifier: 0.5.1
+    version: 0.5.1(expo@50.0.6)(react-native@0.73.4)
   '@ethersproject/basex':
     specifier: ^5.7.0
     version: 5.7.0
@@ -1731,8 +1731,8 @@ packages:
       to-fast-properties: 2.0.0
     dev: false
 
-  /@credo-ts/core@0.5.0(expo@50.0.6)(react-native@0.73.4):
-    resolution: {integrity: sha512-7SJBgs1yd2gpwv8BnCO+U63Uu06v6Cxzg+ypWpqyNkkG4nTsQZSI8r0oSQ+DgbiqwN/AZKsn9HuNISFftf5yKQ==}
+  /@credo-ts/core@0.5.1(expo@50.0.6)(react-native@0.73.4):
+    resolution: {integrity: sha512-ywwFw6wwiMft3A994Y91LAm8CrEg2G7CJQRyLD8UzneU4coMWZTeED63thAEX6XK/tyDmv2MAcrO04hE3KQPcA==}
     dependencies:
       '@digitalcredentials/jsonld': 6.0.0(expo@50.0.6)(react-native@0.73.4)
       '@digitalcredentials/jsonld-signatures': 9.4.0(expo@50.0.6)(react-native@0.73.4)
@@ -9808,7 +9808,7 @@ packages:
       call-bind: 1.0.2
       define-properties: 1.2.0
       es-abstract: 1.22.1
-      get-intrinsic: 1.2.1
+      get-intrinsic: 1.2.4
       has-symbols: 1.0.3
       internal-slot: 1.0.5
       regexp.prototype.flags: 1.5.0
