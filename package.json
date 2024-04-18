@@ -21,7 +21,7 @@
   "dependencies": {
     "@credo-ts/core": "0.5.1",
     "@ayanworks/polygon-did-registry-contract": "2.0.1-alpha.3",
-    "@ayanworks/polygon-did-resolver": "^0.0.16-alpha.10",
+    "@ayanworks/polygon-did-resolver": "^0.0.16-alpha.11",
     "did-resolver": "^4.1.0",
     "@ethersproject/basex": "^5.7.0",
     "@ethersproject/signing-key": "^5.7.0",
