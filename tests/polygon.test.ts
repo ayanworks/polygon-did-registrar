@@ -113,7 +113,7 @@ describe('Registrar', () => {
           'chainId',
           'signature',
           'accessList',
-          'blobVersionedHashes'
+          'blobVersionedHashes',
         ]),
         true,
       )
