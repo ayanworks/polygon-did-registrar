@@ -15,8 +15,8 @@ importers:
         specifier: ^0.0.16-alpha.13
         version: 0.0.16-alpha.13
       '@credo-ts/core':
-        specifier: 0.5.1
-        version: 0.5.1(expo@50.0.6(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))))(react-native@0.73.4(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))(react@18.2.0))(web-streams-polyfill@3.2.1)
+        specifier: 0.5.3
+        version: 0.5.3(expo@50.0.6(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))))(react-native@0.73.4(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))(react@18.2.0))(web-streams-polyfill@3.2.1)
       '@ethersproject/basex':
         specifier: ^5.7.0
         version: 5.7.0
@@ -837,8 +837,8 @@ packages:
     resolution: {integrity: sha512-dQjSq/7HaSjRM43FFGnv5keM2HsxpmyV1PfaSVm0nzzjwwTmjOe6J4bC8e3+pTEIgHaHj+1ZlLThRJ2auc/w1Q==}
     engines: {node: '>=6.9.0'}
 
-  '@credo-ts/core@0.5.1':
-    resolution: {integrity: sha512-ywwFw6wwiMft3A994Y91LAm8CrEg2G7CJQRyLD8UzneU4coMWZTeED63thAEX6XK/tyDmv2MAcrO04hE3KQPcA==}
+  '@credo-ts/core@0.5.3':
+    resolution: {integrity: sha512-bM9iNhhXWiJ4YdH5uqaIfK3XhZ6GjuzF0AwE1vMy586sZz05J1ZLQvIYzRpm/p3Buxj9rimnLrc4jcYNit0VUw==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1372,32 +1372,25 @@ packages:
     peerDependencies:
       react-native: '*'
 
-  '@sd-jwt/core@0.2.1':
-    resolution: {integrity: sha512-8auyt3mfzgAK+IP9mNc3kSONdo5x2Y8ypNj5gHKP7N81nVeyI+DHethoPQv84JVcqYYcNwHwyrc2Z5k7rg2lFQ==}
+  '@sd-jwt/core@0.6.1':
+    resolution: {integrity: sha512-egFTb23o6BGWF93vnjopN02rSiC1HOOnkk9BI8Kao3jz9ipZAHdO6wF7gwfZm5Nlol/Kd1/KSLhbOUPYt++FjA==}
+    engines: {node: '>=16'}
 
-  '@sd-jwt/decode@0.2.1':
-    resolution: {integrity: sha512-rs55WB3llrMObxN8jeMl06km/h0WivO9jSWNubO9JUIdlfrVhssU38xoXakvQeSDjAJkUUhfZcvmC2vNo1X6Wg==}
+  '@sd-jwt/decode@0.6.1':
+    resolution: {integrity: sha512-QgTIoYd5zyKKLgXB4xEYJTrvumVwtsj5Dog0v0L9UH9ZvHekDaeexS247X7A4iSdzTvmZzUpGskgABOa4D8NmQ==}
+    engines: {node: '>=16'}
 
-  '@sd-jwt/decode@0.3.0':
-    resolution: {integrity: sha512-jCN1g3VzopiUxUtBZWq0Ojfzbg+wYkE1/gV86Xq7/gV8aNacCJo7Su5a3pYtoYg/rnH7ou1kwpD6vteQFkvXMQ==}
+  '@sd-jwt/present@0.6.1':
+    resolution: {integrity: sha512-QRD3TUDLj4PqQNZ70bBxh8FLLrOE9mY8V9qiZrJSsaDOLFs2p1CtZG+v9ig62fxFYJZMf4bWKwYjz+qqGAtxCg==}
+    engines: {node: '>=16'}
 
-  '@sd-jwt/present@0.2.1':
-    resolution: {integrity: sha512-yWIAR2C/q1jNUwzAeUlUcf3WCTEcSSGo9pltHW5AXptELjyaWGSmC5p6o9ucDXHvBnicfPONhe5OdUCSpiCntw==}
+  '@sd-jwt/types@0.6.1':
+    resolution: {integrity: sha512-LKpABZJGT77jNhOLvAHIkNNmGqXzyfwBT+6r+DN9zNzMx1CzuNR0qXk1GMUbast9iCfPkGbnEpUv/jHTBvlIvg==}
+    engines: {node: '>=16'}
 
-  '@sd-jwt/present@0.3.0':
-    resolution: {integrity: sha512-dICPhH5hqOLXmuJMdTaA47ZMpCDkTzbWUQXsIgw0vma7Aj9Bc6ySNevPwlsUx4K8XBjPgYWwBM9tKdrs3tsCvQ==}
-
-  '@sd-jwt/types@0.2.1':
-    resolution: {integrity: sha512-nbNik/cq6UIMsN144FcgPZQzaqIsjEEj307j3ZSFORkQBR4Tsmcj54aswTuNh0Z0z/4aSbfw14vOKBZvRWyVLQ==}
-
-  '@sd-jwt/types@0.3.0':
-    resolution: {integrity: sha512-JbpZICZ+nWPiKPKw+Veg5tf0Oftit4EzxhLJyvcd0u4R6IulNZvi6LCoUL7b2IT1H86eYPd/qB1KvSh43ByZOA==}
-
-  '@sd-jwt/utils@0.2.1':
-    resolution: {integrity: sha512-9eRrge44dhE3fenawR/RZGxP5iuW9DtgdOVANu/JK5PEl80r0fDsMwm/gDjuv8OgLDCmQ6uSaVte1lYaTG71bQ==}
-
-  '@sd-jwt/utils@0.3.0':
-    resolution: {integrity: sha512-jQNYxvyfLda9StVLeUqUZtv5csI6IuzcD6b55/wsC9xJgTuntZqf8vyJvuu4MwEJUFwm9PdGkCJXyl/nbpmNLw==}
+  '@sd-jwt/utils@0.6.1':
+    resolution: {integrity: sha512-1NHZ//+GecGQJb+gSdDicnrHG0DvACUk9jTnXA5yLZhlRjgkjyfJLNsCZesYeCyVp/SiyvIC9B+JwoY4kI0TwQ==}
+    engines: {node: '>=16'}
 
   '@segment/loosely-validate-event@2.0.0':
     resolution: {integrity: sha512-ZMCSfztDBqwotkl848ODgVcAmN4OItEWDCkshcKz0/W6gGSQayuuCtWV/MlodFivAZD793d6UgANd6wCXUfrIw==}
@@ -1432,15 +1425,18 @@ packages:
     resolution: {integrity: sha512-kQpk267uxB19X3X2T1mvNMjyvIEonpNSHrMlK5ZaBU6aZxw7wPbpgKJOjHN3+/GPVpXgAV9soVT2oyHpLkLtyw==}
     engines: {node: '>= 8'}
 
-  '@sphereon/pex-models@2.2.2':
-    resolution: {integrity: sha512-CZIsBoaV5rMZEWYBsmH+RxsdoxpXf5FSDwDz0GB0qOf5WFk1BGUnzpZzi5yJ+2L151mhPk97dlRc9Wb01Awr4Q==}
+  '@sphereon/pex-models@2.2.4':
+    resolution: {integrity: sha512-pGlp+wplneE1+Lk3U48/2htYKTbONMeG5/x7vhO6AnPUOsnOXeJdftPrBYWVSzz/JH5GJptAc6+pAyYE1zMu4Q==}
 
-  '@sphereon/pex@3.3.0':
-    resolution: {integrity: sha512-CNthF/6dlIECqTqdOWGD5HOT72OWjzKTFVuFGmSbgOqsEtEtGU0e0g0gYbvXWNm0hYKsyFgS5XIZ1Uj3NR5UMg==}
+  '@sphereon/pex@3.3.3':
+    resolution: {integrity: sha512-CXwdEcMTUh2z/5AriBn3OuShEG06l2tgiIr7qDJthnkez8DQ3sZo2vr4NEQWKKAL+DeAWAI4FryQGO4KuK7yfg==}
     engines: {node: '>=18'}
 
-  '@sphereon/ssi-types@0.18.1':
-    resolution: {integrity: sha512-uM0gb1woyc0R+p+qh8tVDi15ZWmpzo9BP0iBp/yRkJar7gAfgwox/yvtEToaH9jROKnDCwL3DDQCDeNucpMkwg==}
+  '@sphereon/ssi-types@0.22.0':
+    resolution: {integrity: sha512-YPJAZlKmzNALXK8ohP3ETxj1oVzL4+M9ljj3fD5xrbacvYax1JPCVKc8BWSubGcQckKHPbgbpcS7LYEeghyT9Q==}
+
+  '@sphereon/ssi-types@0.23.4':
+    resolution: {integrity: sha512-1lM2yfOEhpcYYBxm/12KYY4n3ZSahVf5rFqGdterQkMJMthwr20HqTjw3+VK5p7IVf+86DyBoZJyS4V9tSsoCA==}
 
   '@stablelib/binary@1.0.1':
     resolution: {integrity: sha512-ClJWvmL6UBM/wjkvv/7m5VP3GMr9t0osr4yVgLZsLCOz4hGN9gIAFEqnJ0TsSMAN+n840nf2cHZnA5/KFqHC7Q==}
@@ -3266,6 +3262,9 @@ packages:
   join-component@1.1.0:
     resolution: {integrity: sha512-bF7vcQxbODoGK1imE2P9GS9aw4zD0Sd+Hni68IMZLj7zRnquH7dXUmMw9hDI5S/Jzt7q+IyTXN0rSg2GI0IKhQ==}
 
+  js-base64@3.7.7:
+    resolution: {integrity: sha512-7rCnleh0z2CkXhH67J8K1Ytz0b2Y+yxTPL+/KOJoa20hfnVQ/3/T6W/KflYI4bRHRagNeXeU2bkNGI3v1oS/lw==}
+
   js-sha3@0.8.0:
     resolution: {integrity: sha512-gF1cRrHhIzNfToc802P800N8PpXS+evLLXfsVpowqmAFR9uwbi89WvXg2QspOmXL8QL86J4T1EpFu+yUkwJY3Q==}
 
@@ -3744,6 +3743,9 @@ packages:
 
   msrcrypto@1.5.8:
     resolution: {integrity: sha512-ujZ0TRuozHKKm6eGbKHfXef7f+esIhEckmThVnz7RNyiOJd7a6MXj2JGBoL9cnPDW+JMG16MoTUh5X+XXjI66Q==}
+
+  multiformats@9.9.0:
+    resolution: {integrity: sha512-HoMUjhH9T8DDBNT+6xzkrd9ga/XiBI4xLr58LJACwK6G3HTOPeMz4nB4KJs33L2BelrIJa7P0VuNaVF3hMYfjg==}
 
   mute-stream@1.0.0:
     resolution: {integrity: sha512-avsJQhyd+680gKXyG/sQc0nXaC6rBkPOfyHYcFb9+hdkqQkR9bdnkJ0AMZhke0oesPqIO+mFFJ+IdBc7mst4IA==}
@@ -4916,6 +4918,9 @@ packages:
 
   ua-parser-js@1.0.37:
     resolution: {integrity: sha512-bhTyI94tZofjo+Dn8SN6Zv8nBDvyXTymAdM3LDI/0IboIUwTu1rEhW7v2TfiVsoYWgkQ4kOVqnI8APUFbIQIFQ==}
+
+  uint8arrays@3.1.1:
+    resolution: {integrity: sha512-+QJa8QRnbdXVpHYjLoTpJIdCTiw9Ir62nocClWuXIq2JIh4Uta0cQsTSpFL678p2CN8B+XSApwcU+pQEqVpKWg==}
 
   unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
@@ -6310,17 +6315,19 @@ snapshots:
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
 
-  '@credo-ts/core@0.5.1(expo@50.0.6(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))))(react-native@0.73.4(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))(react@18.2.0))(web-streams-polyfill@3.2.1)':
+  '@credo-ts/core@0.5.3(expo@50.0.6(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))))(react-native@0.73.4(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))(react@18.2.0))(web-streams-polyfill@3.2.1)':
     dependencies:
       '@digitalcredentials/jsonld': 6.0.0(expo@50.0.6(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))))(react-native@0.73.4(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))(react@18.2.0))(web-streams-polyfill@3.2.1)
       '@digitalcredentials/jsonld-signatures': 9.4.0(expo@50.0.6(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))))(react-native@0.73.4(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))(react@18.2.0))(web-streams-polyfill@3.2.1)
       '@digitalcredentials/vc': 6.0.1(expo@50.0.6(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))))(react-native@0.73.4(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))(react@18.2.0))(web-streams-polyfill@3.2.1)
       '@multiformats/base-x': 4.0.1
-      '@sd-jwt/core': 0.2.1
-      '@sd-jwt/decode': 0.2.1
-      '@sphereon/pex': 3.3.0
-      '@sphereon/pex-models': 2.2.2
-      '@sphereon/ssi-types': 0.18.1
+      '@sd-jwt/core': 0.6.1
+      '@sd-jwt/decode': 0.6.1
+      '@sd-jwt/types': 0.6.1
+      '@sd-jwt/utils': 0.6.1
+      '@sphereon/pex': 3.3.3
+      '@sphereon/pex-models': 2.2.4
+      '@sphereon/ssi-types': 0.23.4
       '@stablelib/ed25519': 1.0.3
       '@stablelib/sha256': 1.0.1
       '@types/ws': 8.5.10
@@ -7636,46 +7643,30 @@ snapshots:
       react-native: 0.73.4(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))(react@18.2.0)
     optional: true
 
-  '@sd-jwt/core@0.2.1':
+  '@sd-jwt/core@0.6.1':
     dependencies:
-      '@sd-jwt/decode': 0.2.1
-      '@sd-jwt/present': 0.2.1
-      '@sd-jwt/types': 0.2.1
-      '@sd-jwt/utils': 0.2.1
+      '@sd-jwt/decode': 0.6.1
+      '@sd-jwt/present': 0.6.1
+      '@sd-jwt/types': 0.6.1
+      '@sd-jwt/utils': 0.6.1
 
-  '@sd-jwt/decode@0.2.1':
+  '@sd-jwt/decode@0.6.1':
     dependencies:
-      '@sd-jwt/types': 0.2.1
-      '@sd-jwt/utils': 0.2.1
+      '@sd-jwt/types': 0.6.1
+      '@sd-jwt/utils': 0.6.1
 
-  '@sd-jwt/decode@0.3.0':
+  '@sd-jwt/present@0.6.1':
     dependencies:
-      '@sd-jwt/types': 0.3.0
-      '@sd-jwt/utils': 0.3.0
+      '@sd-jwt/decode': 0.6.1
+      '@sd-jwt/types': 0.6.1
+      '@sd-jwt/utils': 0.6.1
 
-  '@sd-jwt/present@0.2.1':
+  '@sd-jwt/types@0.6.1': {}
+
+  '@sd-jwt/utils@0.6.1':
     dependencies:
-      '@sd-jwt/types': 0.2.1
-      '@sd-jwt/utils': 0.2.1
-
-  '@sd-jwt/present@0.3.0':
-    dependencies:
-      '@sd-jwt/types': 0.3.0
-      '@sd-jwt/utils': 0.3.0
-
-  '@sd-jwt/types@0.2.1': {}
-
-  '@sd-jwt/types@0.3.0': {}
-
-  '@sd-jwt/utils@0.2.1':
-    dependencies:
-      '@sd-jwt/types': 0.2.1
-      buffer: 6.0.3
-
-  '@sd-jwt/utils@0.3.0':
-    dependencies:
-      '@sd-jwt/types': 0.3.0
-      buffer: 6.0.3
+      '@sd-jwt/types': 0.6.1
+      js-base64: 3.7.7
 
   '@segment/loosely-validate-event@2.0.0':
     dependencies:
@@ -7713,25 +7704,31 @@ snapshots:
 
   '@sovpro/delimited-stream@1.1.0': {}
 
-  '@sphereon/pex-models@2.2.2': {}
+  '@sphereon/pex-models@2.2.4': {}
 
-  '@sphereon/pex@3.3.0':
+  '@sphereon/pex@3.3.3':
     dependencies:
       '@astronautlabs/jsonpath': 1.1.2
-      '@sd-jwt/decode': 0.3.0
-      '@sd-jwt/present': 0.3.0
-      '@sd-jwt/utils': 0.3.0
-      '@sphereon/pex-models': 2.2.2
-      '@sphereon/ssi-types': 0.18.1
+      '@sd-jwt/decode': 0.6.1
+      '@sd-jwt/present': 0.6.1
+      '@sd-jwt/types': 0.6.1
+      '@sphereon/pex-models': 2.2.4
+      '@sphereon/ssi-types': 0.22.0
       ajv: 8.12.0
       ajv-formats: 2.1.1(ajv@8.12.0)
       jwt-decode: 3.1.2
       nanoid: 3.3.7
       string.prototype.matchall: 4.0.10
+      uint8arrays: 3.1.1
 
-  '@sphereon/ssi-types@0.18.1':
+  '@sphereon/ssi-types@0.22.0':
     dependencies:
-      '@sd-jwt/decode': 0.2.1
+      '@sd-jwt/decode': 0.6.1
+      jwt-decode: 3.1.2
+
+  '@sphereon/ssi-types@0.23.4':
+    dependencies:
+      '@sd-jwt/decode': 0.6.1
       jwt-decode: 3.1.2
 
   '@stablelib/binary@1.0.1':
@@ -10012,6 +10009,8 @@ snapshots:
   join-component@1.1.0:
     optional: true
 
+  js-base64@3.7.7: {}
+
   js-sha3@0.8.0: {}
 
   js-tokens@4.0.0: {}
@@ -10616,6 +10615,8 @@ snapshots:
     optional: true
 
   msrcrypto@1.5.8: {}
+
+  multiformats@9.9.0: {}
 
   mute-stream@1.0.0: {}
 
@@ -12027,6 +12028,10 @@ snapshots:
 
   ua-parser-js@1.0.37:
     optional: true
+
+  uint8arrays@3.1.1:
+    dependencies:
+      multiformats: 9.9.0
 
   unbox-primitive@1.0.2:
     dependencies:
