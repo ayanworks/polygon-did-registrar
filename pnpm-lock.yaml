@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@ayanworks/polygon-did-registry-contract':
-        specifier: 2.0.1-alpha.6
-        version: 2.0.1-alpha.6
+        specifier: 2.0.1-alpha.7
+        version: 2.0.1-alpha.7
       '@ayanworks/polygon-did-resolver':
-        specifier: ^0.0.16-alpha.14
-        version: 0.0.16-alpha.14
+        specifier: ^0.0.16-alpha.15
+        version: 0.0.16-alpha.15
       '@credo-ts/core':
         specifier: 0.5.3
         version: 0.5.3(expo@50.0.6(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))))(react-native@0.73.4(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))(react@18.2.0))(web-streams-polyfill@3.2.1)
@@ -70,11 +70,11 @@ packages:
   '@astronautlabs/jsonpath@1.1.2':
     resolution: {integrity: sha512-FqL/muoreH7iltYC1EB5Tvox5E8NSOOPGkgns4G+qxRKl6k5dxEVljUjB5NcKESzkqwnUqWjSZkL61XGYOuV+A==}
 
-  '@ayanworks/polygon-did-registry-contract@2.0.1-alpha.6':
-    resolution: {integrity: sha512-b/Pk0ByQdsleC1bwfP9J2lC6vkpfk4UZk7oJff3/O86Ael9rk0kQ7t3yu4Q7lh4bWEoeJ9Gij8CR1o+ImT9U7g==}
+  '@ayanworks/polygon-did-registry-contract@2.0.1-alpha.7':
+    resolution: {integrity: sha512-pwX45XsGT3LrIBpnIJ6FrzPuB3gSTWiNVSyGGniL0ofUgcsNGqXOv2g3WQSDcG9b7/+AGeoJ6tYqshCbnjsmvQ==}
 
-  '@ayanworks/polygon-did-resolver@0.0.16-alpha.14':
-    resolution: {integrity: sha512-uxDzHScLbUP2x15Pvs3zKeaFx+tYzgep1rXQl0p2bxFD0sRxiX1nhJgMGXNzGtzNIKXCbbnt1Ak/IzB65CQx6Q==}
+  '@ayanworks/polygon-did-resolver@0.0.16-alpha.15':
+    resolution: {integrity: sha512-JyjgFaWWSQzzj1LKsopYVvIJjeo6lzqfVIheILmgxcxvTo1/skFatthocBNmyQ4Vc8QyKc05s5AbTUkm74wNbg==}
 
   '@babel/code-frame@7.10.4':
     resolution: {integrity: sha512-vG6SvB6oYEhvgisZNFRmRCUkLz11c7rp+tbNTynGqc6mS1d5ATd/sGyV6W0KZZnXRKMTzZDRgQT3Ou9jhpAfUg==}
@@ -5286,11 +5286,11 @@ snapshots:
     dependencies:
       static-eval: 2.0.2
 
-  '@ayanworks/polygon-did-registry-contract@2.0.1-alpha.6': {}
+  '@ayanworks/polygon-did-registry-contract@2.0.1-alpha.7': {}
 
-  '@ayanworks/polygon-did-resolver@0.0.16-alpha.14':
+  '@ayanworks/polygon-did-resolver@0.0.16-alpha.15':
     dependencies:
-      '@ayanworks/polygon-did-registry-contract': 2.0.1-alpha.6
+      '@ayanworks/polygon-did-registry-contract': 2.0.1-alpha.7
       did-resolver: 4.1.0
       ethers: 5.7.2
     transitivePeerDependencies:
