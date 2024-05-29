@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@ayanworks/polygon-did-registry-contract':
-        specifier: 2.0.1-alpha.7
-        version: 2.0.1-alpha.7
+        specifier: 2.0.1-alpha.8
+        version: 2.0.1-alpha.8
       '@ayanworks/polygon-did-resolver':
-        specifier: ^0.0.16-alpha.15
-        version: 0.0.16-alpha.15
+        specifier: ^0.0.16-alpha.16
+        version: 0.0.16-alpha.16
       '@credo-ts/core':
         specifier: 0.5.3
         version: 0.5.3(expo@50.0.6(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))))(react-native@0.73.4(@babel/core@7.23.9)(@babel/preset-env@7.23.9(@babel/core@7.23.9))(react@18.2.0))(web-streams-polyfill@3.2.1)
@@ -70,11 +70,11 @@ packages:
   '@astronautlabs/jsonpath@1.1.2':
     resolution: {integrity: sha512-FqL/muoreH7iltYC1EB5Tvox5E8NSOOPGkgns4G+qxRKl6k5dxEVljUjB5NcKESzkqwnUqWjSZkL61XGYOuV+A==}
 
-  '@ayanworks/polygon-did-registry-contract@2.0.1-alpha.7':
-    resolution: {integrity: sha512-pwX45XsGT3LrIBpnIJ6FrzPuB3gSTWiNVSyGGniL0ofUgcsNGqXOv2g3WQSDcG9b7/+AGeoJ6tYqshCbnjsmvQ==}
+  '@ayanworks/polygon-did-registry-contract@2.0.1-alpha.8':
+    resolution: {integrity: sha512-5PI/poy+zWrT3iAQGc4w4hsj39lATIv2ucWeRwMq5uwu1NRQAYRWfoIez4bF/HxBMgI5dYuXWIqLtksLBmTiag==}
 
-  '@ayanworks/polygon-did-resolver@0.0.16-alpha.15':
-    resolution: {integrity: sha512-JyjgFaWWSQzzj1LKsopYVvIJjeo6lzqfVIheILmgxcxvTo1/skFatthocBNmyQ4Vc8QyKc05s5AbTUkm74wNbg==}
+  '@ayanworks/polygon-did-resolver@0.0.16-alpha.16':
+    resolution: {integrity: sha512-+UdFk8/OAItRNx1soKt2DKhR+1RKDcMDVenoaHgcTbEUc3XVcmvqo622BLy2Kqo/VPugHzGpCmaBIOV1JIqM6g==}
 
   '@babel/code-frame@7.10.4':
     resolution: {integrity: sha512-vG6SvB6oYEhvgisZNFRmRCUkLz11c7rp+tbNTynGqc6mS1d5ATd/sGyV6W0KZZnXRKMTzZDRgQT3Ou9jhpAfUg==}
@@ -2758,9 +2758,11 @@ packages:
 
   glob@6.0.4:
     resolution: {integrity: sha512-MKZeRNyYZAVVVG1oZeLaWie1uweH40m9AZwIwxyPbTSX4hHrVYSzLg0Ro5Z5R7XKkIX+Cc6oD1rqeDJnwsB8/A==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   glob@7.1.6:
     resolution: {integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
@@ -3956,6 +3958,7 @@ packages:
 
   osenv@0.1.5:
     resolution: {integrity: sha512-0CWcCECdMVc2Rw3U5w9ZjqX6ga6ubk1xDVKxtBQPK7wis/0F2r9T6k4ydGYhecl7YUBxBVxhL5oisPsNxAPe2g==}
+    deprecated: This package is no longer supported.
 
   p-cancelable@3.0.0:
     resolution: {integrity: sha512-mlVgR3PGuzlo0MmTdk4cXqXWlwQDLnONTAg6sm62XkMJEiRxN3GL3SffkYvqwonbkJBcrI7Uvv5Zh9yjvn2iUw==}
@@ -4389,18 +4392,22 @@ packages:
 
   rimraf@2.4.5:
     resolution: {integrity: sha512-J5xnxTyqaiw06JjMftq7L9ouA448dw/E7dKghkP9WpKNuwmARNNg+Gk8/u5ryb9N/Yo2+z3MCwuqFK/+qPOPfQ==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@2.6.3:
     resolution: {integrity: sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@2.7.1:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   run-applescript@5.0.0:
@@ -5286,11 +5293,11 @@ snapshots:
     dependencies:
       static-eval: 2.0.2
 
-  '@ayanworks/polygon-did-registry-contract@2.0.1-alpha.7': {}
+  '@ayanworks/polygon-did-registry-contract@2.0.1-alpha.8': {}
 
-  '@ayanworks/polygon-did-resolver@0.0.16-alpha.15':
+  '@ayanworks/polygon-did-resolver@0.0.16-alpha.16':
     dependencies:
-      '@ayanworks/polygon-did-registry-contract': 2.0.1-alpha.7
+      '@ayanworks/polygon-did-registry-contract': 2.0.1-alpha.8
       did-resolver: 4.1.0
       ethers: 5.7.2
     transitivePeerDependencies:
