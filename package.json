@@ -1,6 +1,6 @@
 {
   "name": "@ayanworks/polygon-did-registrar",
-  "version": "0.0.16-alpha.20",
+  "version": "0.0.16-alpha.21",
   "main": "build/index.js",
   "scripts": {
     "clean": "rm -rf build",
