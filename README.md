@@ -43,7 +43,6 @@ did:polygon:testnet:0xdce5306fb5f9ba6797546dcd2e11eb5c5201bfeb
 
 Every DID on chain has the same structure, defined as:
 
-
 Where,
 
 - controller : the address of the person who creates and manages the DID
@@ -57,12 +56,10 @@ Where,
 
 Creating a createKeyPair refers to generation of a DID uri, based on a newly generated wallet.
 
-
 ```js
 import { createKeyPair } from 'polygon-did-registrar'
 const keys = await createKeyPair(network)
 ```
-
 
 The function returns address, privateKey, publicKeyBase58, did
 
@@ -71,8 +68,8 @@ The function returns address, privateKey, publicKeyBase58, did
 Register of DID is done by logging the transaction on the polygon-register smart contract, by invoking
 
 ```js
-import { create } from "polygon-did-registrar";
-const txHash = await create(did, didDoc);
+import { create } from 'polygon-did-registrar'
+const txHash = await create(did, didDoc)
 ```
 
 The function returns a txnHash and DID and didDoc on successful execution.
@@ -82,8 +79,8 @@ The function returns a txnHash and DID and didDoc on successful execution.
 The DID controller requests for the update functionality, if the controller wishes to edit the did doc store on the ledger using :
 
 ```js
-import { update } from "polygon-did-registrar";
-const txHash = await update(did, didDoc);
+import { update } from 'polygon-did-registrar'
+const txHash = await update(did, didDoc)
 ```
 
 ## Add Resource
