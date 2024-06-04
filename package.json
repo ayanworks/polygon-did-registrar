@@ -20,8 +20,8 @@
   "license": "MIT",
   "dependencies": {
     "@credo-ts/core": "0.5.3",
-    "@ayanworks/polygon-did-registry-contract": "2.0.1-alpha.8",
-    "@ayanworks/polygon-did-resolver": "^0.0.16-alpha.16",
+    "@ayanworks/polygon-did-registry-contract": "3.0.0",
+    "@ayanworks/polygon-did-resolver": "1.0.0",
     "did-resolver": "^4.1.0",
     "@ethersproject/basex": "^5.7.0",
     "@ethersproject/signing-key": "^5.7.0",
