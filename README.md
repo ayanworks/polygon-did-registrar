@@ -43,14 +43,6 @@ did:polygon:testnet:0xdce5306fb5f9ba6797546dcd2e11eb5c5201bfeb
 
 Every DID on chain has the same structure, defined as:
 
-```js
-struct PolyDID{
-        address controller;
-        uint created;
-        uint updated;
-        string doc;
-    }
-```
 
 Where,
 
@@ -63,44 +55,35 @@ Where,
 
 ## Create
 
-Creating a DID refers to generation of a DID uri, based on either a newly generated wallet or user's existing wallet. Note that the wallet should hold Matic tokens.
+Creating a createKeyPair refers to generation of a DID uri, based on a newly generated wallet.
 
-Can be invoked using 2 methods
-
-Method 1: With user's personal privateKey and network type(mainnet/testnet)
 
 ```js
-import { createDID } from 'polygon-did-registrar'
-const txHash = await createDID(network, privateKey)
+import { createKeyPair } from 'polygon-did-registrar'
+const keys = await createKeyPair(network)
 ```
 
-Method 2: With only network type(mainnet/testnet)
 
-```js
-import { createDID } from 'polygon-did-registrar'
-const txHash = await createDID(network)
-```
-
-The function returns, address, publicKey (base58 format), privateKey, and DID uri.
+The function returns address, privateKey, publicKeyBase58, did
 
 ## Register
 
 Register of DID is done by logging the transaction on the polygon-register smart contract, by invoking
 
 ```js
-import { registerDID } from "polygon-did-registrar";
-const txHash = await registerDID(did, privateKey, url?, contractAddress?);
+import { create } from "polygon-did-registrar";
+const txHash = await create(did, didDoc);
 ```
 
-The function returns a txhash and DID uri on successful execution.
+The function returns a txnHash and DID and didDoc on successful execution.
 
 ## Update
 
 The DID controller requests for the update functionality, if the controller wishes to edit the did doc store on the ledger using :
 
 ```js
-import { updateDidDoc } from "polygon-did-registrar";
-const txHash = await updateDidDoc(did, didDoc, privateKey, url?, contractAddress?);
+import { update } from "polygon-did-registrar";
+const txHash = await update(did, didDoc);
 ```
 
 ## Add Resource
