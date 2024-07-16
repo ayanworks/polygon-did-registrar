@@ -19,7 +19,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@credo-ts/core": "0.5.3",
+    "@credo-ts/core": "0.5.7",
     "@ayanworks/polygon-did-registry-contract": "3.0.0",
     "@ayanworks/polygon-did-resolver": "1.0.0",
     "did-resolver": "^4.1.0",
@@ -36,7 +36,7 @@
     "prettier": "^3.0.2",
     "release-it": "^16.1.5",
     "ts-node": "^10.9.1",
-    "typescript": "^5.1.6"
+    "typescript": "~5.5.2"
   },
   "description": "The polygon DID method library uses Ethereum based addresses as fully functional DID’s or Decentralized identifiers, on the Polygon network. The following allows one to create a key Pair based and facilitates its storage on the registry smart contract, deployed on Polygon chain. Third party users can use this to create polygon DID identities. It allows the controller to perform actions like resolve, update and delete by encapsulating polygonDID registry and PolygonDID resolver. The DID identifier allows the controller to resolve DID document for usage in different scenarios.",
   "directories": {
