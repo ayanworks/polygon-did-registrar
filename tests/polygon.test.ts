@@ -107,11 +107,13 @@ describe('Registrar', () => {
           'gasPrice',
           'maxPriorityFeePerGas',
           'maxFeePerGas',
+          'maxFeePerBlobGas',
           'data',
           'value',
           'chainId',
           'signature',
           'accessList',
+          'blobVersionedHashes',
         ]),
         true,
       )

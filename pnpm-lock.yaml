@@ -5359,7 +5359,7 @@ snapshots:
 
   '@ayanworks/polygon-did-resolver@0.0.16-alpha.10':
     dependencies:
-      '@ayanworks/polygon-did-registry-contract': 2.0.1-alpha.3
+      '@ayanworks/polygon-did-registry-contract': 3.0.0
       did-resolver: 4.1.0
       ethers: 5.7.2
     transitivePeerDependencies:
