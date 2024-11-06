@@ -1,6 +1,6 @@
 {
   "name": "@ayanworks/polygon-did-registrar",
-  "version": "1.0.1-alpha.0",
+  "version": "2.0.0-alpha.0",
   "main": "build/index.js",
   "scripts": {
     "clean": "rm -rf build",
@@ -15,13 +15,13 @@
   },
   "author": "Ajay Jadhav <ajay@ayanworks.com>",
   "contributors": [
-    "Anusha Garg <anusha.garg@ayanworks.com>, Shashank Kulkarni <shashank.kulkarni@ayanworks.com>"
+    "Ankita Patidar <ankita.patidar@ayanworks.com>", "Anusha Garg <anusha.garg@ayanworks.com>, Shashank Kulkarni <shashank.kulkarni@ayanworks.com>"
   ],
   "license": "MIT",
   "dependencies": {
     "@credo-ts/core": "0.5.7",
     "@ayanworks/polygon-did-registry-contract": "3.0.0",
-    "@ayanworks/polygon-did-resolver": "1.0.0",
+    "@ayanworks/polygon-did-resolver": "2.0.1-alpha.0",
     "did-resolver": "^4.1.0",
     "@ethersproject/basex": "^5.7.0",
     "@ethersproject/signing-key": "^5.7.0",
