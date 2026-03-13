@@ -1,3 +1,12 @@
+# ⚠️ ARCHIVED REPOSITORY
+
+This repository is being archived. For the latest features, security updates, and active development, please see the up-to-date version here:
+
+👉 **[https://github.com/ayanworks/polygon-did-modules](https://github.com/ayanworks/polygon-did-modules)**
+
+---
+
+
 # Polygon DID Method
 
 The polygon DID method library uses Ethereum based addresses as fully functional DID’s or Decentralized identifiers, on the Polygon network. The following allows one to create a key Pair based and facilitates its storage on the registry smart contract, deployed on Polygon chain.
